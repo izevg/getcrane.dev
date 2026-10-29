@@ -59,5 +59,6 @@ export function themeStamp(): string {
   return createHash("sha256")
     .update(JSON.stringify(tokensFor()))
     .update(readFileSync(join(ROOT, "scripts", "lib", "mermaid-theme.ts")))
+    .update(readFileSync(join(ROOT, "scripts", "render-mermaid.ts")))
     .digest("hex");
 }

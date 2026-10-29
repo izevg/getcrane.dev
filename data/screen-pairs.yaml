@@ -6,5 +6,5 @@ S2Package/DesktopLight: { dark: DesktopDark, en: English }
 S3Versions/Desktop1440Sheet: { dark: Desktop1440Dark, en: English }
 S5Tokens/DesktopLight: { dark: DesktopDark, en: English }
 S6Platform/Desktop1440: { dark: DesktopDark, en: English }
-S9Journal/Desktop1440: { dark: DesktopDark, en: English }
+S9Journal/Desktop1440: { dark: Desktop1440Dark, en: English }
 S10States/Forbidden: { en: Forbidden }

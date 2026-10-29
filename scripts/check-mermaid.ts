@@ -16,6 +16,20 @@ for (const hash of sources.keys()) {
     }
   }
 }
+// Каждый id внутри SVG начинается с dg-<хэш>-<тема>: иначе светлая и тёмная копии на странице повторяют id.
+for (const hash of sources.keys()) {
+  for (const theme of ["light", "dark"]) {
+    const file = join(DIAGRAMS_DIR, `${hash}.${theme}.svg`);
+    if (!existsSync(file)) {
+      continue;
+    }
+    const prefix = `dg-${hash}-${theme}`;
+    const foreign = [...readFileSync(file, "utf8").matchAll(/\sid="([^"]+)"/g)].map((m) => m[1] as string).filter((id) => !id.startsWith(prefix));
+    if (foreign.length > 0) {
+      errors.push(`${hash}.${theme}.svg: id без префикса ${prefix} (${foreign.slice(0, 3).join(", ")}): перерисуйте диаграмму`);
+    }
+  }
+}
 for (const name of existsSync(DIAGRAMS_DIR) ? readdirSync(DIAGRAMS_DIR) : []) {
   const hash = /^([0-9a-f]+)\.(?:light|dark)\.svg$/.exec(name)?.[1];
   if (hash && !sources.has(hash)) {

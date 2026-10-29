@@ -1,5 +1,5 @@
 {
-  "theme": "8c3711cb5ca8db243057fe2030e7ccd9184c368217392cabe2928714966f92c3",
+  "theme": "37675af144d19e78245fd811566ff3319445b2d0da25f5c93483b5f19db8d62d",
   "diagrams": {
     "0027ddb452739554": {
       "caption": {
@@ -86,7 +86,7 @@
         "en": "Version states and the transitions between them."
       },
       "pages": [
-        "content/en/features/security/immutable-versions.md:56"
+        "content/en/features/security/immutable-versions.md:58"
       ]
     },
     "7c34c1acad0173ac": {
@@ -118,7 +118,7 @@
         "ru": "Состояния версии и переходы между ними."
       },
       "pages": [
-        "content/ru/features/security/immutable-versions.md:56"
+        "content/ru/features/security/immutable-versions.md:58"
       ]
     },
     "a2dc27f571fb211a": {

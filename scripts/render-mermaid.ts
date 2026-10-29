@@ -38,6 +38,23 @@ function normalize(svg: string): string {
     .replace(/<title\b[^>]*>[\s\S]*?<\/title>|<desc\b[^>]*>[\s\S]*?<\/desc>/g, "");
 }
 
+/**
+ * Диаграммы последовательностей кладут в SVG id без префикса (actor0, root-1): в странице светлая и тёмная копии повторяют их.
+ * Префикс `-I` mermaid-cli ставит не на все id, поэтому остальные переписываются здесь вместе со ссылками на них (url(#…), href, aria-*, селекторы в style).
+ */
+function scopeIds(svg: string, prefix: string): string {
+  const own = [...svg.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1] as string).filter((id) => !id.startsWith(prefix));
+  let result = svg;
+  for (const id of new Set(own)) {
+    const escaped = id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    result = result
+      .replace(new RegExp(`(\\sid=")${escaped}(")`, "g"), `$1${prefix}-${id}$2`)
+      .replace(new RegExp(`(url\\(#|href="#|#)${escaped}(?![\\w-])`, "g"), `$1${prefix}-${id}`)
+      .replace(new RegExp(`(aria-(?:labelledby|describedby|controls|owns)=")${escaped}(")`, "g"), `$1${prefix}-${id}$2`);
+  }
+  return result;
+}
+
 let failed = 0;
 for (const [hash, code] of sources) {
   for (const theme of ["light", "dark"] as Theme[]) {
@@ -61,7 +78,7 @@ for (const [hash, code] of sources) {
       failed += 1;
       continue;
     }
-    writeFileSync(out, normalize(readFileSync(raw, "utf8")));
+    writeFileSync(out, scopeIds(normalize(readFileSync(raw, "utf8")), `dg-${hash}-${theme}`));
   }
 }
 if (failed) {

@@ -47,7 +47,7 @@
 | Путь | Заголовок RU | Жанр | Состояние | Аудитории | Источники | Исп. |
 | --- | --- | --- | --- | --- | --- | --- |
 | `start/_index` | Что такое CRANE | explanation | target | developer, platform, security | `docs/product/01`, `02`, `05`, `README.md` | W3 |
-| `start/quickstart` | Первый запуск за 15 минут | tutorial | current | platform, developer | `deploy/compose/*`, `.env.dist`, `deploy/docker/Dockerfile`, `Taskfile.yml`, `crates/entry/server/src` | W3 |
+| `start/quickstart` | Первый запуск | tutorial | current | platform, developer | `deploy/compose/*`, `.env.dist`, `deploy/docker/Dockerfile`, `Taskfile.yml`, `crates/entry/server/src` | W3 |
 | `start/concepts` | Основные понятия | explanation | target | developer, platform | `docs/product/09` (жизненный цикл версии), `10.1–10.3`, `99` | W3 |
 | `start/first-run` | Мастер первого запуска | how-to | current, in-development | platform | `docs/product/20.4–20.5`, `crates/core/domain/src/onboarding` | W3 |
 

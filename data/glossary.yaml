@@ -1,0 +1,166 @@
+# Глоссарий getcrane.dev: единственный источник определений.
+# Ведёт руководитель документации. Писатели ссылаются на id через {{< term "id" >}}.
+# Поля: ru/en — {term, def}; see — связанные id.
+
+advisory:
+  ru: { term: "advisory", def: "Публикация об уязвимости или вредоносном пакете с перечнем затронутых версий: запись OSV, GHSA, NVD или поставщика." }
+  en: { term: "advisory", def: "A published record of a vulnerability or a malicious package that lists the affected versions: an OSV, GHSA, NVD or vendor record." }
+  see: [finding, purl]
+
+attestation:
+  ru: { term: "attestation", def: "Подписанное утверждение о файле версии (in-toto Statement в DSSE, Sigstore bundle): кто, из какого репозитория и коммита собрал файл или что проверил." }
+  en: { term: "attestation", def: "A signed statement about a version file (an in-toto Statement in DSSE, a Sigstore bundle): who built it, from which repository and commit, or what was checked." }
+  see: [digest, provenance]
+
+blob:
+  ru: { term: "blob", def: "Байты одного файла пакета в хранилище. CRANE хранит blob по дайджесту SHA-256 и никогда не меняет." }
+  en: { term: "blob", def: "The bytes of a single package file in storage. CRANE stores a blob under its SHA-256 digest and never changes it." }
+  see: [cas, digest]
+
+bootstrap-token:
+  ru: { term: "bootstrap-токен", def: "Одноразовый секрет первого запуска с префиксом crb_: открывает только мастер первого запуска и перестаёт действовать, когда мастер завершён." }
+  en: { term: "bootstrap token", def: "A one-time first-run secret with the crb_ prefix: it opens only the first-run wizard and stops working once the wizard is complete." }
+
+cas:
+  ru: { term: "CAS", def: "Content-addressable storage: хранилище, в котором объект адресуется хэшем своего содержимого, поэтому одинаковые файлы хранятся один раз, а изменённый файл получает другой адрес." }
+  en: { term: "CAS", def: "Content-addressable storage: objects are addressed by the hash of their content, so identical files are stored once and a changed file gets a different address." }
+  see: [blob, digest]
+
+dependency-confusion:
+  ru: { term: "dependency confusion", def: "Атака, при которой пакет из публичного реестра с именем внутреннего пакета подменяет внутренний при установке." }
+  en: { term: "dependency confusion", def: "An attack in which a package from a public registry that carries the name of an internal package replaces the internal one at install time." }
+  see: [namespace, typosquatting]
+
+digest:
+  ru: { term: "дайджест", def: "Криптографический хэш содержимого файла (SHA-256, SHA-512). Совпадение дайджеста доказывает, что байты не изменились." }
+  en: { term: "digest", def: "A cryptographic hash of a file's content (SHA-256, SHA-512). A matching digest proves the bytes have not changed." }
+  see: [cas, blob]
+
+egress:
+  ru: { term: "исходящий запрос", def: "Запрос, который CRANE сам отправляет во внешнюю сеть: к upstream, фидам уязвимостей, приёмникам webhooks и SIEM." }
+  en: { term: "egress request", def: "A request that CRANE itself sends to an external network: to an upstream, vulnerability feeds, webhook receivers or a SIEM." }
+  see: [ssrf, upstream]
+
+evidence:
+  ru: { term: "evidence", def: "Доказательство о версии пакета: SBOM, отчёт сканера, attestation или подпись файла, привязанное к дайджесту содержимого." }
+  en: { term: "evidence", def: "Proof about a package version, such as an SBOM, a scanner report, an attestation or a file signature, bound to the content digest." }
+  see: [sbom, attestation]
+
+fail-closed:
+  ru: { term: "fail closed", def: "Поведение при сбое, при котором проверка безопасности, которую нельзя выполнить, приводит к отказу, а не к пропуску запроса." }
+  en: { term: "fail closed", def: "Failure behaviour in which a security check that cannot be performed results in a refusal rather than letting the request through." }
+
+finding:
+  ru: { term: "finding", def: "Результат сопоставления advisory с конкретной версией пакета в инвентаре CRANE: что затронуто, с каким приоритетом и кому адресовано." }
+  en: { term: "finding", def: "The result of matching an advisory against a specific package version in the CRANE inventory: what is affected, at which priority and who owns it." }
+  see: [advisory, purl]
+
+hosted-repository:
+  ru: { term: "hosted-репозиторий", def: "Репозиторий, в который команды публикуют собственные пакеты; CRANE является для них источником истины." }
+  en: { term: "hosted repository", def: "A repository to which teams publish their own packages; CRANE is the source of truth for them." }
+  see: [proxy-repository, namespace]
+
+namespace:
+  ru: { term: "namespace", def: "Резервирование имени или префикса имён пакетов формата за командой. Имя, покрытое namespace, считается внутренним и никогда не отдаётся из upstream." }
+  en: { term: "namespace", def: "A reservation of a package name or name prefix within a format for a team. A name covered by a namespace is internal and is never served from an upstream." }
+  see: [dependency-confusion, hosted-repository]
+
+ocsf:
+  ru: { term: "OCSF", def: "Open Cybersecurity Schema Framework: открытая схема событий безопасности, основной формат экспорта событий CRANE в SIEM." }
+  en: { term: "OCSF", def: "Open Cybersecurity Schema Framework: an open schema for security events and the primary format in which CRANE exports events to a SIEM." }
+  see: [siem]
+
+oidc:
+  ru: { term: "OIDC", def: "OpenID Connect: протокол входа поверх OAuth 2.0. CRANE принимает людей только через провайдер OIDC, каталоги LDAP, Active Directory и SAML подключаются через него." }
+  en: { term: "OIDC", def: "OpenID Connect, a sign-in protocol on top of OAuth 2.0. CRANE accepts people only through an OIDC provider; LDAP, Active Directory and SAML directories connect through that provider." }
+
+packument:
+  ru: { term: "packument", def: "Документ metadata npm-пакета со списком версий, dist-tags и ссылками на tarball." }
+  en: { term: "packument", def: "The npm package metadata document that lists versions, dist-tags and tarball links." }
+
+principal:
+  ru: { term: "принципал", def: "Участник, от имени которого выполняется действие в CRANE: человек, робот или workload (например, задача CI)." }
+  en: { term: "principal", def: "The party on whose behalf an action is performed in CRANE: a human, a robot or a workload such as a CI job." }
+
+provenance:
+  ru: { term: "provenance", def: "Сведения о происхождении артефакта: из какого репозитория, коммита и сборки он получен." }
+  en: { term: "provenance", def: "Information about where an artifact came from: the repository, commit and build that produced it." }
+  see: [attestation]
+
+proxy-repository:
+  ru: { term: "proxy-репозиторий", def: "Репозиторий, который отдаёт пакеты публичного реестра (upstream) через кэш CRANE с проверками безопасности." }
+  en: { term: "proxy repository", def: "A repository that serves packages from a public registry (an upstream) through the CRANE cache, with security checks applied." }
+  see: [upstream, hosted-repository, quarantine]
+
+purl:
+  ru: { term: "PURL", def: "Package URL: единый идентификатор пакета для всех экосистем, например pkg:npm/%40acme/ui@1.2.0." }
+  en: { term: "PURL", def: "Package URL: a uniform package identifier across ecosystems, for example pkg:npm/%40acme/ui@1.2.0." }
+
+quarantine:
+  ru: { term: "карантин", def: "Окно после публикации версии в upstream, в течение которого CRANE не отдаёт эту версию клиентам proxy-репозитория." }
+  en: { term: "quarantine", def: "A window after a version is published upstream during which CRANE does not serve that version to clients of a proxy repository." }
+  see: [upstream, proxy-repository]
+
+sbom:
+  ru: { term: "SBOM", def: "Software Bill of Materials: перечень компонентов и зависимостей артефакта в формате CycloneDX или SPDX." }
+  en: { term: "SBOM", def: "Software Bill of Materials: the list of components and dependencies of an artifact in CycloneDX or SPDX format." }
+
+siem:
+  ru: { term: "SIEM", def: "Система сбора и корреляции событий безопасности, в которую CRANE экспортирует журнал ИБ." }
+  en: { term: "SIEM", def: "A system that collects and correlates security events; CRANE exports its security journal to it." }
+  see: [ocsf, security-journal]
+
+security-journal:
+  ru: { term: "журнал ИБ", def: "События безопасности CRANE: аудит действий, журнал доступа и журнал исходящих запросов. Ведётся независимо от уровня обычных логов." }
+  en: { term: "security journal", def: "CRANE security events: the action audit, the access log and the egress log. It is kept regardless of the ordinary log level." }
+  see: [siem, egress]
+
+slopsquatting:
+  ru: { term: "slopsquatting", def: "Регистрация атакующим пакета с именем, которое придумала языковая модель, в расчёте на то, что его установят по её совету." }
+  en: { term: "slopsquatting", def: "An attacker registering a package under a name invented by a language model, expecting it to be installed on the model's advice." }
+  see: [typosquatting]
+
+sparse-registry:
+  ru: { term: "sparse-реестр", def: "Протокол реестра Cargo по HTTP: config.json, индекс по файлу на крейт и скачивание архивов. CRANE реализует только его, без git-индекса." }
+  en: { term: "sparse registry", def: "The Cargo registry protocol over HTTP: config.json, one index file per crate and archive downloads. CRANE implements only this protocol, not the git index." }
+
+ssrf:
+  ru: { term: "SSRF", def: "Server-side request forgery: атака, при которой сервер вынуждают отправить запрос на адрес, выбранный атакующим, например во внутреннюю сеть или к службе метаданных облака." }
+  en: { term: "SSRF", def: "Server-side request forgery: an attack that makes a server send a request to an address chosen by the attacker, such as an internal network or a cloud metadata service." }
+  see: [egress]
+
+stale-if-error:
+  ru: { term: "stale-if-error", def: "Отдача сохранённой копии документа upstream, когда upstream недоступен, с теми же проверками видимости, что и у свежей копии." }
+  en: { term: "stale-if-error", def: "Serving a stored copy of an upstream document while the upstream is unavailable, with the same visibility checks as a fresh copy." }
+
+step-up:
+  ru: { term: "step-up", def: "Требование свежей аутентификации сильным фактором перед опасной операцией." }
+  en: { term: "step-up", def: "A requirement for fresh strong-factor authentication before a dangerous operation." }
+
+tombstone:
+  ru: { term: "tombstone", def: "Запись об удалённой версии: байты больше не отдаются, а номер версии нельзя занять снова." }
+  en: { term: "tombstone", def: "A record of a deleted version: its bytes are no longer served and the version number cannot be taken again." }
+  see: [yank]
+
+typosquatting:
+  ru: { term: "typosquatting", def: "Публикация пакета с именем, похожим на популярное (reqeusts вместо requests), в расчёте на опечатку." }
+  en: { term: "typosquatting", def: "Publishing a package under a name that resembles a popular one (reqeusts instead of requests), counting on a typo." }
+  see: [slopsquatting, dependency-confusion]
+
+upstream:
+  ru: { term: "upstream", def: "Публичный реестр, который проксирует CRANE: crates.io, registry.npmjs.org, PyPI, Maven Central, nuget.org." }
+  en: { term: "upstream", def: "A public registry that CRANE proxies: crates.io, registry.npmjs.org, PyPI, Maven Central, nuget.org." }
+  see: [proxy-repository]
+
+vex:
+  ru: { term: "VEX", def: "Vulnerability Exploitability eXchange: заявление о том, применима ли уязвимость к продукту (not_affected, affected, fixed, under_investigation)." }
+  en: { term: "VEX", def: "Vulnerability Exploitability eXchange: a statement on whether a vulnerability applies to a product (not_affected, affected, fixed, under_investigation)." }
+
+workspace:
+  ru: { term: "команда", def: "Единица владения namespace, пакетами, репозиториями и роботами, а также членства людей. В API и конфигурации называется workspace." }
+  en: { term: "team", def: "The unit that owns namespaces, packages, repositories and robots and that people are members of. Called workspace in the API and configuration." }
+
+yank:
+  ru: { term: "yank", def: "Скрытие версии из выбора при разрешении зависимостей: версия остаётся доступной по точному номеру, действие обратимо." }
+  en: { term: "yank", def: "Hiding a version from dependency resolution: the version stays available by its exact number and the action is reversible." }
+  see: [tombstone]

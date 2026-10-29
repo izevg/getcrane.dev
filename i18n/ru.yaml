@@ -2,6 +2,7 @@
 # Набор ключей совпадает с en.yaml; сверку выполняет scripts/check-content.ts.
 skip: Перейти к содержимому
 docs: Документация
+nav.overview: Обзор раздела
 nav.sections: Разделы документации
 nav.breadcrumb: Навигационная цепочка
 nav.main: Основная навигация
@@ -15,6 +16,12 @@ sitemap: Карта сайта
 search.trigger: Поиск
 search.placeholder: Поиск по документации
 search.empty: По запросу «{q}» ничего не найдено. Проверьте написание или сбросьте фильтры.
+search.clear: Очистить
+search.count.one: "{n} результат"
+search.count.few: "{n} результата"
+search.count.many: "{n} результатов"
+search.count.other: "{n} результата"
+search.summary: "{count} по запросу: {q}"
 search.loading: Загрузка индекса…
 search.error: "Поиск недоступен: не удалось загрузить индекс. Обновите страницу."
 filter.section: Раздел

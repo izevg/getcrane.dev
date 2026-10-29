@@ -1,12 +1,18 @@
-{{- /* Дерево разделов. Вход: dict "cur" (текущая страница) "pages" (список страниц уровня), "root" (true на верхнем уровне). Порядок — по weight. */ -}}
+{{- /*
+  Дерево разделов. Вход: dict "cur" (текущая страница) "pages" (список страниц уровня), "root" (true на верхнем уровне), "overview" (страница-раздел, чья ветка выводится).
+  Порядок — по weight. Ветка — details/summary с одним таб-стопом (сам summary); ссылка на страницу раздела стоит первым пунктом ветки («Обзор раздела»).
+*/ -}}
 {{- $cur := .cur -}}
 <ul{{ if .root }} class="tree"{{ end }}>
+{{- with .overview }}
+  <li><a class="tree-overview" href="{{ .RelPermalink }}"{{ if .Eq $cur }} aria-current="page"{{ end }}>{{ i18n "nav.overview" }}</a></li>
+{{- end }}
 {{- range .pages.ByWeight }}
   {{- $dev := eq .Params.status "in-development" -}}
   {{- if .IsSection }}
   <li><details{{ if or (.Eq $cur) ($cur.IsDescendant .) }} open{{ end }}>
-    <summary><a href="{{ .RelPermalink }}"{{ if .Eq $cur }} aria-current="page"{{ end }}>{{ .Title }}</a></summary>
-    {{ partial "nav/tree.html" (dict "cur" $cur "pages" .Pages "root" false) }}
+    <summary>{{ .Title }}</summary>
+    {{ partial "nav/tree.html" (dict "cur" $cur "pages" .Pages "root" false "overview" .) }}
   </details></li>
   {{- else }}
   <li><a href="{{ .RelPermalink }}"{{ if .Eq $cur }} aria-current="page"{{ end }}>{{ .Title }}{{ if $dev }} <span class="dev">· {{ i18n "status.in-development" }}</span>{{ end }}</a></li>

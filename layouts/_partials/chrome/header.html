@@ -11,7 +11,7 @@
   </a>
   {{ with $docs }}<a class="bar-link" href="{{ .RelPermalink }}">{{ i18n "docs" }}</a>{{ end }}
   <span class="bar-spacer"></span>
-  <button class="btn btn-ghost btn-icon search-trigger js-only" type="button" data-search-open{{ with $docs }} data-docs-href="{{ .RelPermalink }}"{{ end }} aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K">
+  <button class="btn btn-ghost btn-icon search-trigger js-only" type="button" data-search-open{{ with $docs }} data-docs-href="{{ .RelPermalink }}"{{ end }} aria-haspopup="dialog">
     {{ partial "ui/icon.html" (dict "name" "search" "class" "i i-20") }}<span class="search-trigger-label">{{ i18n "search.trigger" }}</span><kbd class="kbd-hint" data-kbd>Ctrl K</kbd>
   </button>
   {{ with $docs }}<a class="bar-link no-js-only" href="{{ .RelPermalink }}">{{ i18n "sitemap" }}</a>{{ end }}

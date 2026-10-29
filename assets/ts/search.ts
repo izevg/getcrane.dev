@@ -1,6 +1,6 @@
-import { $ } from "./lib/dom";
+import { $, $$ } from "./lib/dom";
 import { announce } from "./lib/clipboard";
-import { t } from "./lib/strings";
+import { plural, t } from "./lib/strings";
 
 const BUNDLE = "/pagefind/";
 const GAP = 8;
@@ -28,9 +28,53 @@ function load(): Promise<void> {
       document.body.append(tpl.content.cloneNode(true));
     }
     await customElements.whenDefined("pagefind-modal");
+    const modal = $("pagefind-modal");
+    if (modal) {
+      translateInstance(modal);
+    }
     watchQuery();
   });
   return loading;
+}
+
+/** Часть API экземпляра Pagefind Component UI, которая нужна для перевода строк (экземпляр лежит на каждом компоненте). */
+interface PagefindInstance {
+  translate: (key: string, vars?: Record<string, unknown>) => string;
+}
+
+const COUNT_WITH_TERM = new Set(["one_result", "many_results"]);
+const COUNT_TOTAL = new Set(["total_one_result", "total_many_results"]);
+
+/**
+ * Строки Pagefind, которых нет в его каталоге ru или которые склоняют неверно: у Pagefind только формы «один» и «много» («21 результатов»),
+ * а кнопки очистки он при первой отрисовке пишет по-английски. Перехватываем translate экземпляра: формы числа берутся из Intl.PluralRules и каталога
+ * сайта (ключи search.count.*), очистка — из search.clear. Это заодно исправляет объявление результатов в live-области.
+ */
+function translateInstance(modal: HTMLElement): void {
+  const holder = $<HTMLElement & { instance?: PagefindInstance }>("pagefind-input", modal);
+  const instance = holder?.instance;
+  if (!instance) {
+    return;
+  }
+  const original = instance.translate.bind(instance);
+  instance.translate = (key, vars) => {
+    const count = vars?.COUNT;
+    if (typeof count === "number" && (COUNT_WITH_TERM.has(key) || COUNT_TOTAL.has(key))) {
+      const text = plural("search.count", count);
+      return COUNT_WITH_TERM.has(key) ? t("search.summary", { count: text, q: String(vars?.SEARCH_TERM ?? "") }) : text;
+    }
+    return key === "clear_search" ? t("search.clear") : original(key, vars);
+  };
+  // Кнопки очистки отрисованы до подмены translate, поэтому правим их подписи один раз. Повторная отрисовка через setTranslations дублирует диалог.
+  const clear = t("search.clear");
+  for (const button of $$(".pf-input-clear", modal)) {
+    button.textContent = clear;
+  }
+  for (const button of $$(".pf-dropdown-clear", modal)) {
+    const label = button.parentElement?.querySelector(".pf-dropdown-trigger-label")?.textContent ?? "";
+    button.textContent = clear;
+    button.setAttribute("aria-label", `${clear} ${label}`.trim());
+  }
 }
 
 /** Ряд фильтров показывается после первого запроса: до ввода значений у фильтров нет, пустые списки только шумят. */
@@ -97,6 +141,8 @@ export function initSearch(): void {
     return;
   }
   const apple = /Mac|iPhone|iPad/.test(navigator.platform);
+  // Сочетание объявляется только то, что реально работает на этой платформе (⌘ K на Apple, Ctrl K на остальных).
+  trigger.setAttribute("aria-keyshortcuts", apple ? "Meta+K" : "Control+K");
   const hint = $("[data-kbd]", trigger);
   if (hint) {
     hint.textContent = apple ? "⌘ K" : "Ctrl K";

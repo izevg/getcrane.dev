@@ -1,0 +1,2 @@
+{{- /* Бейдж «В разработке» (status: in-development). Вход: страница; для других статусов пусто. */ -}}
+{{- if eq .Params.status "in-development" }}<span class="badge badge-dev">{{ partial "ui/icon.html" "clock" }}{{ i18n "status.in-development" }}</span>{{ end -}}

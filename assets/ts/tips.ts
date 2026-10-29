@@ -261,7 +261,21 @@ function focusAfter(trigger: HTMLElement): void {
   next?.focus();
 }
 
+/**
+ * Переход по якорю на сам триггер (например, из «Где упоминается») переносит на него фокус браузера. Это не намерение читателя открыть слой:
+ * подсказка закрыла бы оглавление, куда он пришёл. Такой триггер считается подавленным до ухода фокуса (blur) или нового наведения.
+ */
+function suppressFragmentFocus(): void {
+  const id = decodeURIComponent(location.hash.slice(1));
+  const target = id ? document.getElementById(id) : null;
+  if (target?.dataset.tip) {
+    suppressed = target;
+  }
+}
+
 ready(() => {
+  suppressFragmentFocus();
+  window.addEventListener("hashchange", suppressFragmentFocus);
   const triggers = $$("[data-tip]");
   const groups = initCodeGroups();
   for (const group of groups) {

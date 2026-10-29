@@ -1,0 +1,21 @@
+{{- /*
+  Предзагрузка снимка первого экрана главной RU с высоким приоритетом: вариант системной темы читателя (media prefers-color-scheme).
+  У пары светлый/тёмный оба <img> eager, но fetchpriority=high им не ставится: у скрытого варианта он отнял бы пропускную способность у видимого.
+  Предзагружается один формат (AVIF, иначе WebP): браузер без его поддержки link пропустит по type и возьмёт <source> из picture.
+  Выход: link или пусто. Вход: страница.
+*/ -}}
+{{- if and .IsHome (eq .Language.Lang "ru") -}}
+  {{- $cfg := site.Data.home.screens.hero -}}
+  {{- if (index $cfg "ru").alt -}}
+    {{- range slice (dict "v" $cfg.light "m" "(prefers-color-scheme: light)") (dict "v" $cfg.dark "m" "(prefers-color-scheme: dark)") -}}
+      {{- $base := printf "screens/%s/%s" $cfg.story .v -}}
+      {{- $m := .m -}}{{- $done := false -}}
+      {{- range slice "avif" "webp" -}}
+        {{- if and (not $done) (os.FileExists (printf "static/%s.%s" $base .)) }}
+<link rel="preload" as="image" type="image/{{ . }}" href="/{{ $base }}.{{ . }}" media="{{ $m }}" fetchpriority="high">
+          {{- $done = true -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}

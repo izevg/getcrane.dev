@@ -26,5 +26,5 @@
   {{- $p.Scratch.SetInMap "tips" $tid ($html | safeHTML) -}}
 {{- end -}}
 {{- $p.Scratch.Set "f-tips" true -}}
-<a class="{{ .class | default "xref" }}" href="{{ $href }}" data-tip="{{ $tid }}" aria-describedby="{{ $tid }}-d">{{ with (.icon | default (cond (eq (.class | default "xref") "xref") "file-text" "")) }}{{ partial "ui/icon.html" . }}{{ end }}{{ $text }}</a>
+<a class="{{ .class | default "xref" }}" href="{{ $href }}" data-tip="{{ $tid }}" aria-describedby="{{ $tid }}-d">{{ with (.icon | default (cond (eq (.class | default "xref") "xref") "file-text" "")) }}{{ partial "ui/icon.html" . }}&#8288;{{ end }}{{ $text }}</a>
 {{- /* Без пробела после тега: стоит в потоке текста. */ -}}

@@ -2,6 +2,7 @@
 # Набор ключей совпадает с ru.yaml; сверку выполняет scripts/check-content.ts.
 skip: Skip to content
 docs: Docs
+nav.overview: Section overview
 nav.sections: Documentation sections
 nav.breadcrumb: Breadcrumb
 nav.main: Main
@@ -15,6 +16,12 @@ sitemap: Site map
 search.trigger: Search
 search.placeholder: Search the docs
 search.empty: No results for “{q}”. Check the spelling or clear the filters.
+search.clear: Clear
+search.count.one: "{n} result"
+search.count.few: "{n} results"
+search.count.many: "{n} results"
+search.count.other: "{n} results"
+search.summary: "{count} for: {q}"
 search.loading: Loading the index…
 search.error: "Search is unavailable: the index failed to load. Reload the page."
 filter.section: Section
@@ -74,7 +81,7 @@ genre.how-to: How-to guide
 genre.reference: Reference
 genre.explanation: Explanation
 
-state.target: Design
+state.target: Target state
 state.current: Current state
 status.available: Available
 status.in-development: In development

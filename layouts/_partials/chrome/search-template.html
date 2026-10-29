@@ -9,10 +9,12 @@
     </pagefind-modal-header>
     <pagefind-modal-body>
       <pagefind-summary default-message=" "></pagefind-summary>
+      <div class="pf-filters">
       <pagefind-filter-dropdown filter="section" label="{{ i18n "filter.section" }}"></pagefind-filter-dropdown>
       <pagefind-filter-dropdown filter="audience" label="{{ i18n "filter.audience" }}"></pagefind-filter-dropdown>
       <pagefind-filter-dropdown filter="genre" label="{{ i18n "filter.genre" }}"></pagefind-filter-dropdown>
       <pagefind-filter-dropdown filter="status" label="{{ i18n "filter.status" }}"></pagefind-filter-dropdown>
+      </div>
       <pagefind-results></pagefind-results>
     </pagefind-modal-body>
     <pagefind-modal-footer>

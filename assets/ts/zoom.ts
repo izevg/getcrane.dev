@@ -27,9 +27,16 @@ function visibleMedia(frame: HTMLElement): HTMLElement | null {
   return candidates.find((n) => n.getClientRects().length > 0) ?? null;
 }
 
+const CAPTION_SEPARATOR = ". ";
+
+/** Подпись из частей figcaption (бейдж состояния, текст, пометка): между частями разделитель, иначе имя кнопки склеивается без пробела. */
 function captionOf(frame: HTMLElement): string {
-  const fig = frame.closest("figure");
-  return fig?.querySelector("figcaption")?.textContent?.trim() ?? frame.querySelector("img")?.alt ?? "";
+  const caption = frame.closest("figure")?.querySelector("figcaption");
+  if (!caption) {
+    return frame.querySelector("img")?.alt ?? "";
+  }
+  const parts = Array.from(caption.childNodes, (node) => node.textContent?.trim() ?? "").filter((part) => part !== "");
+  return parts.join(CAPTION_SEPARATOR);
 }
 
 function naturalSize(node: Element): { w: number; h: number } {

@@ -12,4 +12,4 @@
 {{- if and (eq $status "in-development") (ne $state "current") }}{{ errorf "front matter: in-development допустим только для state: current (%s)" $p.Path }}{{ end -}}
 {{- with $genre }}<span class="badge badge-genre">{{ i18n (printf "genre.%s" .) }}</span>{{ end -}}
 {{- with $state }}<span class="badge badge-{{ . }}">{{ partial "ui/icon.html" (cond (eq . "target") "target" "current") }}{{ i18n (printf "state.%s" .) }}</span>{{ end -}}
-{{- if eq $status "in-development" }}<span class="badge badge-dev">{{ partial "ui/icon.html" "clock" }}{{ i18n "status.in-development" }}</span>{{ end -}}
+{{- partial "ui/dev-badge.html" $p -}}

@@ -1,6 +1,6 @@
 {{- /*
   Блок кода: подсветка Chroma с классами (цвета — токены --syn-*), шапка резервируется всегда, кнопку копирования добавляет остров.
-  В блоках известных языков имена переменных окружения оборачиваются ссылками на справочник (ui-spec, «Переменные окружения env»):
+  В блоках известных языков имена переменных окружения из data/env.yaml (любой префикс: CRANE_, AWS_, RUST_LOG, CADDY_…) оборачиваются ссылками на справочник (ui-spec, «Переменные окружения env»):
   разбор идёт по максимальным «словам» [A-Za-z0-9_] уже подсвеченного HTML, поэтому MY_CRANE_TOKEN и CRANE_TOKENS не совпадают,
   а обёртка не добавляет ни одного символа текста и не меняет классы токенов Chroma. Неизвестное CRANE_* при params.envStrict ломает сборку.
 */ -}}
@@ -17,14 +17,13 @@
 {{- if in $envLangs $lang -}}
   {{- $url := partial "env/url.html" -}}
   {{- $out := slice -}}
-  {{- range findRE `[A-Za-z0-9_]+|[^A-Za-z0-9_]+` $inner -}}
-    {{- $w := . -}}
-    {{- if or (hasPrefix $w "CRANE_") (hasPrefix $w "AWS_") -}}
+  {{- range $i, $w := findRE `[A-Za-z0-9_]+|[^A-Za-z0-9_]+` $inner -}}
+    {{- if findRE `^[A-Z][A-Z0-9_]+$` $w 1 -}}
       {{- $r := partial "env/lookup.html" $w -}}
       {{- if $r -}}
         {{- $id := partial "env/register.html" (dict "page" $p "r" $r) -}}
         {{- $frag := printf "%s%s" $r.anchor (cond $r.isFile "-file" "") -}}
-        {{- $mid := partial "env/first.html" (dict "page" $p "r" $r) -}}
+        {{- $mid := partial "env/first.html" (dict "page" $p "r" $r "key" (printf "c%d:%d:%d" $.Position.LineNumber $.Position.ColumnNumber $i)) -}}
         {{- $out = $out | append (printf `<a class="env"%s href="%s#%s" data-tip="%s" data-env="%s" draggable="false">%s</a>` (cond (ne $mid "") (printf ` id="%s"` $mid) "") $url $frag $id $w $w) -}}
       {{- else -}}
         {{- if and site.Params.envStrict (findRE `^CRANE_[A-Z0-9_]+$` $w) }}{{ errorf "env: неизвестное имя %s в блоке кода %q (%s); опечатка или его нет в data/env.yaml" $w $lang $p.Path }}{{ end -}}

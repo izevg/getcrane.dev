@@ -23,20 +23,9 @@
   .hero-lang a { font-weight: 650; }
   @media (max-width: 39.99rem) { .hero-shot { display: none; } }
 
-  /* Рамка «окно» вокруг снимков консоли: место резервируют width/height у img (вьюпорты снимков различаются), снимок крупнее h1 — кандидат LCP. */
-  .window { border-radius: var(--radius-card); border: 1px solid var(--border); box-shadow: var(--shadow-card); background: var(--card); overflow: hidden; }
-  .window picture, .window img { display: block; inline-size: 100%; block-size: auto; }
   .hero-shot figcaption, .console-shot figcaption { margin-block-start: var(--space-2); font-size: var(--type-small); color: var(--muted-foreground); }
   .console-shot figcaption a { font-weight: 650; }
   .demo::before { content: "· "; }
-  .shot-light, .shot-dark { display: none; }
-  .window .shot-light { display: block; }
-  :root[data-theme="dark"] .window .shot-light { display: none; }
-  :root[data-theme="dark"] .window .shot-dark { display: block; }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme]) .window .shot-light { display: none; }
-    :root:not([data-theme]) .window .shot-dark { display: block; }
-  }
 
   /*
    * Схема «путь пакета». Контейнерный запрос: в узкой колонке (hero, мобильный) узлы идут столбцом, в полосе от 52rem — рядом.
@@ -76,7 +65,7 @@
 
   @container (min-width: 52rem) {
     .pkg-path { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: var(--space-6); }
-    .pkg-box { flex-direction: column; justify-content: center; text-align: center; block-size: 100%; padding: var(--space-4) var(--space-3); }
+    .pkg-box { flex-direction: column; justify-content: center; text-align: center; block-size: 100%; padding: var(--space-4) var(--space-2); }
     .pkg-text { justify-items: center; }
     .pkg-line { inset-block: 50%; inset-inline: calc(100% / 12); inline-size: auto; block-size: 2px; margin-block-start: -1px; }
     .pkg-dot { inset-block-start: calc(var(--space-1) * -1); inset-inline-start: 0; }
@@ -126,6 +115,7 @@
   @media (min-width: 64rem) { .grid-f { grid-template-columns: repeat(5, 1fr); } }
   .card-tile { padding: var(--space-4); }
   .card-tile p { font-size: var(--type-small); color: var(--muted-foreground); }
+  .card-tile .card-status { margin-block-start: var(--space-2); }
   .grid-d { grid-template-columns: 1fr; }
   @media (min-width: 48rem) { .grid-d { grid-template-columns: repeat(3, 1fr); } }
   .card-tile .code { margin-block-start: var(--space-3); position: relative; }

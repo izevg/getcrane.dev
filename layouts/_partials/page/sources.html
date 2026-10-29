@@ -8,7 +8,10 @@
     {{- range $i, $id := . }}
     {{- $n := add $i 1 -}}
     {{- $s := index site.Data.sources $id -}}
-    {{- $count := int (index ($p.Scratch.Get "cite-m" | default dict) $id) }}
+    {{- /* Упоминания источника — id cite-<n>-… в готовом HTML, в порядке появления (см. tips/cite.html). */ -}}
+    {{- $marks := slice -}}
+    {{- range findRESubmatch (printf `id="(cite-%d-[0-9-]+)"` $n) $p.Content }}{{ $marks = $marks | append (index . 1) }}{{ end -}}
+    {{- $count := len $marks }}
     <li id="source-{{ $n }}">
       <span class="src-pub">{{ $s.publisher }}</span> — <a href="{{ $s.url }}" rel="noopener noreferrer">{{ $s.title }}</a>
       <span class="src-meta">
@@ -16,10 +19,10 @@
         {{- partial "ui/t.html" (dict "k" "cite.accessed" "v" (dict "date" ((time.AsTime $s.accessed).Format "2006-01-02"))) -}}
       </span>
       {{- if eq $count 1 }}
-      <a class="backref" href="#cite-{{ $n }}-1" aria-label="{{ partial "ui/t.html" (dict "k" "cite.back" "v" (dict "n" 1)) }}">↑</a>
+      <a class="backref" href="#{{ index $marks 0 }}" aria-label="{{ partial "ui/t.html" (dict "k" "cite.back" "v" (dict "n" 1)) }}">↑</a>
       {{- else if gt $count 1 }}
       <span class="backrefs" role="group" aria-label="{{ i18n "cite.back.group" }}"><span aria-hidden="true">↑</span>
-        {{- range seq $count }} <a class="backref" href="#cite-{{ $n }}-{{ . }}" aria-label="{{ partial "ui/t.html" (dict "k" "cite.back" "v" (dict "n" .)) }}">{{ . }}</a>{{ end }}</span>
+        {{- range $j, $mark := $marks }} <a class="backref" href="#{{ $mark }}" aria-label="{{ partial "ui/t.html" (dict "k" "cite.back" "v" (dict "n" (add $j 1))) }}">{{ add $j 1 }}</a>{{ end }}</span>
       {{- end }}
     </li>
     {{- end }}

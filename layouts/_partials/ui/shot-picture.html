@@ -1,5 +1,5 @@
 {{- /*
-  <picture> снимка Storybook: static/screens/<история>/<вариант>.{avif,webp,png}. Вход: dict "story" "variant" "alt" "class" "eager" (bool) "lazy" (bool).
+  <picture> снимка Storybook: static/screens/<история>/<вариант>.{avif,webp,png}. Вход: dict "story" "variant" "alt" "class" "eager" (bool: loading=eager) "high" (bool: fetchpriority=high).
   Размеры — ui/screen-dims.html (data/screenshot-variants.yaml). Источники в порядке AVIF, WebP; запасной img — png, иначе webp, иначе avif.
   Нет ни одного файла: пустая строка. Выход: HTML.
 */ -}}
@@ -14,6 +14,6 @@
 <picture class="{{ .class }}">
   {{- if in $have "avif" }}<source type="image/avif" srcset="{{ $url }}.avif">{{ end }}
   {{- if in $have "webp" }}<source type="image/webp" srcset="{{ $url }}.webp">{{ end }}
-  <img src="{{ $url }}.{{ $fallback }}" width="{{ $dims.width }}" height="{{ $dims.height }}" alt="{{ .alt }}" decoding="async" {{ if .eager }}loading="eager" fetchpriority="high"{{ else }}loading="lazy"{{ end }}>
+  <img src="{{ $url }}.{{ $fallback }}" width="{{ $dims.width }}" height="{{ $dims.height }}" alt="{{ .alt }}" decoding="async" {{ if .eager }}loading="eager"{{ if .high }} fetchpriority="high"{{ end }}{{ else }}loading="lazy"{{ end }}>
 </picture>
 {{- end -}}

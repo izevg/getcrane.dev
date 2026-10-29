@@ -13,13 +13,13 @@
 {{- $pic := "" -}}
 {{- if eq .Page.Language.Lang "en" -}}
   {{- $en := $pair.en | default $variant -}}
-  {{- $pic = partial "ui/shot-picture.html" (dict "story" $story "variant" $en "alt" $alt "class" "" "eager" $eager) -}}
+  {{- $pic = partial "ui/shot-picture.html" (dict "story" $story "variant" $en "alt" $alt "class" "" "eager" $eager "high" $eager) -}}
 {{- else if $pair.dark -}}
   {{- $l := partial "ui/shot-picture.html" (dict "story" $story "variant" $variant "alt" $alt "class" "shot-light" "eager" $eager) -}}
-  {{- $d := partial "ui/shot-picture.html" (dict "story" $story "variant" $pair.dark "alt" $alt "class" "shot-dark" "eager" false) -}}
+  {{- $d := partial "ui/shot-picture.html" (dict "story" $story "variant" $pair.dark "alt" $alt "class" "shot-dark" "eager" $eager) -}}
   {{- if and (trim (string $l) " \n") (trim (string $d) " \n") }}{{ $pic = (print $l $d) | safeHTML }}{{ end -}}
 {{- else -}}
-  {{- $pic = partial "ui/shot-picture.html" (dict "story" $story "variant" $variant "alt" $alt "class" "" "eager" $eager) -}}
+  {{- $pic = partial "ui/shot-picture.html" (dict "story" $story "variant" $variant "alt" $alt "class" "" "eager" $eager "high" $eager) -}}
 {{- end -}}
 {{- $has := ne (trim (string $pic) " \n") "" -}}
 {{- if and (not $has) site.Params.screenshotsRequired }}{{ errorf "screenshot: нет файлов static/screens/%s/%s.{avif,webp} (%s)" $story $variant .Position }}{{ end -}}

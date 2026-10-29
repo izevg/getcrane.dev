@@ -36,7 +36,12 @@ pagefind-modal, pagefind-modal-trigger, pagefind-input, pagefind-results, pagefi
 pagefind-modal mark { background: var(--brand-container); color: var(--foreground); }
 pagefind-modal { color-scheme: inherit; }
 /* Фильтры появляются после первого запроса (атрибут ставит search.ts). */
-pagefind-modal:not([data-q]) pagefind-filter-dropdown { display: none; }
+pagefind-modal:not([data-q]) :is(*, #\#):is(*, #\#):is(*, #\#):is(*, #\#).pf-filters { display: none; }
+/* Фильтры идут одним рядом и переносятся; «Очистить» у фильтра показывается только при выбранном значении (у Pagefind пустое состояние — aria-disabled). */
+/* Усиление селектора приёмом Pagefind (:is(*, #\#)): его собственные правила несут «id»-специфичность. */
+:is(*, #\#):is(*, #\#):is(*, #\#):is(*, #\#) .pf-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-block: 8px; }
+:is(*, #\#):is(*, #\#):is(*, #\#):is(*, #\#) .pf-filters pagefind-filter-dropdown { display: block; flex: 0 1 auto; min-inline-size: 0; }
+:is(*, #\#):is(*, #\#):is(*, #\#):is(*, #\#) .pf-filters .pf-dropdown-clear[aria-disabled="true"] { display: none; }
 @media (max-width: 40rem) {
   pagefind-modal, pagefind-modal-trigger { --pf-modal-top: 0; --pf-modal-max-width: 100vw; }
 }

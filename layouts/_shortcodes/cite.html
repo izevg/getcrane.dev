@@ -2,4 +2,4 @@
   {{< cite "pep-503" >}}: чип «[N] издатель» и слой с названием, датами и ссылкой. Раздел «Источники» добавляется шаблоном страницы.
   Разметка и учёт номеров — в partial tips/cite.html.
 */ -}}
-{{- partial "ui/emit.html" (dict "ctx" . "html" (partial "tips/cite.html" (dict "page" .Page "id" (.Get 0) "pos" .Position))) -}}
+{{- partial "ui/emit.html" (dict "ctx" . "html" (partial "tips/cite.html" (dict "page" .Page "id" (.Get 0) "pos" .Position "key" (partial "util/sckey.html" .)))) -}}

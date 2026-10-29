@@ -12,7 +12,11 @@
     content: ""; position: absolute; inset-block: var(--space-1); inset-inline-start: 0; inline-size: 3px;
     border-radius: 2px; background: var(--nav-active-bar);
   }
-  .tree summary { display: flex; align-items: center; gap: var(--space-1); list-style: none; border-radius: var(--radius); }
+  .tree summary {
+    display: flex; align-items: center; gap: var(--space-1); list-style: none; border-radius: var(--radius); cursor: pointer;
+    padding: var(--space-1) var(--space-2); font-size: var(--type-small); line-height: 1.4; color: var(--foreground);
+  }
+  .tree summary:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
   .tree summary::-webkit-details-marker { display: none; }
   .tree summary::before {
     content: ""; flex: none; inline-size: 20px; block-size: 20px; margin-inline-start: calc(var(--space-1) * -1);
@@ -22,8 +26,6 @@
   }
   .tree details[open] > summary::before { transform: rotate(90deg); }
   .tree summary:hover { background: var(--accent); }
-  .tree summary > a { flex: 1; }
-  .tree summary > a:hover { background: transparent; }
   .tree .dev { font-size: var(--type-caption); color: var(--warning); }
   @media (prefers-reduced-motion: reduce) { .tree summary::before { transition: none; } }
 

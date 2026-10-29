@@ -16,7 +16,7 @@
   {{- $did := printf "card-%d-%d-d" $ord $i }}
   <li class="card-link">
     <p class="card-link-head">{{ partial "ui/icon.html" (dict "name" (partial "ui/section-icon.html" $path) "class" "i i-16") }}<a class="card-link-title" href="{{ $t.RelPermalink }}"{{ if $t.Params.description }} aria-describedby="{{ $did }}"{{ end }}>{{ $t.Title }}</a>
-      {{- if eq $t.Params.status "in-development" }}<span class="badge badge-dev">{{ partial "ui/icon.html" "clock" }}{{ i18n "status.in-development" }}</span>{{ end -}}
+      {{- partial "ui/dev-badge.html" $t -}}
       {{ partial "ui/icon.html" (dict "name" "arrow-right" "class" "i i-16 card-link-go") }}</p>
     {{- with $t.Params.description }}
     <p class="card-link-desc" id="{{ $did }}">{{ . }}</p>

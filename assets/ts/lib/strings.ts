@@ -24,3 +24,11 @@ export function t(key: string, vars: Record<string, string | number> = {}): stri
   }
   return text;
 }
+
+/** Строка во множественной форме по правилам языка страницы (Intl.PluralRules): ключи <base>.one|few|many|other, запасной — other. */
+export function plural(base: string, n: number, vars: Record<string, string | number> = {}): string {
+  const category = new Intl.PluralRules(document.documentElement.lang || "en").select(n);
+  const key = `${base}.${category}`;
+  const form = load()[key] === undefined ? `${base}.other` : key;
+  return t(form, { n: new Intl.NumberFormat(document.documentElement.lang || "en").format(n), ...vars });
+}

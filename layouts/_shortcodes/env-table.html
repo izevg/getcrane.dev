@@ -47,7 +47,7 @@
         <span class="env-name"><a href="#{{ $anchor }}"><code>{{ $name }}</code></a><button type="button" class="btn btn-ghost btn-icon btn-sm js-only" data-copy-name="{{ $name }}" aria-label="{{ i18n "env.copy" }}">{{ partial "ui/icon.html" "copy" }}</button></span>
         {{- if $mentions }}
         <details class="env-mentions"><summary>{{ partial "ui/t.html" (dict "k" "env.mentions" "v" (dict "n" (len $mentions))) }}</summary>
-          <ul>{{ range $mentions }}<li><a href="{{ .RelPermalink }}{{ if or (hasPrefix $name "CRANE_") (hasPrefix $name "AWS_") }}#envm-{{ $anchor }}{{ end }}">{{ .Title }}</a></li>{{ end }}</ul>
+          <ul>{{ range $mentions }}<li><a href="{{ .RelPermalink }}#envm-{{ $anchor }}">{{ .Title }}</a></li>{{ end }}</ul>
         </details>
         {{- end }}
       </th>

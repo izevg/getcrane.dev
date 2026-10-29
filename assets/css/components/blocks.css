@@ -21,13 +21,18 @@
   /* Снимок экрана и диаграмма. */
   .shot-frame { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--card); }
   .shot img { inline-size: 100%; block-size: auto; }
-  .shot-light, .diagram-light { display: block; }
-  .shot-dark, .diagram-dark { display: none; }
-  :root[data-theme="dark"] .shot-light, :root[data-theme="dark"] .diagram-light { display: none; }
-  :root[data-theme="dark"] .shot-dark, :root[data-theme="dark"] .diagram-dark { display: block; }
+  /*
+   * Пары вариантов (светлый/тёмный) живут в одном слое и с равной силой: display у самих picture/img задан через :where (нулевая специфичность),
+   * поэтому скрытие неактивного варианта (0,2,0) и выбор темы выигрывают без !important.
+   */
+  .window { border-radius: var(--radius-card); border: 1px solid var(--border); box-shadow: var(--shadow-card); background: var(--card); overflow: hidden; }
+  .window :where(picture, img) { display: block; inline-size: 100%; block-size: auto; }
+  .diagram-dark, .window .shot-dark { display: none; }
+  :root[data-theme="dark"] :is(.diagram-light, .window .shot-light) { display: none; }
+  :root[data-theme="dark"] :is(.diagram-dark, .window .shot-dark) { display: block; }
   @media (prefers-color-scheme: dark) {
-    :root:not([data-theme]) .shot-light, :root:not([data-theme]) .diagram-light { display: none; }
-    :root:not([data-theme]) .shot-dark, :root:not([data-theme]) .diagram-dark { display: block; }
+    :root:not([data-theme]) :is(.diagram-light, .window .shot-light) { display: none; }
+    :root:not([data-theme]) :is(.diagram-dark, .window .shot-dark) { display: block; }
   }
   .shot-ph {
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-2);

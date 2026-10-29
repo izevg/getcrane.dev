@@ -19,12 +19,12 @@ The setup is minimal: a cache in process memory (`memory`), blobs on a local Doc
 - Git, curl and a POSIX shell (Linux or macOS).
 - Task (go-task) and Node.js 24: they are needed only for `task secrets:init`.
 - `cargo`, latest stable. The last step also needs Node.js and `npm`.
-- Free ports 80 and 443 on the host (`CADDY_HTTP_PORT`, `CADDY_HTTPS_PORT`).
+- Free ports 80 and 443 on the host ({{< env "CADDY_HTTP_PORT" >}}, {{< env "CADDY_HTTPS_PORT" >}}).
 - Internet access: images and dependencies are built from public sources, and the CRANE proxy repositories contact crates.io and registry.npmjs.org.
 
 ## Get the sources and build the image {#build}
 
-The CRANE image is built locally from `deploy/docker/Dockerfile` and is not published to a registry. The name and tag `crane/crane:latest` match `CRANE_IMAGE` and `CRANE_VERSION` in `.env.dist`.
+The CRANE image is built locally from `deploy/docker/Dockerfile` and is not published to a registry. The name and tag `crane/crane:latest` match {{< env "CRANE_IMAGE" >}} and {{< env "CRANE_VERSION" >}} in `.env.dist`.
 
 ```bash
 git clone <repository-url> crane
@@ -42,7 +42,7 @@ Copy the environment template. Compose takes all values from `.env`: the compose
 cp .env.dist .env
 ```
 
-Set three values in `.env`. The `CRANE_NAMESPACES` line already exists and is empty; add the other two lines.
+Set three values in `.env`. The {{< env "CRANE_NAMESPACES" >}} line already exists and is empty; add the other two lines.
 
 ```ini
 CRANE_NAMESPACES=cargo:acme-*
@@ -50,7 +50,7 @@ CRANE_CARGO_PROXY_REPOS=crates-io
 CRANE_NPM_PROXY_REPOS=npmjs
 ```
 
-`CRANE_NAMESPACES` reserves Cargo crate names with the prefix `acme-` for the platform. Publishing a name covered by a {{< term "namespace" >}} needs no request to crates.io, and CRANE never serves such a name from an {{< term "upstream" >}}. `CRANE_CARGO_PROXY_REPOS` and `CRANE_NPM_PROXY_REPOS` create the proxy repositories `crates-io` and `npmjs`. The Cargo hosted repository `internal` exists without configuration.
+{{< env "CRANE_NAMESPACES" >}} reserves Cargo crate names with the prefix `acme-` for the platform. Publishing a name covered by a {{< term "namespace" >}} needs no request to crates.io, and CRANE never serves such a name from an {{< term "upstream" >}}. {{< env "CRANE_CARGO_PROXY_REPOS" >}} and {{< env "CRANE_NPM_PROXY_REPOS" >}} create the proxy repositories `crates-io` and `npmjs`. The Cargo hosted repository `internal` exists without configuration.
 
 Create the secret files: the access token, the PostgreSQL password and the catalog URL. The task creates only the missing files and overwrites nothing. It does not print the values.
 
@@ -79,12 +79,12 @@ docker compose --project-directory . -f deploy/compose/docker-compose.yaml \
   cp caddy:/data/caddy/pki/authorities/local/root.crt secrets/caddy-root.crt
 ```
 
-Set the shell variables. `cargo` and `npm` need them in the next steps, so run the remaining commands in the same shell. The token lives in `secrets/crane_token`: Compose passes it to the server as a file through `CRANE_TOKEN_FILE`, and CRANE compares the token of every protocol request with it. The same token serves the hosted and the proxy repositories.
+Set the shell variables. `cargo` and `npm` need them in the next steps, so run the remaining commands in the same shell. The token lives in `secrets/crane_token`: Compose passes it to the server as a file through {{< env "CRANE_TOKEN_FILE" >}}, and CRANE compares the token of every protocol request with it. The same token serves the hosted and the proxy repositories.
 
 ```bash
-export CRANE_CA="$PWD/secrets/caddy-root.crt"
-export CARGO_HTTP_CAINFO="$CRANE_CA"
-export NODE_EXTRA_CA_CERTS="$CRANE_CA"
+export STAND_CA="$PWD/secrets/caddy-root.crt"
+export CARGO_HTTP_CAINFO="$STAND_CA"
+export NODE_EXTRA_CA_CERTS="$STAND_CA"
 export CARGO_REGISTRIES_CRANE_TOKEN="$(cat secrets/crane_token)"
 export CARGO_REGISTRIES_CRANE_PROXY_TOKEN="$CARGO_REGISTRIES_CRANE_TOKEN"
 export NPM_TOKEN="$CARGO_REGISTRIES_CRANE_TOKEN"
@@ -97,7 +97,7 @@ Check that the registry responds. The token goes through stdin (`-K -`), so it d
 
 ```bash
 printf 'header = "Authorization: %s"\n' "$CARGO_REGISTRIES_CRANE_TOKEN" \
-  | curl -fsS --cacert "$CRANE_CA" -K - https://localhost/cargo/internal/index/config.json
+  | curl -fsS --cacert "$STAND_CA" -K - https://localhost/cargo/internal/index/config.json
 ```
 
 CRANE returns the {{< term "sparse-registry" >}} configuration of the `internal` hosted repository:

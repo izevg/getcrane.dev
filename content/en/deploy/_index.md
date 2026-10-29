@@ -11,7 +11,7 @@ terms: [blob]
 
 CRANE runs through Docker Compose on a single node; S3 storage and the Valkey cache are added with override files. Configuration consists of environment variables and an optional TOML file. Deployment to Kubernetes with a Helm chart is in development. The CRANE image is currently built locally from `deploy/docker/Dockerfile` and is not published to a registry.
 
-Access to the protocols is protected by the static token `CRANE_TOKEN`. The probe (admin) port is not published in the Compose file: only the API port is exposed, through Caddy.
+Access to the protocols is protected by the static token {{< env "CRANE_TOKEN" >}}. The probe (admin) port is not published in the Compose file: only the API port is exposed, through Caddy.
 
 ## Deployment options {#options}
 

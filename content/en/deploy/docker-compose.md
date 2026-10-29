@@ -18,8 +18,8 @@ Safe values are the defaults. Secrets live in files and never enter environment 
 - A host with Docker, BuildKit and Docker Compose. Versions: {{< xref "deploy/requirements#tooling" >}}.
 - go-task and Node.js 24 for the `task secrets:init` task.
 - A copy of the CRANE repository. Run every command from its root.
-- Free ports `80` and `443` (the `CADDY_HTTP_PORT` and `CADDY_HTTPS_PORT` variables).
-- A public DNS name for `CRANE_HOST`. `localhost` is enough for a trial.
+- Free ports `80` and `443` (the {{< env "CADDY_HTTP_PORT" >}} and {{< env "CADDY_HTTPS_PORT" >}} variables).
+- A public DNS name for {{< env "CRANE_HOST" >}}. `localhost` is enough for a trial.
 
 ## Steps {#steps}
 
@@ -58,9 +58,9 @@ Safe values are the defaults. Secrets live in files and never enter environment 
    CRANE_NAMESPACES=cargo:acme-*
    ```
 
-   The `CRANE_NAMESPACES` variable reserves internal {{< term "namespace" "namespaces" >}}: the proxy never serves these names. Entries have the form `format:pattern` or `format:pattern=uuid`, separated by commas.
+   The {{< env "CRANE_NAMESPACES" >}} variable reserves internal {{< term "namespace" "namespaces" >}}: the proxy never serves these names. Entries have the form `format:pattern` or `format:pattern=uuid`, separated by commas.
 
-5. Build the image. The name and tag must match `CRANE_IMAGE` and `CRANE_VERSION` in `.env` (`crane/crane` and `latest` by default).
+5. Build the image. The name and tag must match {{< env "CRANE_IMAGE" >}} and {{< env "CRANE_VERSION" >}} in `.env` (`crane/crane` and `latest` by default).
 
    ```bash
    docker build -f deploy/docker/Dockerfile -t crane/crane:latest .
@@ -109,9 +109,9 @@ The `/healthz/ready` probe checks PostgreSQL and the blob storage and answers wi
 
 | Service | Purpose |
 | --- | --- |
-| `caddy` | TLS and reverse proxy to `crane`; publishes the `CADDY_HTTP_PORT` and `CADDY_HTTPS_PORT` ports |
+| `caddy` | TLS and reverse proxy to `crane`; publishes the {{< env "CADDY_HTTP_PORT" >}} and {{< env "CADDY_HTTPS_PORT" >}} ports |
 | `migrate` | A one-shot `migrate` role; a lock prevents concurrent migration runs |
-| `crane` | The `all` role: the API and the probe port. Resource limits: `CRANE_CPUS` and `CRANE_MEMORY` |
+| `crane` | The `all` role: the API and the probe port. Resource limits: {{< env "CRANE_CPUS" >}} and {{< env "CRANE_MEMORY" >}} |
 | `postgres` | The catalog in the `pg` volume; no port is published |
 
 Blobs live in the `blobs` volume (`CRANE_BLOBS=file:///data/blobs`), and Caddy data, including issued certificates, lives in the `caddy-data` volume. The proxy cache sits in process memory by default. The `all` role currently equals the `serve` role: see {{< xref "reference/server-cli" >}}.
@@ -121,12 +121,12 @@ Blobs live in the `blobs` volume (`CRANE_BLOBS=file:///data/blobs`), and Caddy d
 
 ## The edge network and trusted proxies {#edge}
 
-The `edge` network connects only `caddy` and `crane`. Its subnet is fixed by the `CRANE_EDGE_SUBNET` variable (`172.31.250.0/24` by default), and Compose passes the same value to the server as `CRANE_TRUSTED_PROXIES`. As a result CRANE trusts `X-Forwarded-For` and `X-Request-Id` only from Caddy, and the audit shows the client address instead of the proxy. The subnet must be free: one value defines both the network and the trusted proxy list.
+The `edge` network connects only `caddy` and `crane`. Its subnet is fixed by the {{< env "CRANE_EDGE_SUBNET" >}} variable (`172.31.250.0/24` by default), and Compose passes the same value to the server as {{< env "CRANE_TRUSTED_PROXIES" >}}. As a result CRANE trusts `X-Forwarded-For` and `X-Request-Id` only from Caddy, and the audit shows the client address instead of the proxy. The subnet must be free: one value defines both the network and the trusted proxy list.
 
-Without `CRANE_TRUSTED_PROXIES` the server ignores both headers. The reference `Caddyfile` removes the client `X-Request-Id` (`header_up -X-Request-Id`). More about the network: {{< xref "configure/network" >}}.
+Without {{< env "CRANE_TRUSTED_PROXIES" >}} the server ignores both headers. The reference `Caddyfile` removes the client `X-Request-Id` (`header_up -X-Request-Id`). More about the network: {{< xref "configure/network" >}}.
 
 > [!WARNING]
-> Do not publish the admin port (`CRANE_ADMIN_PORT`, `9464` by default). The probes work without a token and do not pass through Caddy.
+> Do not publish the admin port ({{< env "CRANE_ADMIN_PORT" >}}, `9464` by default). The probes work without a token and do not pass through Caddy.
 
 ## Secrets {#secrets}
 
@@ -134,13 +134,13 @@ The token, the PostgreSQL password and the catalog URL live in files. Compose mo
 
 | `.env` variable | Default file | Read by |
 | --- | --- | --- |
-| `CRANE_TOKEN_SECRET` | `./secrets/crane_token` | `crane`, through `CRANE_TOKEN_FILE` |
-| `POSTGRES_PASSWORD_SECRET` | `./secrets/postgres_password` | `postgres`, through `POSTGRES_PASSWORD_FILE` |
-| `CRANE_DATABASE_URL_SECRET` | `./secrets/database_url` | `crane` and `migrate`, through `CRANE_DATABASE_URL_FILE` |
+| {{< env "CRANE_TOKEN_SECRET" >}} | `./secrets/crane_token` | `crane`, through {{< env "CRANE_TOKEN_FILE" >}} |
+| {{< env "POSTGRES_PASSWORD_SECRET" >}} | `./secrets/postgres_password` | `postgres`, through `POSTGRES_PASSWORD_FILE` |
+| {{< env "CRANE_DATABASE_URL_SECRET" >}} | `./secrets/database_url` | `crane` and `migrate`, through {{< env "CRANE_DATABASE_URL_FILE" >}} |
 
 The `secrets` directory is created with mode `0700` and the files with mode `0644`: on Linux, user `65532` and `postgres` read the secrets, not the host owner. The `/secrets/` directory is listed in `.gitignore`. When you create the files by hand, the catalog URL looks like `postgres://crane:<password>@postgres:5432/crane`, and the password contains only URL-safe characters.
 
-Do not set `CRANE_TOKEN` and `CRANE_TOKEN_FILE` together: the server does not start. The PostgreSQL password is written into the `pg` volume on the first start, and changing the file does not change the password in an existing volume.
+Do not set {{< env "CRANE_TOKEN" >}} and {{< env "CRANE_TOKEN_FILE" >}} together: the server does not start. The PostgreSQL password is written into the `pg` volume on the first start, and changing the file does not change the password in an existing volume.
 
 ## What's next {#next}
 

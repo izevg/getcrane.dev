@@ -1,6 +1,6 @@
 ---
 title: "Failing closed"
-description: "When CRANE cannot perform a security check, it answers 503 with Retry-After: 10 instead of serving a package unchecked; the price is that reads become unavailable."
+description: "When CRANE cannot perform a security check, it answers 503 with Retry-After: 10 instead of serving a package unchecked; reads become unavailable."
 audience: [security, platform]
 genre: explanation
 state: target

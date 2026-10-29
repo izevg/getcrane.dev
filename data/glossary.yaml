@@ -164,3 +164,84 @@ yank:
   ru: { term: "yank", def: "Скрытие версии из выбора при разрешении зависимостей: версия остаётся доступной по точному номеру, действие обратимо." }
   en: { term: "yank", def: "Hiding a version from dependency resolution: the version stays available by its exact number and the action is reversible." }
   see: [tombstone]
+
+break-glass:
+  ru: { term: "break-glass", def: "Временное разрешение для конкретного проекта скачать заблокированную версию: не дольше 24 часов, с двумя подтверждениями, каждое использование пишется в журнал." }
+  en: { term: "break-glass", def: "A temporary permission for one project to download a blocked version: at most 24 hours, with two approvals, and every use is recorded in the journal." }
+
+cedar:
+  ru: { term: "Cedar", def: "Открытый язык и движок политик авторизации: возвращает решение и сработавшие правила." }
+  en: { term: "Cedar", def: "An open authorization policy language and engine that returns the decision and the rules that produced it." }
+
+epss:
+  ru: { term: "EPSS", def: "Exploit Prediction Scoring System (FIRST): оценка вероятности эксплуатации уязвимости в ближайшие 30 дней." }
+  en: { term: "EPSS", def: "Exploit Prediction Scoring System (FIRST): the estimated probability that a vulnerability is exploited within the next 30 days." }
+
+hash-chain:
+  ru: { term: "цепочка хэшей", def: "Способ защиты журнала от изменения: каждая запись хранит хэш предыдущей, поэтому правка или удаление записи обнаруживается при проверке." }
+  en: { term: "hash chain", def: "A way to protect a journal from tampering: each record stores the hash of the previous one, so editing or removing a record is detected on verification." }
+  see: [worm, security-journal]
+
+kev:
+  ru: { term: "KEV", def: "Known Exploited Vulnerabilities (CISA): каталог уязвимостей, которые эксплуатируются на практике." }
+  en: { term: "KEV", def: "Known Exploited Vulnerabilities (CISA): a catalog of vulnerabilities that are exploited in practice." }
+
+separation-of-duties:
+  ru: { term: "разделение обязанностей", def: "Правило, по которому одна роль не может одновременно выполнять действия и контролировать их журнал." }
+  en: { term: "separation of duties", def: "The rule that one role cannot both perform actions and control the journal of those actions." }
+
+soar:
+  ru: { term: "SOAR", def: "Security Orchestration, Automation and Response: платформа автоматизации реагирования на инциденты, которая может вызывать ответные действия CRANE через API." }
+  en: { term: "SOAR", def: "Security Orchestration, Automation and Response: an incident response automation platform that can trigger CRANE response actions through the API." }
+
+spdx:
+  ru: { term: "SPDX", def: "Стандарт идентификаторов и выражений лицензий (например, MIT OR Apache-2.0) и формат SBOM." }
+  en: { term: "SPDX", def: "A standard for license identifiers and expressions (for example, MIT OR Apache-2.0) and an SBOM format." }
+
+worm:
+  ru: { term: "WORM", def: "Write once, read many: хранилище, объект в котором нельзя изменить или удалить до истечения срока хранения (например, S3 Object Lock)." }
+  en: { term: "WORM", def: "Write once, read many: storage in which an object cannot be changed or deleted before its retention period ends, such as S3 Object Lock." }
+
+singleflight:
+  ru: { term: "singleflight", def: "Объединение одновременных одинаковых запросов к upstream в одну выборку." }
+  en: { term: "singleflight", def: "Merging concurrent identical upstream requests into a single fetch." }
+
+stale-while-revalidate:
+  ru: { term: "stale-while-revalidate", def: "Отдача устаревшей копии документа с одновременным фоновым обновлением из upstream." }
+  en: { term: "stale-while-revalidate", def: "Serving a stale copy of a document while refreshing it from the upstream in the background." }
+
+negative-cache:
+  ru: { term: "негативный кэш", def: "Короткое запоминание ответа upstream «не найдено», чтобы не повторять запрос." }
+  en: { term: "negative cache", def: "Briefly remembering an upstream “not found” response so the request is not repeated." }
+
+outbox:
+  ru: { term: "outbox", def: "Таблица событий для внешней доставки, которая записывается в той же транзакции, что и изменение данных; доставка без потерь." }
+  en: { term: "outbox", def: "A table of events for external delivery written in the same transaction as the data change, so nothing is lost." }
+
+trust-policy:
+  ru: { term: "trust policy", def: "Правило обмена токена платформы CI на токен CRANE: какой издатель, какие claims и какие права допустимы." }
+  en: { term: "trust policy", def: "The rule for exchanging a CI platform token for a CRANE token: which issuer, which claims and which permissions are allowed." }
+
+robot:
+  ru: { term: "робот", def: "Принципал команды для автоматизации с собственным секретом и обязательным сроком действия." }
+  en: { term: "robot", def: "A team principal for automation with its own secret and a mandatory expiry." }
+
+group-mapping:
+  ru: { term: "маппинг групп", def: "Явное отображение группы из IdP на команду и роль в ней; без маппинга группа прав не даёт." }
+  en: { term: "group mapping", def: "An explicit mapping of an IdP group to a team and a role in it; without a mapping a group grants nothing." }
+
+access-grant:
+  ru: { term: "межкомандный доступ", def: "Роль, которую команда-владелец даёт другой команде на свой namespace или репозиторий, с необязательным сроком." }
+  en: { term: "cross-team grant", def: "A role that the owning team gives another team on its namespace or repository, with an optional expiry." }
+
+catalog:
+  ru: { term: "каталог", def: "Метаданные CRANE в PostgreSQL: репозитории, пакеты, версии, namespace, журнал. Единственный источник истины." }
+  en: { term: "catalog", def: "CRANE metadata in PostgreSQL: repositories, packages, versions, namespaces and the journal. The only source of truth." }
+
+static-token:
+  ru: { term: "статический токен", def: "Единый токен доступа к протоколам пакетов, заданный при развёртывании через CRANE_TOKEN или CRANE_TOKEN_FILE." }
+  en: { term: "static token", def: "The single package protocol access token set at deployment through CRANE_TOKEN or CRANE_TOKEN_FILE." }
+
+readiness-probe:
+  ru: { term: "проба готовности", def: "Запрос /healthz/ready на порту admin: отвечает 200, когда доступны PostgreSQL и хранилище blob." }
+  en: { term: "readiness probe", def: "The /healthz/ready request on the admin port: it returns 200 when PostgreSQL and the blob storage are reachable." }

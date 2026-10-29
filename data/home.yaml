@@ -1,0 +1,105 @@
+# Тексты главной getcrane.dev. Ведёт руководитель документации: ЗАПОЛНЯЕТ РУКОВОДИТЕЛЬ ДОКУМЕНТАЦИИ.
+# Шаблон (layouts/_partials/home/) тексты не сочиняет: пустое поле не выводится.
+# Каждое утверждение hero и карточек гарантий должно опираться на страницу Features
+# и вести на неё; механизм со статусом in-development нельзя подавать как доступный.
+#
+# Пути href — от корня языка, как в xref (например features/security/immutable-versions).
+# Сборка проверяет: путь существует; availability совпадает со status страницы-цели.
+#
+# Структура языковых полей та же, что в glossary.yaml: ru / en.
+
+hero:
+  ru:
+    overline: ""   # черновик UI-спеки: «Self-hosted реестр пакетов и proxy upstream»
+    title: ""      # h1: что CRANE гарантирует для цепочки поставки
+    lead: ""       # 1–2 предложения, до 60 знаков в строке; каждое утверждение ведёт на страницу гарантии
+  en:
+    overline: ""
+    title: ""
+    lead: ""
+  # Подпись кнопки: глагол + объект; пустая — берётся title страницы-цели.
+  primary:   { href: start/quickstart, ru: "", en: "" }
+  secondary: { href: features/security/supply-chain-threats, ru: "", en: "" }
+
+# Схема «путь пакета» в hero: upstream → группа CRANE → клиент сборки.
+# Подписи узлов — метки до 2 слов. Узлы группы — ссылки на страницы гарантий.
+path:
+  upstream: { ru: "", en: "" }
+  client:   { ru: "", en: "" }
+  nodes:
+    - { href: features/security/namespace-reservation,  ru: "", en: "" }
+    - { href: features/security/upstream-quarantine,    ru: "", en: "" }
+    - { href: features/security/digest-verification,    ru: "", en: "" }
+    - { href: features/security/immutable-versions,     ru: "", en: "" }
+
+# Карточки гарантий: 6–8 штук. Первые две занимают по 6 колонок из 12 на широком экране.
+# availability: available | in-development.
+guarantees:
+  - href: features/security/immutable-versions
+    availability: available
+    ru: { title: "", claim: "", limit: "" }
+    en: { title: "", claim: "", limit: "" }
+  - href: features/security/digest-verification
+    availability: available
+    ru: { title: "", claim: "", limit: "" }
+    en: { title: "", claim: "", limit: "" }
+  - href: features/security/namespace-reservation
+    availability: available
+    ru: { title: "", claim: "", limit: "" }
+    en: { title: "", claim: "", limit: "" }
+  - href: features/security/upstream-quarantine
+    availability: available
+    ru: { title: "", claim: "", limit: "" }
+    en: { title: "", claim: "", limit: "" }
+  - href: features/security/egress-guard
+    availability: available
+    ru: { title: "", claim: "", limit: "" }
+    en: { title: "", claim: "", limit: "" }
+
+# Четыре входа по аудиториям (ia.md, столбцы «Что ищет» и «Вход»). Ссылок 2–3.
+audiences:
+  - id: developer
+    ru:
+      seeks: "Подключить клиент, опубликовать, понять отказ"
+    en:
+      seeks: "Connect a client, publish, understand a refusal"
+    links: [start/, formats/, start/quickstart]
+  - id: platform
+    ru:
+      seeks: "Развернуть, настроить, обслуживать, масштабировать"
+    en:
+      seeks: "Deploy, configure, operate, scale"
+    links: [deploy/, configure/, operations/]
+  - id: security
+    ru:
+      seeks: "Какие угрозы закрыты, где границы, что видно в журнале ИБ и SIEM"
+    en:
+      seeks: "Which threats are closed, where the limits are, what the security journal and the SIEM show"
+    links: [features/security/, security/]
+  - id: auditor
+    ru:
+      seeks: "Что регистрируется, кто имеет доступ к журналу, как проверить целостность"
+    en:
+      seeks: "What is recorded, who can read the journal, how to verify integrity"
+    links: [features/security/, security/, reference/]
+
+# Плитки форматов. Строка под названием — description страницы formats/<id>.
+formats: [cargo, npm, pypi, maven, nuget]
+
+# Карточки развёртывания. href пустой — карточка без ссылки (страница «Один бинарник» не определена, OPEN 5).
+deploy:
+  - id: binary
+    href: ""
+    ru: { title: "", text: "", command: "" }
+    en: { title: "", text: "", command: "" }
+  - id: compose
+    href: deploy/docker-compose
+    ru: { title: "", text: "", command: "" }
+    en: { title: "", text: "", command: "" }
+  - id: kubernetes
+    href: deploy/kubernetes-helm
+    ru: { title: "", text: "", command: "" }
+    en: { title: "", text: "", command: "" }
+
+# Полоса «Начало работы»: подписи берутся из title страниц.
+start: [start/, start/quickstart, start/concepts, deploy/requirements]

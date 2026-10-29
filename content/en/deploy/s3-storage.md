@@ -20,7 +20,7 @@ The S3 keys live only in files. They are not in the environment, in the URL or i
 
 ## Steps {#steps}
 
-1. Set the storage address and the bucket name in `.env`. The bucket in the URL must match `S3_BUCKET`: the `seaweedfs-init` service creates it.
+1. Set the storage address and the bucket name in `.env`. The bucket in the URL must match {{< env "S3_BUCKET" >}}: the `seaweedfs-init` service creates it.
 
    ```bash
    CRANE_BLOBS=s3://blobs?endpoint=http://seaweedfs:8333&allow_http=true
@@ -79,8 +79,8 @@ The S3 keys live only in files. They are not in the environment, in the URL or i
 | Service | Change |
 | --- | --- |
 | `seaweedfs` | An S3 server on port `8333`, data in the `s3` volume; the `crane` identity with the actions `Admin`, `Read`, `Write`, `List`, `Tagging`; no anonymous access |
-| `seaweedfs-init` | Creates the `S3_BUCKET` bucket once; repeated runs are idempotent |
-| `crane` | Reads the keys from `AWS_ACCESS_KEY_ID_FILE` and `AWS_SECRET_ACCESS_KEY_FILE`; joins the `s3` network; the local `blobs` volume is removed; starts after `seaweedfs-init` |
+| `seaweedfs-init` | Creates the {{< env "S3_BUCKET" >}} bucket once; repeated runs are idempotent |
+| `crane` | Reads the keys from {{< env "AWS_ACCESS_KEY_ID_FILE" >}} and {{< env "AWS_SECRET_ACCESS_KEY_FILE" >}}; joins the `s3` network; the local `blobs` volume is removed; starts after `seaweedfs-init` |
 
 Compose holds the SeaweedFS access policy, not a secret file: the identities are built at start from the key files into a temporary container file with mode `0600`, and the keys do not reach process arguments, the environment or the log.
 
@@ -104,7 +104,7 @@ CRANE_BLOBS: ключ `<key>` не из списка несекретных па
 
 The message says: the key is not in the list of non-secret parameters; S3 credentials and their providers are set only through `AWS_*` variables.
 
-The static key comes from the `AWS_ACCESS_KEY_ID_FILE` and `AWS_SECRET_ACCESS_KEY_FILE` files. Both are required: one file without the other is a start error, and a variable together with its own file is a conflict. Without both files, keys, roles and metadata come from the ordinary `AWS_*` variables. For `memory` and `file://` a key is not needed, and the server refuses to start.
+The static key comes from the {{< env "AWS_ACCESS_KEY_ID_FILE" >}} and {{< env "AWS_SECRET_ACCESS_KEY_FILE" >}} files. Both are required: one file without the other is a start error, and a variable together with its own file is a conflict. Without both files, keys, roles and metadata come from the ordinary `AWS_*` variables. For `memory` and `file://` a key is not needed, and the server refuses to start.
 
 The `allow_http=true` parameter permits `http://` in `endpoint` and is needed for SeaweedFS inside the isolated `s3` network.
 

@@ -19,12 +19,12 @@ terms: [hosted-repository, proxy-repository, upstream, namespace, sparse-registr
 - Git, curl и POSIX-оболочка (Linux или macOS).
 - Task (go-task) и Node.js 24: они нужны только для `task secrets:init`.
 - `cargo` последней стабильной версии. Для последнего шага нужны ещё Node.js и `npm`.
-- Свободные порты 80 и 443 на хосте (`CADDY_HTTP_PORT`, `CADDY_HTTPS_PORT`).
+- Свободные порты 80 и 443 на хосте ({{< env "CADDY_HTTP_PORT" >}}, {{< env "CADDY_HTTPS_PORT" >}}).
 - Доступ в интернет: образы и зависимости собираются из публичных источников, а proxy-репозитории CRANE обращаются к crates.io и registry.npmjs.org.
 
 ## Получите исходники и соберите образ {#build}
 
-Образ CRANE собирается локально из `deploy/docker/Dockerfile` и в реестр не публикуется. Имя и тег `crane/crane:latest` совпадают со значениями `CRANE_IMAGE` и `CRANE_VERSION` в `.env.dist`.
+Образ CRANE собирается локально из `deploy/docker/Dockerfile` и в реестр не публикуется. Имя и тег `crane/crane:latest` совпадают со значениями {{< env "CRANE_IMAGE" >}} и {{< env "CRANE_VERSION" >}} в `.env.dist`.
 
 ```bash
 git clone <repository-url> crane
@@ -42,7 +42,7 @@ docker build -f deploy/docker/Dockerfile -t crane/crane:latest .
 cp .env.dist .env
 ```
 
-В `.env` задайте три значения. Строка `CRANE_NAMESPACES` уже есть и пуста, две остальные строки нужно добавить.
+В `.env` задайте три значения. Строка {{< env "CRANE_NAMESPACES" >}} уже есть и пуста, две остальные строки нужно добавить.
 
 ```ini
 CRANE_NAMESPACES=cargo:acme-*
@@ -50,7 +50,7 @@ CRANE_CARGO_PROXY_REPOS=crates-io
 CRANE_NPM_PROXY_REPOS=npmjs
 ```
 
-`CRANE_NAMESPACES` резервирует за платформой имена крейтов Cargo с префиксом `acme-`. Публикация имени, покрытого {{< term "namespace" >}}, проходит без запроса к crates.io, а сам CRANE никогда не отдаёт такое имя из {{< term "upstream" >}}. `CRANE_CARGO_PROXY_REPOS` и `CRANE_NPM_PROXY_REPOS` создают proxy-репозитории `crates-io` и `npmjs`. Hosted-репозиторий Cargo `internal` существует без настройки.
+{{< env "CRANE_NAMESPACES" >}} резервирует за платформой имена крейтов Cargo с префиксом `acme-`. Публикация имени, покрытого {{< term "namespace" >}}, проходит без запроса к crates.io, а сам CRANE никогда не отдаёт такое имя из {{< term "upstream" >}}. {{< env "CRANE_CARGO_PROXY_REPOS" >}} и {{< env "CRANE_NPM_PROXY_REPOS" >}} создают proxy-репозитории `crates-io` и `npmjs`. Hosted-репозиторий Cargo `internal` существует без настройки.
 
 Создайте файлы секретов: токен доступа, пароль PostgreSQL и URL каталога. Задача создаёт только недостающие файлы и ничего не перезаписывает. Значения она не печатает.
 
@@ -79,12 +79,12 @@ docker compose --project-directory . -f deploy/compose/docker-compose.yaml \
   cp caddy:/data/caddy/pki/authorities/local/root.crt secrets/caddy-root.crt
 ```
 
-Задайте переменные оболочки. Они нужны `cargo` и `npm` на следующих шагах, поэтому выполняйте остальные команды в этой же оболочке. Токен лежит в `secrets/crane_token`: Compose передаёт его серверу файлом через `CRANE_TOKEN_FILE`, а CRANE сравнивает с ним токен каждого запроса к протоколам. Один и тот же токен служит и для hosted-, и для proxy-репозиториев.
+Задайте переменные оболочки. Они нужны `cargo` и `npm` на следующих шагах, поэтому выполняйте остальные команды в этой же оболочке. Токен лежит в `secrets/crane_token`: Compose передаёт его серверу файлом через {{< env "CRANE_TOKEN_FILE" >}}, а CRANE сравнивает с ним токен каждого запроса к протоколам. Один и тот же токен служит и для hosted-, и для proxy-репозиториев.
 
 ```bash
-export CRANE_CA="$PWD/secrets/caddy-root.crt"
-export CARGO_HTTP_CAINFO="$CRANE_CA"
-export NODE_EXTRA_CA_CERTS="$CRANE_CA"
+export STAND_CA="$PWD/secrets/caddy-root.crt"
+export CARGO_HTTP_CAINFO="$STAND_CA"
+export NODE_EXTRA_CA_CERTS="$STAND_CA"
 export CARGO_REGISTRIES_CRANE_TOKEN="$(cat secrets/crane_token)"
 export CARGO_REGISTRIES_CRANE_PROXY_TOKEN="$CARGO_REGISTRIES_CRANE_TOKEN"
 export NPM_TOKEN="$CARGO_REGISTRIES_CRANE_TOKEN"
@@ -97,7 +97,7 @@ export NPM_TOKEN="$CARGO_REGISTRIES_CRANE_TOKEN"
 
 ```bash
 printf 'header = "Authorization: %s"\n' "$CARGO_REGISTRIES_CRANE_TOKEN" \
-  | curl -fsS --cacert "$CRANE_CA" -K - https://localhost/cargo/internal/index/config.json
+  | curl -fsS --cacert "$STAND_CA" -K - https://localhost/cargo/internal/index/config.json
 ```
 
 CRANE возвращает конфигурацию {{< term "sparse-registry" >}} hosted-репозитория `internal`:

@@ -18,8 +18,8 @@ terms: [proxy-repository, namespace, blob]
 - Хост с Docker, BuildKit и Docker Compose. Версии: {{< xref "deploy/requirements#tooling" >}}.
 - go-task и Node.js 24 для задачи `task secrets:init`.
 - Копия репозитория CRANE. Все команды выполняются из его корня.
-- Свободные порты `80` и `443` (переменные `CADDY_HTTP_PORT` и `CADDY_HTTPS_PORT`).
-- Публичное DNS-имя для `CRANE_HOST`. Для проверки подойдёт `localhost`.
+- Свободные порты `80` и `443` (переменные {{< env "CADDY_HTTP_PORT" >}} и {{< env "CADDY_HTTPS_PORT" >}}).
+- Публичное DNS-имя для {{< env "CRANE_HOST" >}}. Для проверки подойдёт `localhost`.
 
 ## Шаги {#steps}
 
@@ -58,9 +58,9 @@ terms: [proxy-repository, namespace, blob]
    CRANE_NAMESPACES=cargo:acme-*
    ```
 
-   Переменная `CRANE_NAMESPACES` резервирует внутренние {{< term "namespace" >}}: proxy никогда не отдаёт эти имена. Формат записей: `формат:шаблон` или `формат:шаблон=uuid`, через запятую.
+   Переменная {{< env "CRANE_NAMESPACES" >}} резервирует внутренние {{< term "namespace" >}}: proxy никогда не отдаёт эти имена. Формат записей: `формат:шаблон` или `формат:шаблон=uuid`, через запятую.
 
-5. Соберите образ. Имя и тег должны совпадать с `CRANE_IMAGE` и `CRANE_VERSION` из `.env` (по умолчанию `crane/crane` и `latest`).
+5. Соберите образ. Имя и тег должны совпадать с {{< env "CRANE_IMAGE" >}} и {{< env "CRANE_VERSION" >}} из `.env` (по умолчанию `crane/crane` и `latest`).
 
    ```bash
    docker build -f deploy/docker/Dockerfile -t crane/crane:latest .
@@ -109,9 +109,9 @@ terms: [proxy-repository, namespace, blob]
 
 | Сервис | Назначение |
 | --- | --- |
-| `caddy` | TLS и обратный прокси к `crane`; публикует порты `CADDY_HTTP_PORT` и `CADDY_HTTPS_PORT` |
+| `caddy` | TLS и обратный прокси к `crane`; публикует порты {{< env "CADDY_HTTP_PORT" >}} и {{< env "CADDY_HTTPS_PORT" >}} |
 | `migrate` | Одноразовая роль `migrate`; блокировка исключает параллельный запуск миграций |
-| `crane` | Роль `all`: API и порт проб. Пределы ресурсов: `CRANE_CPUS` и `CRANE_MEMORY` |
+| `crane` | Роль `all`: API и порт проб. Пределы ресурсов: {{< env "CRANE_CPUS" >}} и {{< env "CRANE_MEMORY" >}} |
 | `postgres` | Каталог в томе `pg`; наружу порт не опубликован |
 
 Блобы лежат в томе `blobs` (`CRANE_BLOBS=file:///data/blobs`), данные Caddy, включая выданные сертификаты, в томе `caddy-data`. Кэш proxy по умолчанию находится в памяти процесса. Роль `all` сейчас равна роли `serve`: см. {{< xref "reference/server-cli" >}}.
@@ -121,12 +121,12 @@ terms: [proxy-repository, namespace, blob]
 
 ## Сеть edge и доверенные прокси {#edge}
 
-Сеть `edge` соединяет только `caddy` и `crane`. Её подсеть фиксирована переменной `CRANE_EDGE_SUBNET` (по умолчанию `172.31.250.0/24`), и то же значение Compose передаёт серверу как `CRANE_TRUSTED_PROXIES`. Поэтому CRANE верит `X-Forwarded-For` и `X-Request-Id` только от Caddy, а в аудите виден адрес клиента, а не прокси. Подсеть должна быть свободной: одно значение задаёт и сеть, и список доверенных прокси.
+Сеть `edge` соединяет только `caddy` и `crane`. Её подсеть фиксирована переменной {{< env "CRANE_EDGE_SUBNET" >}} (по умолчанию `172.31.250.0/24`), и то же значение Compose передаёт серверу как {{< env "CRANE_TRUSTED_PROXIES" >}}. Поэтому CRANE верит `X-Forwarded-For` и `X-Request-Id` только от Caddy, а в аудите виден адрес клиента, а не прокси. Подсеть должна быть свободной: одно значение задаёт и сеть, и список доверенных прокси.
 
-Без `CRANE_TRUSTED_PROXIES` сервер игнорирует оба заголовка. Эталонный `Caddyfile` удаляет клиентский `X-Request-Id` (`header_up -X-Request-Id`). Подробнее о сети: {{< xref "configure/network" >}}.
+Без {{< env "CRANE_TRUSTED_PROXIES" >}} сервер игнорирует оба заголовка. Эталонный `Caddyfile` удаляет клиентский `X-Request-Id` (`header_up -X-Request-Id`). Подробнее о сети: {{< xref "configure/network" >}}.
 
 > [!WARNING]
-> Не публикуйте порт admin (`CRANE_ADMIN_PORT`, по умолчанию `9464`). Пробы работают без токена и не проходят через Caddy.
+> Не публикуйте порт admin ({{< env "CRANE_ADMIN_PORT" >}}, по умолчанию `9464`). Пробы работают без токена и не проходят через Caddy.
 
 ## Секреты {#secrets}
 
@@ -134,13 +134,13 @@ terms: [proxy-repository, namespace, blob]
 
 | Переменная в `.env` | Файл по умолчанию | Кто читает |
 | --- | --- | --- |
-| `CRANE_TOKEN_SECRET` | `./secrets/crane_token` | `crane`, через `CRANE_TOKEN_FILE` |
-| `POSTGRES_PASSWORD_SECRET` | `./secrets/postgres_password` | `postgres`, через `POSTGRES_PASSWORD_FILE` |
-| `CRANE_DATABASE_URL_SECRET` | `./secrets/database_url` | `crane` и `migrate`, через `CRANE_DATABASE_URL_FILE` |
+| {{< env "CRANE_TOKEN_SECRET" >}} | `./secrets/crane_token` | `crane`, через {{< env "CRANE_TOKEN_FILE" >}} |
+| {{< env "POSTGRES_PASSWORD_SECRET" >}} | `./secrets/postgres_password` | `postgres`, через `POSTGRES_PASSWORD_FILE` |
+| {{< env "CRANE_DATABASE_URL_SECRET" >}} | `./secrets/database_url` | `crane` и `migrate`, через {{< env "CRANE_DATABASE_URL_FILE" >}} |
 
 Каталог `secrets` создаётся с правами `0700`, файлы — с правами `0644`: на Linux секрет читают пользователь `65532` и `postgres`, а не владелец на хосте. Каталог `/secrets/` внесён в `.gitignore`. Если создавать файлы вручную, URL каталога имеет вид `postgres://crane:<пароль>@postgres:5432/crane`, а пароль состоит только из символов, безопасных в URL.
 
-Переменные `CRANE_TOKEN` и `CRANE_TOKEN_FILE` задавать вместе нельзя: сервер не стартует. Пароль PostgreSQL записывается в том `pg` при первом запуске, и смена файла пароль в уже созданном томе не меняет.
+Переменные {{< env "CRANE_TOKEN" >}} и {{< env "CRANE_TOKEN_FILE" >}} задавать вместе нельзя: сервер не стартует. Пароль PostgreSQL записывается в том `pg` при первом запуске, и смена файла пароль в уже созданном томе не меняет.
 
 ## Что дальше {#next}
 

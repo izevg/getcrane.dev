@@ -19,7 +19,7 @@ CRANE требует PostgreSQL 17 или новее с расширениями
 | `vector` (pgvector) | 0.8 и новее |
 | `pg_trgm` | любая версия; версия не проверяется |
 
-Каталог хранится только в PostgreSQL. Адрес подключения задаёт `CRANE_DATABASE_URL` или `CRANE_DATABASE_URL_FILE`: схема `postgres://` или `postgresql://`. Значение `memory` включает каталог в памяти, данные при этом теряются при перезапуске; такой каталог нельзя сочетать с постоянным `CRANE_BLOBS`.
+Каталог хранится только в PostgreSQL. Адрес подключения задаёт {{< env "CRANE_DATABASE_URL" >}} или {{< env "CRANE_DATABASE_URL_FILE" >}}: схема `postgres://` или `postgresql://`. Значение `memory` включает каталог в памяти, данные при этом теряются при перезапуске; такой каталог нельзя сочетать с постоянным {{< env "CRANE_BLOBS" >}}.
 
 ## Расширения и `crane migrate` {#extensions}
 
@@ -56,11 +56,11 @@ CREATE EXTENSION pg_trgm;
 
 | Переменная | Значение (тег) | Назначение |
 | --- | --- | --- |
-| `CRANE_IMAGE` | `crane/crane` | Образ CRANE; собирается локально, в реестр не публикуется |
-| `CRANE_VERSION` | `latest` | Тег образа CRANE; версия не закреплена |
-| `CADDY_IMAGE` | `caddy:2.11.7` | Обратный прокси и TLS |
-| `POSTGRES_IMAGE` | `pgvector/pgvector:0.8.7-pg17-bookworm` | PostgreSQL 17.11 с pgvector 0.8.7 |
-| `VALKEY_IMAGE` | `valkey/valkey:8.1.11` | Кэш, {{< xref "deploy/valkey-cache" "режим Valkey" >}} |
+| {{< env "CRANE_IMAGE" >}} | `crane/crane` | Образ CRANE; собирается локально, в реестр не публикуется |
+| {{< env "CRANE_VERSION" >}} | `latest` | Тег образа CRANE; версия не закреплена |
+| {{< env "CADDY_IMAGE" >}} | `caddy:2.11.7` | Обратный прокси и TLS |
+| {{< env "POSTGRES_IMAGE" >}} | `pgvector/pgvector:0.8.7-pg17-bookworm` | PostgreSQL 17.11 с pgvector 0.8.7 |
+| {{< env "VALKEY_IMAGE" >}} | `valkey/valkey:8.1.11` | Кэш, {{< xref "deploy/valkey-cache" "режим Valkey" >}} |
 | `SEAWEEDFS_IMAGE` | `chrislusf/seaweedfs:4.51` | S3-хранилище, {{< xref "deploy/s3-storage" "режим S3" >}} |
 
 Точные дайджесты записаны в `.env.dist`. Чтобы обновить образ, возьмите строку `Digest` верхнего уровня из вывода команды:
@@ -73,9 +73,9 @@ docker buildx imagetools inspect <образ:тег>
 
 | Параметр | Значение по умолчанию | Где действует |
 | --- | --- | --- |
-| `CRANE_CPUS` | `2` | Предел CPU сервиса `crane` в Compose |
-| `CRANE_MEMORY` | `1g` | Предел памяти сервиса `crane` в Compose |
-| `VALKEY_MAXMEMORY` | `512mb` | Предел памяти Valkey в режиме Valkey; политика вытеснения `allkeys-lru` зафиксирована в compose-файле |
+| {{< env "CRANE_CPUS" >}} | `2` | Предел CPU сервиса `crane` в Compose |
+| {{< env "CRANE_MEMORY" >}} | `1g` | Предел памяти сервиса `crane` в Compose |
+| {{< env "VALKEY_MAXMEMORY" >}} | `512mb` | Предел памяти Valkey в режиме Valkey; политика вытеснения `allkeys-lru` зафиксирована в compose-файле |
 
 Кэш `memory` ограничен 256 МиБ веса записей (тела документов proxy). Предел задан в коде и не настраивается переменной.
 
@@ -91,9 +91,9 @@ docker buildx imagetools inspect <образ:тег>
 
 | Порт | Где | Назначение |
 | --- | --- | --- |
-| `80`, `443` | Хост, `CADDY_HTTP_PORT` и `CADDY_HTTPS_PORT` | Единственные порты Compose-проекта, опубликованные наружу |
-| `8080` | Контейнер `crane`, `CRANE_HTTP_PORT` | API и протоколы пакетов |
-| `9464` | Контейнер `crane`, `CRANE_ADMIN_PORT` | Пробы `/healthz/live` и `/healthz/ready` |
+| `80`, `443` | Хост, {{< env "CADDY_HTTP_PORT" >}} и {{< env "CADDY_HTTPS_PORT" >}} | Единственные порты Compose-проекта, опубликованные наружу |
+| `8080` | Контейнер `crane`, {{< env "CRANE_HTTP_PORT" >}} | API и протоколы пакетов |
+| `9464` | Контейнер `crane`, {{< env "CRANE_ADMIN_PORT" >}} | Пробы `/healthz/live` и `/healthz/ready` |
 
 ## Что дальше {#next}
 

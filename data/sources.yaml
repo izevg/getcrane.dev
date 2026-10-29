@@ -114,3 +114,116 @@ iana-ipv6-special:
   short: "IANA"
   url: "https://www.iana.org/assignments/iana-ipv6-special-registry/"
   accessed: 2026-10-29
+
+rfc-5424:
+  title: "RFC 5424: The Syslog Protocol"
+  publisher: "IETF"
+  short: "IETF"
+  url: "https://www.rfc-editor.org/rfc/rfc5424"
+  date: 2009-03-01
+  accessed: 2026-10-29
+
+cyclonedx:
+  title: "CycloneDX Specification"
+  publisher: "OWASP CycloneDX"
+  short: "CycloneDX"
+  url: "https://cyclonedx.org/specification/overview/"
+  accessed: 2026-10-29
+
+spdx-spec:
+  title: "SPDX Specifications"
+  publisher: "Linux Foundation SPDX"
+  short: "SPDX"
+  url: "https://spdx.dev/use/specifications/"
+  accessed: 2026-10-29
+
+openvex:
+  title: "OpenVEX Specification"
+  publisher: "OpenVEX project"
+  short: "OpenVEX"
+  url: "https://github.com/openvex/spec"
+  accessed: 2026-10-29
+
+cedar:
+  title: "Cedar policy language"
+  publisher: "Cedar project"
+  short: "Cedar"
+  url: "https://www.cedarpolicy.com/"
+  accessed: 2026-10-29
+
+cisa-kev:
+  title: "Known Exploited Vulnerabilities Catalog"
+  publisher: "CISA"
+  short: "CISA"
+  url: "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+  accessed: 2026-10-29
+
+first-epss:
+  title: "Exploit Prediction Scoring System (EPSS)"
+  publisher: "FIRST"
+  short: "FIRST"
+  url: "https://www.first.org/epss/"
+  accessed: 2026-10-29
+
+rfc-5861:
+  title: "RFC 5861: HTTP Cache-Control Extensions for Stale Content"
+  publisher: "IETF"
+  short: "IETF"
+  url: "https://www.rfc-editor.org/rfc/rfc5861"
+  date: 2010-05-01
+  accessed: 2026-10-29
+
+rfc-7636:
+  title: "RFC 7636: Proof Key for Code Exchange by OAuth Public Clients"
+  publisher: "IETF"
+  short: "IETF"
+  url: "https://www.rfc-editor.org/rfc/rfc7636"
+  date: 2015-09-01
+  accessed: 2026-10-29
+
+rfc-8252:
+  title: "RFC 8252: OAuth 2.0 for Native Apps"
+  publisher: "IETF"
+  short: "IETF"
+  url: "https://www.rfc-editor.org/rfc/rfc8252"
+  date: 2017-10-01
+  accessed: 2026-10-29
+
+rfc-8628:
+  title: "RFC 8628: OAuth 2.0 Device Authorization Grant"
+  publisher: "IETF"
+  short: "IETF"
+  url: "https://www.rfc-editor.org/rfc/rfc8628"
+  date: 2019-08-01
+  accessed: 2026-10-29
+
+rfc-8693:
+  title: "RFC 8693: OAuth 2.0 Token Exchange"
+  publisher: "IETF"
+  short: "IETF"
+  url: "https://www.rfc-editor.org/rfc/rfc8693"
+  date: 2020-01-01
+  accessed: 2026-10-29
+
+rfc-9457:
+  title: "RFC 9457: Problem Details for HTTP APIs"
+  publisher: "IETF"
+  short: "IETF"
+  url: "https://www.rfc-editor.org/rfc/rfc9457"
+  date: 2023-07-01
+  accessed: 2026-10-29
+
+w3c-trace-context:
+  title: "Trace Context"
+  publisher: "W3C"
+  short: "W3C"
+  url: "https://www.w3.org/TR/trace-context/"
+  date: 2021-11-23
+  accessed: 2026-10-29
+
+nuget-server-api:
+  title: "NuGet Server API"
+  publisher: "Microsoft"
+  short: "Microsoft"
+  url: "https://learn.microsoft.com/en-us/nuget/api/overview"
+  accessed: 2026-10-29

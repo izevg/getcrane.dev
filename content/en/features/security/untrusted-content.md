@@ -1,6 +1,6 @@
 ---
 title: "Serving untrusted content"
-description: "How CRANE keeps a package file or a README from running code in the console: a separate packages origin, protective headers, a strict CSP and READMEs without image loading."
+description: "How CRANE keeps a package file or README from running code in the console: a separate packages origin, safe headers, a strict CSP, no README images."
 audience: [security, platform]
 genre: explanation
 state: target

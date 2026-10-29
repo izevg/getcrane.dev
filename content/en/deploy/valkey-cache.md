@@ -11,7 +11,7 @@ terms: [upstream, proxy-repository, blob, cas, digest]
 
 This page explains how to replace the in-process cache with a shared Valkey cache. Valkey holds the {{< term "proxy-repository" >}} cache and coordinates fetches from the {{< term "upstream" >}} between `crane` replicas. The mode is switched on by the override file `deploy/compose/docker-compose.cache.yaml`: it adds Valkey with mandatory authentication in the isolated `cache` network.
 
-In the Compose file `crane` is a single container, so Valkey is optional there. By default the server uses the `memory` cache when neither `CRANE_CACHE` nor `CRANE_CACHE_FILE` is set. Valkey is needed when replicas must share the cache.
+In the Compose file `crane` is a single container, so Valkey is optional there. By default the server uses the `memory` cache when neither {{< env "CRANE_CACHE" >}} nor {{< env "CRANE_CACHE_FILE" >}} is set. Valkey is needed when replicas must share the cache.
 
 > [!WARNING]
 > Valkey must be reachable only by `crane`. The cache holds proxy document bodies that CRANE serves to clients and pointers to {{< term "blob" "blobs" >}} in the {{< term "cas" "CAS" >}}. Whoever can write to Valkey can substitute proxy documents and pointers. Do not publish the Valkey port, do not disable authentication and do not attach other services to the `cache` network.
@@ -19,7 +19,7 @@ In the Compose file `crane` is a single container, so Valkey is optional there. 
 ## Before you begin {#prerequisites}
 
 - A working project from {{< xref "deploy/docker-compose" >}}.
-- The `VALKEY_IMAGE`, `VALKEY_MAXMEMORY`, `VALKEY_PASSWORD_SECRET` and `CRANE_CACHE_URL_SECRET` values in `.env` (`.env.dist` already has them).
+- The {{< env "VALKEY_IMAGE" >}}, {{< env "VALKEY_MAXMEMORY" >}}, {{< env "VALKEY_PASSWORD_SECRET" >}} and {{< env "CRANE_CACHE_URL_SECRET" >}} values in `.env` (`.env.dist` already has them).
 
 ## Steps {#steps}
 
@@ -50,7 +50,7 @@ In the Compose file `crane` is a single container, so Valkey is optional there. 
    ```
 
 > [!NOTE]
-> Do not set `CRANE_CACHE` in this mode. The address with the password lives only in the `cache_url` secret, and the server reads it through `CRANE_CACHE_FILE`. If both variables are set, the server does not start.
+> Do not set {{< env "CRANE_CACHE" >}} in this mode. The address with the password lives only in the `cache_url` secret, and the server reads it through {{< env "CRANE_CACHE_FILE" >}}. If both variables are set, the server does not start.
 
 ## Verify {#verify}
 
@@ -83,7 +83,7 @@ In the Compose file `crane` is a single container, so Valkey is optional there. 
 
 | Service | Change |
 | --- | --- |
-| `valkey` | The `VALKEY_IMAGE` image; started with `--save ""`, `--appendonly no`, `--maxmemory ${VALKEY_MAXMEMORY}`, `--maxmemory-policy allkeys-lru` and `--aclfile`; data is not saved to disk |
+| `valkey` | The {{< env "VALKEY_IMAGE" >}} image; started with `--save ""`, `--appendonly no`, `--maxmemory ${VALKEY_MAXMEMORY}`, `--maxmemory-policy allkeys-lru` and `--aclfile`; data is not saved to disk |
 | `crane` | Reads the address from `CRANE_CACHE_FILE=/run/secrets/cache_url`; joins the `cache` network; starts after `valkey` is healthy |
 
 The ACL is built at container start from the password file into a temporary file with mode `0600`. The password does not reach process arguments, the environment or the image:

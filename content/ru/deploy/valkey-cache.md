@@ -11,7 +11,7 @@ terms: [upstream, proxy-repository, blob, cas, digest]
 
 Страница описывает, как заменить кэш в памяти процесса общим кэшем Valkey. Valkey хранит кэш {{< term "proxy-repository" >}} и координирует выборки из {{< term "upstream" >}} между репликами `crane`. Режим включает override-файл `deploy/compose/docker-compose.cache.yaml`: он добавляет Valkey с обязательной аутентификацией в изолированной сети `cache`.
 
-В Compose-файле `crane` — один контейнер, поэтому там Valkey не обязателен. По умолчанию сервер берёт кэш `memory`, если не заданы ни `CRANE_CACHE`, ни `CRANE_CACHE_FILE`. Valkey нужен, когда реплики должны делить кэш.
+В Compose-файле `crane` — один контейнер, поэтому там Valkey не обязателен. По умолчанию сервер берёт кэш `memory`, если не заданы ни {{< env "CRANE_CACHE" >}}, ни {{< env "CRANE_CACHE_FILE" >}}. Valkey нужен, когда реплики должны делить кэш.
 
 > [!WARNING]
 > Valkey должен быть доступен только `crane`. Кэш хранит тела документов proxy, которые CRANE отдаёт клиентам, и указатели на {{< term "blob" >}} в {{< term "cas" "CAS" >}}. Тот, кто пишет в Valkey, может подменить документы proxy и указатели. Не публикуйте порт Valkey, не отключайте аутентификацию и не подключайте другие сервисы к сети `cache`.
@@ -19,7 +19,7 @@ terms: [upstream, proxy-repository, blob, cas, digest]
 ## Перед началом {#prerequisites}
 
 - Рабочий проект из {{< xref "deploy/docker-compose" >}}.
-- Значения `VALKEY_IMAGE`, `VALKEY_MAXMEMORY`, `VALKEY_PASSWORD_SECRET` и `CRANE_CACHE_URL_SECRET` в `.env` (в `.env.dist` они уже есть).
+- Значения {{< env "VALKEY_IMAGE" >}}, {{< env "VALKEY_MAXMEMORY" >}}, {{< env "VALKEY_PASSWORD_SECRET" >}} и {{< env "CRANE_CACHE_URL_SECRET" >}} в `.env` (в `.env.dist` они уже есть).
 
 ## Шаги {#steps}
 
@@ -50,7 +50,7 @@ terms: [upstream, proxy-repository, blob, cas, digest]
    ```
 
 > [!NOTE]
-> Не задавайте `CRANE_CACHE` в этом режиме. Адрес с паролем лежит только в секрете `cache_url`, и сервер читает его через `CRANE_CACHE_FILE`. Если заданы обе переменные, сервер не стартует.
+> Не задавайте {{< env "CRANE_CACHE" >}} в этом режиме. Адрес с паролем лежит только в секрете `cache_url`, и сервер читает его через {{< env "CRANE_CACHE_FILE" >}}. Если заданы обе переменные, сервер не стартует.
 
 ## Проверка {#verify}
 
@@ -83,7 +83,7 @@ terms: [upstream, proxy-repository, blob, cas, digest]
 
 | Сервис | Изменение |
 | --- | --- |
-| `valkey` | Образ `VALKEY_IMAGE`; запуск с `--save ""`, `--appendonly no`, `--maxmemory ${VALKEY_MAXMEMORY}`, `--maxmemory-policy allkeys-lru` и `--aclfile`; данные не сохраняются на диск |
+| `valkey` | Образ {{< env "VALKEY_IMAGE" >}}; запуск с `--save ""`, `--appendonly no`, `--maxmemory ${VALKEY_MAXMEMORY}`, `--maxmemory-policy allkeys-lru` и `--aclfile`; данные не сохраняются на диск |
 | `crane` | Читает адрес из `CRANE_CACHE_FILE=/run/secrets/cache_url`; подключён к сети `cache`; стартует после того, как `valkey` стал здоровым |
 
 ACL собирается при старте контейнера из файла пароля во временном файле с правами `0600`. Пароль не попадает в аргументы процесса, окружение и образ:

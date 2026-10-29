@@ -19,7 +19,7 @@ CRANE requires PostgreSQL 17 or newer with the `vector` (pgvector 0.8 or newer) 
 | `vector` (pgvector) | 0.8 or newer |
 | `pg_trgm` | any version; the version is not checked |
 
-The catalog is stored only in PostgreSQL. The connection address comes from `CRANE_DATABASE_URL` or `CRANE_DATABASE_URL_FILE`: the `postgres://` or `postgresql://` scheme. The value `memory` selects an in-memory catalog, and its data is lost on restart; such a catalog cannot be combined with a persistent `CRANE_BLOBS`.
+The catalog is stored only in PostgreSQL. The connection address comes from {{< env "CRANE_DATABASE_URL" >}} or {{< env "CRANE_DATABASE_URL_FILE" >}}: the `postgres://` or `postgresql://` scheme. The value `memory` selects an in-memory catalog, and its data is lost on restart; such a catalog cannot be combined with a persistent {{< env "CRANE_BLOBS" >}}.
 
 ## Extensions and `crane migrate` {#extensions}
 
@@ -56,11 +56,11 @@ Images are pinned in `.env.dist` in the format `tag@sha256:<index digest>`. The 
 
 | Variable | Value (tag) | Purpose |
 | --- | --- | --- |
-| `CRANE_IMAGE` | `crane/crane` | The CRANE image; built locally, not published to a registry |
-| `CRANE_VERSION` | `latest` | The CRANE image tag; the version is not pinned |
-| `CADDY_IMAGE` | `caddy:2.11.7` | Reverse proxy and TLS |
-| `POSTGRES_IMAGE` | `pgvector/pgvector:0.8.7-pg17-bookworm` | PostgreSQL 17.11 with pgvector 0.8.7 |
-| `VALKEY_IMAGE` | `valkey/valkey:8.1.11` | Cache, {{< xref "deploy/valkey-cache" "Valkey mode" >}} |
+| {{< env "CRANE_IMAGE" >}} | `crane/crane` | The CRANE image; built locally, not published to a registry |
+| {{< env "CRANE_VERSION" >}} | `latest` | The CRANE image tag; the version is not pinned |
+| {{< env "CADDY_IMAGE" >}} | `caddy:2.11.7` | Reverse proxy and TLS |
+| {{< env "POSTGRES_IMAGE" >}} | `pgvector/pgvector:0.8.7-pg17-bookworm` | PostgreSQL 17.11 with pgvector 0.8.7 |
+| {{< env "VALKEY_IMAGE" >}} | `valkey/valkey:8.1.11` | Cache, {{< xref "deploy/valkey-cache" "Valkey mode" >}} |
 | `SEAWEEDFS_IMAGE` | `chrislusf/seaweedfs:4.51` | S3 storage, {{< xref "deploy/s3-storage" "S3 mode" >}} |
 
 The exact digests are recorded in `.env.dist`. To update an image, take the top-level `Digest` line from the output of:
@@ -73,9 +73,9 @@ docker buildx imagetools inspect <image:tag>
 
 | Parameter | Default | Where it applies |
 | --- | --- | --- |
-| `CRANE_CPUS` | `2` | CPU limit of the `crane` service in Compose |
-| `CRANE_MEMORY` | `1g` | Memory limit of the `crane` service in Compose |
-| `VALKEY_MAXMEMORY` | `512mb` | Valkey memory limit in Valkey mode; the `allkeys-lru` eviction policy is fixed in the compose file |
+| {{< env "CRANE_CPUS" >}} | `2` | CPU limit of the `crane` service in Compose |
+| {{< env "CRANE_MEMORY" >}} | `1g` | Memory limit of the `crane` service in Compose |
+| {{< env "VALKEY_MAXMEMORY" >}} | `512mb` | Valkey memory limit in Valkey mode; the `allkeys-lru` eviction policy is fixed in the compose file |
 
 The `memory` cache is bounded to 256 MiB of entry weight (proxy document bodies). The limit is set in code and no variable changes it.
 
@@ -91,9 +91,9 @@ The `memory` cache is bounded to 256 MiB of entry weight (proxy document bodies)
 
 | Port | Where | Purpose |
 | --- | --- | --- |
-| `80`, `443` | Host, `CADDY_HTTP_PORT` and `CADDY_HTTPS_PORT` | The only Compose project ports published outside |
-| `8080` | `crane` container, `CRANE_HTTP_PORT` | API and package protocols |
-| `9464` | `crane` container, `CRANE_ADMIN_PORT` | The `/healthz/live` and `/healthz/ready` probes |
+| `80`, `443` | Host, {{< env "CADDY_HTTP_PORT" >}} and {{< env "CADDY_HTTPS_PORT" >}} | The only Compose project ports published outside |
+| `8080` | `crane` container, {{< env "CRANE_HTTP_PORT" >}} | API and package protocols |
+| `9464` | `crane` container, {{< env "CRANE_ADMIN_PORT" >}} | The `/healthz/live` and `/healthz/ready` probes |
 
 ## What's next {#next}
 

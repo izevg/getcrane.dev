@@ -66,6 +66,7 @@
 | `features/security/namespace-reservation` | Резервирование namespace | security, platform, developer | `10.3`, решения 28, 42, 43 | W1 |
 | `features/security/upstream-quarantine` | Карантин новых версий upstream | security, platform | `10.2` (видимость proxy), `14.2`, `21.7`, решения 27, 62 | W1 |
 | `features/security/egress-guard` | Контроль исходящих запросов (SSRF) | security, platform | `14.2`, `14.3`, `10.2`, `crates/adapters/external/upstream/src/guard.rs` | W1 |
+| `features/security/public-upstreams-only` | Только публичные upstream | platform, security | код констант хостов upstream, `config/proxy`, `guard.rs`, `10.15`; утверждение владельца в реестре происхождения | W4 |
 | `features/security/fail-closed` | Отказ в закрытую сторону | security, platform | решение 46, `04` | B2 |
 | `features/security/untrusted-content` | Отдача недоверенного содержимого | security | `14.3`, `15`, решение 21 | B2 |
 | `features/security/secrets` | Шифрование секретов и токены | security, platform | `14.3`, `20.2` (шифрование), `13` (токены) | B2 |

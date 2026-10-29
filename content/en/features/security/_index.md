@@ -13,6 +13,10 @@ CRANE is a private package registry and a proxy for {{< term "upstream" >}} regi
 
 This section describes which threats CRANE defends against and where each defense ends. Every guarantee is worded so that it can be verified, and its limits are stated openly: a security engineer or an auditor sees not only what is covered but also what stays with the deployment.
 
+## What “guarantee” means here {#meaning}
+
+On these pages a guarantee is a property of a CRANE mechanism that can be checked against its behaviour and code: what exactly CRANE does and under which conditions. It is not a legal commitment. CRANE is free software under the Apache License 2.0 and, as section 7 of that license states, is provided “as is”, without warranties. That is why every guarantee states its limits, and CRANE does not take on what it cannot enforce with a mechanism.
+
 ## Why the registry is the control point {#control-point}
 
 Every dependency passes through the registry before it reaches a build. That gives three capabilities that a scanner placed elsewhere in the pipeline does not have.
@@ -60,6 +64,7 @@ The table links each guarantee to a threat and names its main limit. The full li
 | {{< xref "features/security/namespace-reservation" >}} | Dependency confusion: a public package with an internal name | Unscoped npm names are not protected; when the upstream is unavailable, publishing a new name is refused |
 | {{< xref "features/security/upstream-quarantine" >}} | A fresh malicious version of a popular package (maintainer account takeover) | Proxy repositories only; a version without a known publication time is handled by a setting |
 | {{< xref "features/security/egress-guard" >}} | {{< term "ssrf" >}}: a request to internal addresses through an upstream, a redirect or DNS | Trusts the hosts in the allowlist; protects CRANE's outbound requests, not the network around it |
+| {{< xref "features/security/public-upstreams-only" >}} | Injection through a private or arbitrary upstream whose content CRANE does not control | Packages from other registries enter only through a hosted publication, and the publisher is accountable for what was moved |
 | {{< xref "features/security/fail-closed" >}} | Skipping a check on failure | The price is a refusal to serve while the catalog is down |
 | {{< xref "features/security/untrusted-content" >}} | Active content of a package file (HTML, SVG) running on the console origin | Works when a separate packages origin is set |
 | {{< xref "features/security/secrets" >}} | Leaks of tokens and settings secrets | Rolling back a whole settings row is not caught by the cipher: that is a threat at the database access level |

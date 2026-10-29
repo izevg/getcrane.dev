@@ -1,6 +1,6 @@
 ---
 title: "Deployment"
-description: "The ways to run CRANE today: Docker Compose on a single node with S3 and Valkey modes, and a Helm chart for Kubernetes, and how to choose between them."
+description: "How to run CRANE today: Docker Compose on a single node, the S3 and Valkey modes, and how to choose between them."
 audience: [platform]
 genre: how-to
 state: current
@@ -9,9 +9,9 @@ weight: 30
 terms: [blob]
 ---
 
-CRANE runs in two ways: through Docker Compose on a single node and through a Helm chart in Kubernetes. Both use the same image and the same configuration: environment variables and an optional TOML file. The CRANE image is currently built locally from `deploy/docker/Dockerfile` and is not published to a registry.
+CRANE runs through Docker Compose on a single node; S3 storage and the Valkey cache are added with override files. Configuration consists of environment variables and an optional TOML file. Deployment to Kubernetes with a Helm chart is in development. The CRANE image is currently built locally from `deploy/docker/Dockerfile` and is not published to a registry.
 
-Access to the protocols is protected by the static token `CRANE_TOKEN`. The probe (admin) port is not published, neither in the Compose file nor in the chart's `Service`: only the API port is exposed.
+Access to the protocols is protected by the static token `CRANE_TOKEN`. The probe (admin) port is not published in the Compose file: only the API port is exposed, through Caddy.
 
 ## Deployment options {#options}
 
@@ -20,7 +20,7 @@ Access to the protocols is protected by the static token `CRANE_TOKEN`. The prob
 | Docker Compose on a single node | One host; PostgreSQL, Caddy and `crane` in one project; {{< term "blob" "blobs" >}} in a local volume | `caddy`, `migrate`, `crane`, `postgres` | {{< xref "deploy/docker-compose" >}} |
 | S3 mode (override) | Blobs are stored in S3; SeaweedFS ships with the project | `docker-compose.s3.yaml`: `seaweedfs`, `seaweedfs-init` | {{< xref "deploy/s3-storage" >}} |
 | Valkey mode (override) | A shared cache with mandatory authentication in an isolated network | `docker-compose.cache.yaml`: `valkey` | {{< xref "deploy/valkey-cache" >}} |
-| Kubernetes and Helm | A cluster is available; PostgreSQL, Valkey and S3 are provided by the organization | api and worker `Deployment`s, migrate `Job`, `Service`, `Ingress` | {{< xref "deploy/kubernetes-helm" >}} |
+| Kubernetes and Helm | A cluster is available; PostgreSQL, Valkey and S3 are provided by the organization | This functionality is in development | {{< xref "deploy/kubernetes-helm" >}} |
 
 The S3 and Valkey modes are Compose override files, not profiles: they change the configuration of `crane` itself (keys, networks, dependencies), which a profile cannot do. The override files are layered on top of the base `docker-compose.yaml`.
 
@@ -35,7 +35,6 @@ The S3 and Valkey modes are Compose override files, not profiles: they change th
 1. One host with the fewest dependencies: deploy Docker Compose on a single node. By default the cache lives in process memory and blobs live in a local volume.
 2. Blobs must be stored in S3: add the `docker-compose.s3.yaml` override.
 3. `crane` replicas need a shared cache: add the `docker-compose.cache.yaml` override. In the Compose file `crane` is a single container, so Valkey is optional there.
-4. The organization already has Kubernetes, PostgreSQL, Valkey and S3: use the Helm chart. Read the chart limitations at the top of {{< xref "deploy/kubernetes-helm" >}} first.
 
 ## Verify {#verify}
 

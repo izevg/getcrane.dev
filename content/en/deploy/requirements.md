@@ -1,6 +1,6 @@
 ---
 title: "Requirements"
-description: "PostgreSQL and extension versions, images pinned by digest, default Compose and Helm resources, and the tools needed to deploy CRANE."
+description: "PostgreSQL and extension versions, images pinned by digest, default Compose resources, and the tools needed to deploy CRANE."
 audience: [platform]
 genre: reference
 state: current
@@ -69,8 +69,6 @@ The exact digests are recorded in `.env.dist`. To update an image, take the top-
 docker buildx imagetools inspect <image:tag>
 ```
 
-In the Helm chart, the value `image.digest` sets the digest of the CRANE image: {{< xref "deploy/kubernetes-helm#values" >}}.
-
 ## Default resources {#resources}
 
 | Parameter | Default | Where it applies |
@@ -78,8 +76,6 @@ In the Helm chart, the value `image.digest` sets the digest of the CRANE image: 
 | `CRANE_CPUS` | `2` | CPU limit of the `crane` service in Compose |
 | `CRANE_MEMORY` | `1g` | Memory limit of the `crane` service in Compose |
 | `VALKEY_MAXMEMORY` | `512mb` | Valkey memory limit in Valkey mode; the `allkeys-lru` eviction policy is fixed in the compose file |
-| `api.resources` (Helm) | request 500m CPU and 512Mi memory, memory limit 1Gi | api pods |
-| `worker.resources` (Helm) | request 500m CPU and 512Mi memory, memory limit 1Gi | worker pods |
 
 The `memory` cache is bounded to 256 MiB of entry weight (proxy document bodies). The limit is set in code and no variable changes it.
 
@@ -90,7 +86,6 @@ The `memory` cache is bounded to 256 MiB of entry weight (proxy document bodies)
 | Docker Compose | Running the project | The repeated `--env-file` option was verified on Compose v5.6.1. The S3 override uses the `!reset` tag |
 | Docker with BuildKit | Building the CRANE image | The `Dockerfile` uses `RUN --mount=type=cache` |
 | go-task and Node.js 24 | The `task secrets:init` task | The Node.js version is recorded in `.nvmrc` |
-| Helm | Installing the chart | The chart uses `apiVersion: v2` |
 
 ## Ports {#ports}
 

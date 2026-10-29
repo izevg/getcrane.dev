@@ -1,6 +1,6 @@
 ---
 title: "Требования"
-description: "Версии PostgreSQL и его расширений, образы с закреплёнными дайджестами, ресурсы Compose и Helm по умолчанию и инструменты для развёртывания CRANE."
+description: "Версии PostgreSQL и его расширений, образы с закреплёнными дайджестами, ресурсы Compose по умолчанию и инструменты для развёртывания CRANE."
 audience: [platform]
 genre: reference
 state: current
@@ -69,8 +69,6 @@ CREATE EXTENSION pg_trgm;
 docker buildx imagetools inspect <образ:тег>
 ```
 
-В Helm-чарте дайджест образа CRANE задаёт значение `image.digest`: {{< xref "deploy/kubernetes-helm#values" >}}.
-
 ## Ресурсы по умолчанию {#resources}
 
 | Параметр | Значение по умолчанию | Где действует |
@@ -78,8 +76,6 @@ docker buildx imagetools inspect <образ:тег>
 | `CRANE_CPUS` | `2` | Предел CPU сервиса `crane` в Compose |
 | `CRANE_MEMORY` | `1g` | Предел памяти сервиса `crane` в Compose |
 | `VALKEY_MAXMEMORY` | `512mb` | Предел памяти Valkey в режиме Valkey; политика вытеснения `allkeys-lru` зафиксирована в compose-файле |
-| `api.resources` (Helm) | запрос 500m CPU и 512Mi памяти, предел памяти 1Gi | Поды api |
-| `worker.resources` (Helm) | запрос 500m CPU и 512Mi памяти, предел памяти 1Gi | Поды worker |
 
 Кэш `memory` ограничен 256 МиБ веса записей (тела документов proxy). Предел задан в коде и не настраивается переменной.
 
@@ -90,7 +86,6 @@ docker buildx imagetools inspect <образ:тег>
 | Docker Compose | Запуск проекта | Повторяемый ключ `--env-file` проверен на Compose v5.6.1. Override S3 использует тег `!reset` |
 | Docker с BuildKit | Сборка образа CRANE | `Dockerfile` использует `RUN --mount=type=cache` |
 | go-task и Node.js 24 | Задача `task secrets:init` | Версия Node.js записана в `.nvmrc` |
-| Helm | Установка чарта | Чарт использует `apiVersion: v2` |
 
 ## Порты {#ports}
 

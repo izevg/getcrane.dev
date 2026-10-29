@@ -19,9 +19,13 @@ jobs:
         run: npm run typecheck
       - name: Контент (паритет RU/EN, мета, слова, xref, i18n)
         run: npm run check:content
+      - name: Диаграммы (готовые SVG актуальны, без рендера)
+        run: npm run mermaid:check
+      - name: Иконки Lucide (манифест и файлы)
+        run: npm run icons:check
       - name: Орфография RU и EN
         run: npm run check:spell
-      - name: Сборка (mermaid → Hugo → Pagefind)
+      - name: Сборка (Hugo → Pagefind → postbuild, без рендера диаграмм)
         run: npm run build
       - name: Внутренние ссылки
         run: npm run check:links

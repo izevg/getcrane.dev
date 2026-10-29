@@ -2,7 +2,7 @@ import { $, $$, ready } from "./lib/dom";
 import { t } from "./lib/strings";
 import { isGone, place } from "./tips/position";
 import { initCodeGroups } from "./tips/envcode";
-import { CLOSE_DELAY_MS, OPEN_DELAY_MS, applyTiming } from "./tips/timing";
+import { CLOSE_DELAY_MS, GROUP_TIMEOUT_MS, OPEN_DELAY_MS } from "./tips/timing";
 
 type Mode = "hover" | "focus" | "pinned";
 
@@ -16,6 +16,7 @@ let current: Open | undefined;
 let openTimer = 0;
 let closeTimer = 0;
 let suppressed: HTMLElement | undefined;
+let lastClosedAt = -Infinity;
 let lastPointer = "";
 let frame = 0;
 const groupOf = new Map<HTMLElement, number>();
@@ -88,6 +89,7 @@ function close(instant = false): void {
   }
   const { trigger, tip } = current;
   current = undefined;
+  lastClosedAt = performance.now();
   tip.classList.toggle("no-anim", instant);
   if (tip.matches(":popover-open")) {
     tip.hidePopover();
@@ -106,8 +108,9 @@ function scheduleOpen(trigger: HTMLElement): void {
     return;
   }
   window.clearTimeout(openTimer);
-  // Пока открыт слой соседнего триггера, переход мгновенный.
-  const delay = current ? 0 : OPEN_DELAY_MS;
+  // Пока открыт слой соседнего триггера или он закрыт меньше GROUP_TIMEOUT_MS назад, переход мгновенный и без анимации входа.
+  const grouped = current !== undefined || performance.now() - lastClosedAt < GROUP_TIMEOUT_MS;
+  const delay = grouped ? 0 : OPEN_DELAY_MS;
   openTimer = window.setTimeout(() => show(trigger, "hover", delay === 0), delay);
 }
 
@@ -156,12 +159,19 @@ function bindTrigger(trigger: HTMLElement): void {
     lastPointer = event.pointerType;
   });
   trigger.addEventListener("pointerenter", (event) => {
-    if (event.pointerType === "touch" || suppressed === trigger) {
+    if (event.pointerType === "touch") {
       return;
+    }
+    // Новое наведение — новое намерение: после Esc слой снова открывается, пока указатель не вошёл заново.
+    if (suppressed === trigger) {
+      suppressed = undefined;
     }
     scheduleOpen(trigger);
   });
   trigger.addEventListener("pointerleave", (event) => {
+    if (suppressed === trigger) {
+      suppressed = undefined;
+    }
     if (event.pointerType !== "touch") {
       scheduleClose();
     }
@@ -173,12 +183,15 @@ function bindTrigger(trigger: HTMLElement): void {
     }
   });
   trigger.addEventListener("focus", () => {
-    suppressed = suppressed === trigger ? undefined : suppressed;
-    if (!cite && trigger.matches(":focus-visible")) {
+    // После Esc фокус возвращается на триггер без повторного показа слоя (WCAG 1.4.13).
+    if (suppressed !== trigger && !cite && trigger.matches(":focus-visible")) {
       show(trigger, "focus", true);
     }
   });
   trigger.addEventListener("blur", () => {
+    if (suppressed === trigger) {
+      suppressed = undefined;
+    }
     if (current?.mode === "focus" && current.trigger === trigger) {
       close(true);
     }
@@ -249,7 +262,6 @@ function focusAfter(trigger: HTMLElement): void {
 }
 
 ready(() => {
-  applyTiming();
   const triggers = $$("[data-tip]");
   const groups = initCodeGroups();
   for (const group of groups) {

@@ -1,97 +1,111 @@
 @layer page {
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-block-size: 44px;
-    padding: 0 var(--space-6); border-radius: var(--radius); border: 1px solid transparent; font-weight: 600; text-decoration: none;
-  }
-  @media (min-width: 48rem) { .btn { min-block-size: 48px; } }
-  .btn-primary { background: var(--primary); color: var(--primary-foreground); }
-  .btn-primary:hover { background: var(--primary-hover); color: var(--primary-foreground); }
-  .btn-primary:active { background: var(--primary-active); }
-  :root[data-theme="dark"] .btn-primary { border-color: var(--brand); }
-  .btn-secondary { background: var(--card); color: var(--foreground); border-color: var(--input); }
-  .btn-secondary:hover { background: var(--accent); color: var(--foreground); }
-  .btn-secondary:active { background: var(--surface-high); }
-
-  .home { flex: 1; }
+  .home { flex: 1; margin-block-end: var(--space-section); }
   .section { padding-block-start: var(--space-section); }
-  .section + .section, .hero + .section { content-visibility: auto; contain-intrinsic-size: auto 40rem; }
   .section > h2 { margin-block-end: var(--space-6); }
   .overline { font-size: var(--type-caption); font-weight: 650; color: var(--brand); letter-spacing: 0.04em; margin-block-end: var(--space-3); }
 
-  /* Hero. */
-  .hero { position: relative; padding-block: var(--space-12) var(--space-8); isolation: isolate; }
+  /* Hero: ниже 64rem одна колонка (снимок после кнопок), от 64rem две колонки 6/6. */
+  .hero { position: relative; padding-block: var(--space-12) var(--space-8); isolation: isolate; display: grid; gap: var(--space-10); align-items: center; }
+  @media (min-width: 64rem) { .hero { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-12); } }
   .hero::before {
     content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
     background-image: linear-gradient(var(--hero-grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--hero-grid-line) 1px, transparent 1px);
     background-size: 32px 32px;
     mask-image: radial-gradient(ellipse 70% 80% at 50% 40%, #000 20%, transparent 75%);
   }
+  .hero-copy, .hero-visual { min-inline-size: 0; }
   .hero h1 { font-size: var(--type-display); line-height: 1.05; font-weight: 650; letter-spacing: -0.02em; max-inline-size: 18ch; text-wrap: balance; }
   .hero .lead { margin-block-start: var(--space-4); }
   .cta { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-block-start: var(--space-6); }
+  @media (max-width: 29.99rem) { .cta { flex-direction: column; } .cta .btn { inline-size: 100%; } }
+  .hero-meta { display: flex; align-items: center; gap: var(--space-2); margin-block-start: var(--space-5); font-size: var(--type-small); color: var(--muted-foreground); }
   .hero-lang { margin-block-start: var(--space-4); font-size: var(--type-small); }
   .hero-lang a { font-weight: 650; }
+  @media (max-width: 39.99rem) { .hero-shot { display: none; } }
 
-  /* Схема «путь пакета»: ol, линия — декор. Вертикальная ниже 64rem. */
-  .pkg-path { list-style: none; padding: 0; margin-block-start: var(--space-12); position: relative; display: flex; flex-direction: column; gap: var(--space-6); padding-inline-start: var(--space-8); }
-  .pkg-path::before, .pkg-path::after { content: ""; position: absolute; inset-block: 12px; inset-inline-start: 11px; inline-size: 2px; background: var(--border); }
-  .pkg-path::after { background: var(--success-strong); transform-origin: top; animation: fill-y 1.6s var(--ease-in-out) 0.1s backwards; }
-  .pkg-box {
-    position: relative; display: block; background: var(--card); border: 1px solid var(--input); border-radius: var(--radius);
-    padding: var(--space-3) var(--space-4); color: var(--foreground); text-decoration: none; font-weight: 600;
+  /* Рамка «окно» вокруг снимков консоли: пропорция резервирует место, снимок крупнее h1 — кандидат LCP. */
+  .window { border-radius: var(--radius-card); border: 1px solid var(--border); box-shadow: var(--shadow-card); background: var(--card); overflow: hidden; aspect-ratio: 1440 / 900; }
+  .window picture, .window img { display: block; inline-size: 100%; block-size: auto; }
+  .hero-shot figcaption, .console-shot figcaption { margin-block-start: var(--space-2); font-size: var(--type-small); color: var(--muted-foreground); }
+  .console-shot figcaption a { font-weight: 650; }
+  .demo::before { content: "· "; }
+  .shot-light, .shot-dark { display: none; }
+  .window .shot-light { display: block; }
+  :root[data-theme="dark"] .window .shot-light { display: none; }
+  :root[data-theme="dark"] .window .shot-dark { display: block; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) .window .shot-light { display: none; }
+    :root:not([data-theme]) .window .shot-dark { display: block; }
   }
-  .pkg-path > li { position: relative; }
-  .pkg-path > li::before {
-    content: ""; position: absolute; inset-inline-start: calc(-1 * var(--space-8) + 3px); inset-block-start: 14px; inline-size: 18px; block-size: 18px;
-    border-radius: 50%; background: var(--background); border: 2px solid var(--input);
+
+  /*
+   * Схема «путь пакета». Контейнерный запрос: в узкой колонке (hero, мобильный) узлы идут столбцом, в полосе от 52rem — рядом.
+   * Линия .pkg-line — отдельный декоративный элемент перед узлами; узлы непрозрачны и закрывают её, так что линия видна только в зазорах (R2).
+   */
+  .pkg { container-type: inline-size; }
+  .pkg-track { position: relative; }
+  .pkg-path { list-style: none; padding: 0; display: flex; flex-direction: column; gap: var(--space-6); }
+  .pkg-node { min-inline-size: 0; }
+  .pkg-box {
+    position: relative; display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3);
+    background: var(--card); color: var(--foreground); border: 1px solid var(--input); border-radius: var(--radius);
+    text-decoration: none; min-block-size: 60px;
   }
   a.pkg-box:hover { background: var(--accent); color: var(--foreground); }
-  .pkg-ok {
-    position: absolute; inset-block-start: 50%; inset-inline-end: var(--space-3); inline-size: 16px; block-size: 16px; margin-block-start: -8px; color: var(--success-strong);
-    animation: pop 300ms var(--ease-out) calc(0.25s + var(--i, 0) * 0.28s) backwards;
+  .pkg-tile, .tile {
+    flex: none; display: grid; place-items: center; inline-size: 36px; block-size: 36px; border-radius: var(--radius);
+    background: var(--muted); color: var(--muted-foreground);
   }
-  .pkg-box { padding-inline-end: calc(var(--space-4) + 24px); }
-  .pkg-group-label { display: block; font-size: var(--type-caption); color: var(--muted-foreground); margin-block-end: var(--space-2); }
-  .pkg-nodes { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-3); }
-  .pkg-nodes > li { flex: 1 1 11rem; }
-  .pkg-code { font-family: var(--font-mono); font-weight: 500; }
-  @media (min-width: 64rem) {
-    .pkg-path { flex-direction: row; align-items: center; padding-inline-start: 0; gap: var(--space-8); }
-    .pkg-path::before, .pkg-path::after { inset-block: auto; inset-inline: 0; inset-block-start: 50%; inline-size: auto; block-size: 2px; margin-block-start: -1px; }
-    .pkg-path::after { transform-origin: left; animation-name: fill-x; }
-    .pkg-path > li::before { content: none; }
-    .pkg-path > li { background: var(--background); padding-inline: var(--space-2); z-index: 1; }
-    .pkg-path > li.pkg-mid { flex: 1; }
+  .is-gate .pkg-tile { background: var(--brand-container); color: var(--brand); }
+  .pkg-text { display: grid; gap: 2px; min-inline-size: 0; }
+  .pkg-label { font-weight: 600; overflow-wrap: anywhere; }
+  .pkg-note { font-size: var(--type-small); color: var(--muted-foreground); }
+  .pkg-tick { position: absolute; inset-block-start: 8px; inset-inline-end: 8px; color: var(--success-strong); transition: opacity var(--dur-fast) var(--ease-out); }
+  .pkg-brace { display: none; }
+  .pkg-line {
+    position: absolute; inset-block: 30px; inset-inline-start: 29px; inline-size: 2px; background: var(--input); pointer-events: none;
   }
-  @keyframes fill-x { from { transform: scaleX(0); } }
-  @keyframes fill-y { from { transform: scaleY(0); } }
-  @keyframes pop { from { opacity: 0; } }
-  @media (prefers-reduced-motion: reduce) { .pkg-path::after, .pkg-ok { animation: none; } }
+  .pkg-dot {
+    position: absolute; inset-block-start: 0; inset-inline-start: -4px; inline-size: 10px; block-size: 10px; border-radius: 50%;
+    background: var(--brand); opacity: 0;
+  }
+  .pkg[data-anim="run"] .pkg-dot { opacity: 1; }
+  .pkg[data-anim="run"] .pkg-tick { opacity: 0; }
+  .pkg[data-anim="run"] .pkg-node.is-passed .pkg-tick { opacity: 1; }
 
-  /* Карточки. */
+  @container (min-width: 52rem) {
+    .pkg-path { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: var(--space-6); }
+    .pkg-box { flex-direction: column; justify-content: center; text-align: center; block-size: 100%; padding: var(--space-4) var(--space-3); }
+    .pkg-text { justify-items: center; }
+    .pkg-line { inset-block: 50%; inset-inline: calc(100% / 12); inline-size: auto; block-size: 2px; margin-block-start: -1px; }
+    .pkg-dot { inset-block-start: -4px; inset-inline-start: 0; }
+    /* Скобка «CRANE» под четырьмя узлами: колонки 2–5 из 6. */
+    .pkg-brace { display: block; margin-block-start: var(--space-3); text-align: center; margin-inline: calc((100% - 5 * var(--space-6)) / 6 + var(--space-6)) calc((100% - 5 * var(--space-6)) / 6 + var(--space-6)); }
+    .pkg-brace span { display: block; padding-block-start: var(--space-2); border-block-start: 2px solid var(--brand); color: var(--brand); font-size: var(--type-caption); font-weight: 650; }
+  }
+  .pkg-hero .pkg-path { gap: var(--space-5); }
+
+  /* Карточки: как Card консоли — радиус 16, shadow-card вместо рамки (рамка только в forced-colors). */
   .card {
-    position: relative; container-type: inline-size; background: var(--card); border: 1px solid var(--border);
-    border-radius: var(--radius-card); box-shadow: var(--shadow-subtle); padding: var(--space-6);
+    position: relative; container-type: inline-size; background: var(--card);
+    border-radius: var(--radius-card); box-shadow: var(--shadow-card); padding: var(--space-6);
     transition: transform var(--dur-fast) var(--ease-out);
   }
-  .card::before {
-    content: ""; position: absolute; inset: -1px; border-radius: inherit; box-shadow: var(--shadow-card); opacity: 0; pointer-events: none;
-    transition: opacity var(--dur-instant) var(--ease-out);
-  }
   .card:hover { transform: translateY(-2px); }
-  .card:hover::before { opacity: 1; }
   .card:has(a:focus-visible) { outline: 2px solid var(--ring); outline-offset: 2px; }
   .card h3 a { color: var(--foreground); text-decoration: none; }
   .card h3 a:focus-visible { outline: none; }
   .card h3 a::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
   .card h3 { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
   .card p { margin-block-start: var(--space-3); }
+  .tile { background: var(--brand-container); color: var(--brand); inline-size: 32px; block-size: 32px; border-radius: var(--radius); }
+  .tile-sm { inline-size: 28px; block-size: 28px; }
   .claim { font-size: var(--type-body); }
   .limit { display: flex; gap: var(--space-2); align-items: flex-start; color: var(--muted-foreground); font-size: var(--type-small); }
   .limit .i { margin-block-start: 3px; }
   .limit b { font-weight: 650; }
   @container (max-width: 18rem) { .limit { flex-direction: column; gap: var(--space-1); } }
-  @media (prefers-reduced-motion: reduce) { .card { transition: none; } .card:hover { transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .card:hover { transform: none; } }
 
   .grid { list-style: none; padding: 0; display: grid; gap: var(--space-6); }
   .grid-g { grid-template-columns: 1fr; }
@@ -101,23 +115,32 @@
     .grid-g > li { grid-column: span 4; }
     .grid-g > li:nth-child(-n + 2) { grid-column: span 6; }
   }
-  .more-link { margin-block-start: var(--space-6); display: inline-block; font-weight: 650; }
+  .more-link { margin-block-start: var(--space-6); display: inline-flex; align-items: center; gap: var(--space-2); font-weight: 650; }
   .grid-a { grid-template-columns: 1fr; }
   @media (min-width: 40rem) { .grid-a { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 80rem) { .grid-a { grid-template-columns: repeat(4, 1fr); } }
   .card-aud .seeks { color: var(--muted-foreground); font-size: var(--type-small); }
   .card-aud ul { list-style: none; padding: 0; margin-block-start: var(--space-3); display: grid; gap: var(--space-2); }
-  .card-aud h3 { gap: var(--space-2); }
   .grid-f { grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: var(--space-4); }
   @media (min-width: 64rem) { .grid-f { grid-template-columns: repeat(5, 1fr); } }
   .card-tile { padding: var(--space-4); }
   .card-tile p { font-size: var(--type-small); color: var(--muted-foreground); }
   .grid-d { grid-template-columns: 1fr; }
   @media (min-width: 48rem) { .grid-d { grid-template-columns: repeat(3, 1fr); } }
-  .card-tile code { display: block; margin-block-start: var(--space-3); overflow-wrap: anywhere; }
-  .strip { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-6); }
-  .strip a { font-weight: 600; }
+  .card-tile .code { margin-block-start: var(--space-3); position: relative; }
+  .card-tile .code pre { font-size: var(--type-caption); white-space: pre-wrap; overflow-wrap: anywhere; }
+  .card-tile .code pre code { white-space: inherit; }
+  .grid-c { grid-template-columns: 1fr; }
+  @media (min-width: 64rem) { .grid-c { grid-template-columns: repeat(3, 1fr); } }
+  .strip { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  @media (max-width: 29.99rem) { .strip { flex-direction: column; } .strip .btn { inline-size: 100%; justify-content: space-between; } }
 
   .notfound { padding-block: var(--space-16); max-inline-size: var(--measure); }
   .notfound p { margin-block: var(--space-4) var(--space-6); }
+
+  @media (forced-colors: active) {
+    .card, .window, .pkg-box { border: 1px solid CanvasText; }
+    .pkg-line { background: CanvasText; }
+    .pkg-dot { background: Highlight; forced-color-adjust: none; }
+  }
 }

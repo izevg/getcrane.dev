@@ -1,0 +1,11 @@
+{{- /*
+  Содержимое блочного шорткода → HTML: Markdown страницы (Goldmark) плюс подстановка токенов вложенных term/xref/env/cite (см. ui/emit.html).
+  Вход: dict "page" "inner" "display" ("block" по умолчанию или "inline"). Выход: safeHTML.
+*/ -}}
+{{- $p := .page -}}
+{{- $out := string (.inner | $p.RenderString (dict "display" (.display | default "block"))) -}}
+{{- $map := $p.Scratch.Get "tok" | default dict -}}
+{{- range findRE `❬[0-9a-f]{40}❭` $out -}}
+  {{- $out = replace $out . (index $map (substr . 1 40)) -}}
+{{- end -}}
+{{- return ($out | safeHTML) -}}

@@ -2,22 +2,4 @@
   {{< term "id" >}} или {{< term "id" "текст в нужной форме" >}}.
   Ссылка на /<lang>/glossary/#id; определение рендерится слоем в конце main (дедупликация по id). Неизвестный id ломает сборку.
 */ -}}
-{{- $id := .Get 0 -}}
-{{- $p := .Page -}}
-{{- $lang := $p.Language.Lang -}}
-{{- $e := index site.Data.glossary $id -}}
-{{- if not $e }}{{ errorf "term: неизвестный id %q (%s); добавьте его в data/glossary.yaml через руководителя документации" $id .Position }}{{ end -}}
-{{- $t := index $e $lang -}}
-{{- $text := .Get 1 | default $t.term -}}
-{{- $base := "" -}}
-{{- with site.GetPage "glossary" }}{{ $base = .RelPermalink }}{{ else }}{{ $base = relLangURL "glossary/" }}{{ end -}}
-{{- $href := printf "%s#%s" $base $id -}}
-{{- $tid := printf "tip-t-%s" $id -}}
-{{- $tips := $p.Scratch.Get "tips" | default dict -}}
-{{- if not (index $tips $tid) -}}
-  {{- $html := printf `<div id="%s" class="tip tip-term" popover="manual" role="tooltip"><p class="tip-title">%s</p><p class="tip-def" id="%s-d">%s</p><a class="tip-more btn-text" href="%s">%s</a></div>` $tid ($t.term | htmlEscape) $tid ($t.def | htmlEscape) $href (i18n "term.more") -}}
-  {{- $p.Scratch.SetInMap "tips" $tid ($html | safeHTML) -}}
-{{- end -}}
-{{- $p.Scratch.Set "f-tips" true -}}
-<a class="term" href="{{ $href }}" data-tip="{{ $tid }}" aria-describedby="{{ $tid }}-d">{{ $text }}</a>
-{{- /* Без пробела после тега: шорткод стоит в потоке текста. */ -}}
+{{- partial "ui/emit.html" (dict "ctx" . "html" (partial "tips/term.html" (dict "page" .Page "id" (.Get 0) "text" (.Get 1) "pos" .Position))) -}}

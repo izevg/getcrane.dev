@@ -2,10 +2,13 @@
 {{- $p := .page -}}
 {{- $lang := $p.Language.Lang -}}
 {{- $d := site.Data.home -}}
+{{- /* Пустая цель меню: на главной нет дерева разделов, но кнопка «Меню» ниже 64rem должна открывать его. */ -}}
+<div class="menu-host" id="site-nav"><nav aria-label="{{ i18n "nav.sections" }}" data-pagefind-ignore>{{ partial "nav/tree.html" (dict "cur" $p "pages" site.Home.Sections "root" true) }}</nav></div>
 <main id="content" class="home">
   {{ partial "home/hero.html" (dict "page" $p "root" .root "d" $d "lang" $lang) }}
   {{ partial "home/guarantees.html" (dict "d" $d "lang" $lang) }}
   {{ partial "home/audiences.html" (dict "d" $d "lang" $lang) }}
+  {{ partial "home/console.html" (dict "d" $d "lang" $lang) }}
   {{ partial "home/formats.html" (dict "d" $d "lang" $lang) }}
   {{ partial "home/deploy.html" (dict "d" $d "lang" $lang) }}
   {{ partial "home/start.html" (dict "d" $d "lang" $lang) }}

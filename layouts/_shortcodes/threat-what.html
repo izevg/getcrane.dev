@@ -1,0 +1,6 @@
+{{- /* Блок «Угроза» внутри {{< threat >}}: 1–3 предложения; term, xref, env, cite и inline-код работают. */ -}}
+{{- if not .Parent }}{{ errorf "threat-what: допустим только внутри threat (%s)" .Position }}{{ end -}}
+<div class="threat-block threat-what">
+  <h4 class="threat-h">{{ partial "ui/icon.html" (dict "name" "crosshair" "class" "i i-18") }}<span>{{ i18n "threat.what" }}</span></h4>
+  {{ partial "ui/inner.html" (dict "page" .Page "inner" .Inner) }}
+</div>

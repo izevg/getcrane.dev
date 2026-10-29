@@ -35,9 +35,14 @@
   {{- end -}}
   {{- $inner = delimit $out "" -}}
 {{- end -}}
-{{- $label := $lang -}}
-{{- with .Attributes.file }}{{ $label = . }}{{ end -}}
-<div class="code" data-lang="{{ $lang }}">
-<div class="code-head"><span class="code-lang">{{ $label }}</span><span class="code-actions"></span></div>
+{{- /* Метка — человеческая подпись из каталога i18n, не id лексера. Атрибут file="…" показывает имя файла моноширинным; output="true" помечает вывод. */ -}}
+{{- $keys := dict "bash" "shell" "sh" "shell" "shell" "shell" "zsh" "shell" "console" "terminal" "shell-session" "terminal" "dotenv" "dotenv" "env" "dotenv" "yaml" "yaml" "yml" "yaml" "toml" "toml" "json" "json" "ini" "ini" "sql" "sql" "http" "http" "dockerfile" "dockerfile" "mermaid" "mermaid" "text" "text" "plaintext" "text" "output" "output" -}}
+{{- $isOutput := or (eq (.Attributes.output | default "" | string) "true") (in (slice "text" "plaintext" "output") $lang) -}}
+{{- $label := i18n (printf "code.lang.%s" (index $keys $lang | default "other")) -}}
+{{- if $isOutput }}{{ $label = i18n "code.lang.output" }}{{ end -}}
+{{- $isFile := false -}}
+{{- with .Attributes.file }}{{ $label = . }}{{ $isFile = true }}{{ end -}}
+<div class="code" data-lang="{{ $lang }}"{{ if $isOutput }} data-output{{ end }}>
+<div class="code-head"><span class="code-lang{{ if $isFile }} is-file{{ end }}">{{ $label }}</span><span class="code-actions"></span></div>
 <pre class="chroma"><code class="language-{{ .Type | default "text" }}" data-lang="{{ .Type | default "text" }}">{{ $inner | safeHTML }}</code></pre>
 </div>

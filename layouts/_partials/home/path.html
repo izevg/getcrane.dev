@@ -1,0 +1,23 @@
+{{- /*
+  Схема «путь пакета»: публичный реестр → четыре узла CRANE → сборка. Вход: dict "d" "lang" "variant" (hero или strip).
+  Семантика — ol из шести li; соединитель .pkg-line — декоративный элемент, он стоит в DOM раньше узлов (узлы непрозрачны и закрывают линию,
+  поэтому она видна только в зазорах и не пересекает текст). Анимацию одного прохода запускает остров home.ts, без JS — финальное состояние.
+*/ -}}
+{{- $lang := .lang -}}
+{{- $path := .d.path -}}
+{{- $up := index $path.upstream $lang -}}{{- $cl := index $path.client $lang -}}
+{{- if and $up $cl }}
+<div class="pkg pkg-{{ .variant }}" data-pkg>
+  <div class="pkg-track">
+    <span class="pkg-line" aria-hidden="true"><span class="pkg-dot"></span></span>
+    <ol class="pkg-path" aria-label="{{ i18n "home.path" }}">
+      <li class="pkg-node is-edge">{{ partial "home/path-box.html" (dict "icon" $path.upstream.icon "label" $up "note" (index $path.upstream.note $lang) "edge" true) }}</li>
+      {{- range $i, $n := $path.nodes }}{{ with partial "home/page.html" $n.href }}
+      <li class="pkg-node is-gate">{{ partial "home/path-box.html" (dict "icon" $n.icon "label" (index $n $lang | default .Title) "note" (index $n.note $lang) "href" .RelPermalink "group" (i18n "home.path.group")) }}</li>
+      {{- end }}{{ end }}
+      <li class="pkg-node is-edge">{{ partial "home/path-box.html" (dict "icon" $path.client.icon "label" $cl "note" (index $path.client.note $lang) "edge" true) }}</li>
+    </ol>
+  </div>
+  <p class="pkg-brace" aria-hidden="true"><span>{{ i18n "home.path.group" }}</span></p>
+</div>
+{{- end }}

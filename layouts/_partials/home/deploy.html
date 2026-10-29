@@ -1,16 +1,19 @@
-{{- /* Три карточки развёртывания. Пустой href — карточка без ссылки. */ -}}
+{{- /* Три карточки развёртывания с иконками. Пустой href — карточка без ссылки. Команда — мини-блок кода с копированием (остров article.ts). Бейдж «В разработке» — по status страницы-цели. */ -}}
 {{- $lang := .lang -}}
 <section class="section container" aria-labelledby="d-h">
   <h2 id="d-h">{{ i18n "home.deploy" }}</h2>
   <ul class="grid grid-d">
     {{- range .d.deploy }}
     {{- $t := index . $lang -}}
+    {{- $icon := .icon -}}
     {{- $pg := partial "home/page.html" .href -}}
     {{- if $t.title }}
     <li class="card card-tile">
-      <h3>{{ if $pg }}<a href="{{ $pg.RelPermalink }}">{{ $t.title }}</a>{{ else }}{{ $t.title }}{{ end }}</h3>
+      <h3>{{ with $icon }}<span class="tile">{{ partial "ui/icon.html" (dict "name" . "class" "i i-20") }}</span>{{ end }}{{ if $pg }}<a href="{{ $pg.RelPermalink }}">{{ $t.title }}</a>{{ else }}{{ $t.title }}{{ end }}{{ if and $pg (eq $pg.Params.status "in-development") }}<span class="badge badge-dev">{{ partial "ui/icon.html" "clock" }}{{ i18n "status.in-development" }}</span>{{ end }}</h3>
       {{- with $t.text }}<p>{{ . }}</p>{{ end }}
-      {{- with $t.command }}<code>{{ . }}</code>{{ end }}
+      {{- with $t.command }}
+      <div class="code" data-lang="bash"><div class="code-head"><span class="code-lang">{{ i18n "code.lang.shell" }}</span><span class="code-actions"></span></div><pre class="chroma"><code class="language-bash" data-lang="bash">{{ . }}</code></pre></div>
+      {{- end }}
     </li>
     {{- end }}
     {{- end }}

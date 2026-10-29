@@ -1,6 +1,6 @@
 @layer component {
   /* Вкладки. До JS панели идут стеком; с JS (класс .js) до гидратации видна первая и зарезервирован ряд вкладок. */
-  .tabs { margin-block: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); }
+  .tabs { border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); }
   .tab-panel { padding: var(--space-4); }
   .tab-panel + .tab-panel { border-block-start: 1px solid var(--border); }
   .tab-title { font-weight: 650; margin-block-end: var(--space-2); }
@@ -19,10 +19,8 @@
   @media (pointer: coarse) { .tab { min-block-size: 44px; } }
 
   /* Снимок экрана и диаграмма. */
-  .shot, .diagram { margin-block: var(--space-4); }
   .shot-frame { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--card); }
   .shot img { inline-size: 100%; block-size: auto; }
-  .shot figcaption, .diagram figcaption { margin-block-start: var(--space-2); font-size: var(--type-small); color: var(--muted-foreground); }
   .shot-light, .diagram-light { display: block; }
   .shot-dark, .diagram-dark { display: none; }
   :root[data-theme="dark"] .shot-light, :root[data-theme="dark"] .diagram-light { display: none; }
@@ -35,10 +33,23 @@
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-2);
     border: 2px dashed var(--input); border-radius: var(--radius); color: var(--muted-foreground); text-align: center; padding: var(--space-4);
   }
-  .diagram-img { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); padding: var(--space-4); }
-  .diagram-img svg { margin-inline: auto; max-inline-size: none; block-size: auto; font-family: var(--font-sans); }
+
+  /*
+   * Диаграмма: inline-SVG в figure. Ширина svg — min(100%, естественная); меньше 0.85 естественной не сжимается (текст ≥ 12 px):
+   * вместо этого прокрутка внутри региона (role и tabindex ставит остров только при переполнении).
+   */
+  .diagram-frame { border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); overflow: hidden; }
+  .diagram-scroll { overflow-x: auto; padding: var(--space-4); scrollbar-width: thin; }
+  .diagram-svg svg {
+    display: block; margin-inline: auto; block-size: auto; font-family: var(--font-sans);
+    inline-size: 100%; max-inline-size: var(--dg-w, none); min-inline-size: calc(var(--dg-w, 0px) * 0.85);
+  }
+  .diagram figcaption { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2); }
+  .diagram figcaption .badge { flex: none; }
   .diagram-src { margin-block-start: var(--space-2); }
   .diagram-src > summary { color: var(--muted-foreground); font-size: var(--type-small); }
+  .diagram-src .code { margin-block-start: var(--space-2); }
+  .shot figcaption, .diagram figcaption { margin-block-start: var(--space-2); font-size: var(--type-small); color: var(--muted-foreground); }
 
   /* Панель «Функциональность в разработке». */
   .dev-panel {

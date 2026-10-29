@@ -1,0 +1,35 @@
+# Смысловые имена иконок сайта → имена Lucide (lucide-static 1.62.0). Остальные вызовы используют имя Lucide напрямую.
+# Список векторных файлов — assets/icons/manifest.json; сверку выполняет scripts/check-content.ts.
+alias:
+  # Выноски
+  note: info
+  tip: lightbulb
+  important: message-square-warning
+  warning: triangle-alert
+  caution: octagon-alert
+  limits: ruler-dimension-line
+  # Аудитории: одни и те же знаки в чипах, фильтрах и блоках
+  developer: code-xml
+  platform: server
+  security: shield
+  auditor: clipboard-check
+  # Состояния страницы и интерфейс
+  target: target
+  current: tag
+  system: monitor
+  chevron: chevron-right
+  external: external-link
+  arrow: arrow-right
+
+# Иконка карточки ссылки по началу пути страницы (самое длинное совпадение); остальное — file-text.
+section:
+  deploy: container
+  configure: sliders-horizontal
+  reference: book-open
+  features/security: shield
+  features/operations: activity
+  features/registry: layers
+  operations: activity
+  security: shield-check
+  formats: package
+  start: rocket

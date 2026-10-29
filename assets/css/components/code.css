@@ -1,21 +1,34 @@
 @layer component {
-  /* Блок кода. Шапка резервируется всегда: кнопка копирования появляется на месте без сдвига. */
+  /*
+   * Блок кода как CodeBlock консоли, с шапкой: метка языка слева, кнопка копирования справа. Шапка занята всегда
+   * (кнопку добавляет остров, место зарезервировано), высота блока не ограничена.
+   */
   .code { background: var(--code-bg); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-  .code-head { display: flex; align-items: center; justify-content: space-between; min-block-size: 36px; padding: 0 var(--space-2) 0 var(--space-4); }
-  .code-lang { font-size: var(--type-caption); color: var(--muted-foreground); font-family: var(--font-mono); }
-  .code-actions { display: inline-flex; min-block-size: 32px; }
+  .code-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); min-block-size: 36px; padding: 0 var(--space-2) 0 var(--space-4); }
+  .code-lang { font-size: var(--type-caption); font-weight: 600; color: var(--muted-foreground); }
+  .code-lang.is-file { font-family: var(--font-mono); font-weight: 400; }
+  .code-actions { display: inline-flex; align-items: center; min-block-size: 32px; min-inline-size: 32px; }
   .code pre {
-    margin: 0; padding: var(--space-3) var(--space-4) var(--space-4); overflow: auto;
+    margin: 0; padding: var(--space-1) var(--space-4) 14px; overflow: auto;
     font-size: var(--type-code); line-height: 1.6; tab-size: 2; color: var(--foreground);
   }
   .code pre code { font-size: inherit; white-space: pre; background: none; padding: 0; }
-  .copy-btn { gap: 6px; font-size: var(--type-caption); }
-  .copy-btn .copy-label { display: none; }
-  @media (min-width: 48rem) { .copy-btn .copy-label { display: inline; } }
-  .copy-btn[data-state="copied"] { color: var(--success); }
-  .copy-btn[data-state="error"] { color: var(--error); }
-  .copy-btn [data-icon="check"], .copy-btn[data-state="copied"] [data-icon="copy"] { display: none; }
-  .copy-btn[data-state="copied"] [data-icon="check"] { display: block; }
+  .code[data-output] .code-head { min-block-size: 32px; }
+
+  /* Копирование: иконка 32×32 в рамке; copy и check накладываются, переключаются opacity и scale(0.8 → 1). */
+  .copy-btn { background: var(--card); border-color: var(--border); border-radius: 8px; position: relative; }
+  .copy-btn .copy-ico { position: relative; inline-size: 16px; block-size: 16px; }
+  .copy-btn .copy-ico .i {
+    position: absolute; inset: 0; inline-size: 16px; block-size: 16px;
+    transition: opacity var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+  }
+  .copy-btn [data-icon="check"] { opacity: 0; transform: scale(0.8); color: var(--success); }
+  .copy-btn[data-state="copied"] [data-icon="copy"] { opacity: 0; transform: scale(0.8); }
+  .copy-btn[data-state="copied"] [data-icon="check"] { opacity: 1; transform: none; }
+  .copy-btn[data-state="error"] { color: var(--error); border-color: var(--error-strong); }
+  @media (prefers-reduced-motion: reduce) {
+    .copy-btn .copy-ico .i { transform: none !important; }
+  }
 
   /* Подсветка Chroma: ровно семь ролей. Курсив только у комментариев. */
   .chroma .k, .chroma .kc, .chroma .kd, .chroma .kn, .chroma .kp, .chroma .kr, .chroma .kt { color: var(--syn-keyword); }
@@ -32,7 +45,7 @@
 
   /* env в блоках кода: без подложки, подчёркивание цветом токена. */
   .chroma a.env, .chroma span.env {
-    color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; cursor: pointer;
+    color: inherit; text-decoration: underline; text-decoration-color: currentColor; text-decoration-thickness: 1px; text-underline-offset: 0.2em; cursor: pointer;
   }
   .chroma a.env:hover { text-decoration-thickness: 2px; color: inherit; }
   .chroma .env[aria-expanded="true"] { text-decoration-thickness: 2px; text-decoration-color: var(--env-underline-active); }

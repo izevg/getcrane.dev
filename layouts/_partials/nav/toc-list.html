@@ -1,13 +1,19 @@
-{{- /* Список ссылок оглавления. Вход: dict "heads" "sources". */ -}}
+{{- /* Список ссылок оглавления: h2 с вложенными h3. Вход: dict "heads" (плоский список из nav/toc-flat.html) "sources". */ -}}
 {{- $out := `<ol class="toc">` -}}
+{{- $open := false -}}
+{{- $sub := false -}}
 {{- range .heads -}}
-  {{- $out = printf `%s<li><a href="#%s">%s</a>` $out .ID (.Title | htmlEscape) -}}
-  {{- with .Headings -}}
-    {{- $out = printf `%s<ol>` $out -}}
-    {{- range . }}{{ $out = printf `%s<li><a href="#%s">%s</a></li>` $out .ID (.Title | htmlEscape) }}{{ end -}}
-    {{- $out = printf `%s</ol>` $out -}}
+  {{- if eq .level 2 -}}
+    {{- if $sub }}{{ $out = printf `%s</ol>` $out }}{{ $sub = false }}{{ end -}}
+    {{- if $open }}{{ $out = printf `%s</li>` $out }}{{ end -}}
+    {{- $out = printf `%s<li><a href="#%s">%s</a>` $out .id (.title | htmlEscape) -}}
+    {{- $open = true -}}
+  {{- else -}}
+    {{- if not $sub }}{{ $out = printf `%s<ol>` $out }}{{ $sub = true }}{{ end -}}
+    {{- $out = printf `%s<li><a href="#%s">%s</a></li>` $out .id (.title | htmlEscape) -}}
   {{- end -}}
-  {{- $out = printf `%s</li>` $out -}}
 {{- end -}}
+{{- if $sub }}{{ $out = printf `%s</ol>` $out }}{{ end -}}
+{{- if $open }}{{ $out = printf `%s</li>` $out }}{{ end -}}
 {{- if .sources }}{{ $out = printf `%s<li><a href="#sources">%s</a></li>` $out (i18n "sources") }}{{ end -}}
 {{- return (printf "%s</ol>" $out | safeHTML) -}}

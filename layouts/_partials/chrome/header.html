@@ -11,25 +11,25 @@
   </a>
   {{ with $docs }}<a class="bar-link" href="{{ .RelPermalink }}">{{ i18n "docs" }}</a>{{ end }}
   <span class="bar-spacer"></span>
-  <button class="btn-icon search-trigger js-only" type="button" data-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K">
+  <button class="btn btn-ghost btn-icon search-trigger js-only" type="button" data-search-open{{ with $docs }} data-docs-href="{{ .RelPermalink }}"{{ end }} aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K">
     {{ partial "ui/icon.html" (dict "name" "search" "class" "i i-20") }}<span class="search-trigger-label">{{ i18n "search.trigger" }}</span><kbd class="kbd-hint" data-kbd>Ctrl K</kbd>
   </button>
   {{ with $docs }}<a class="bar-link no-js-only" href="{{ .RelPermalink }}">{{ i18n "sitemap" }}</a>{{ end }}
   {{ partial "chrome/lang-switch.html" (dict "page" $p "nav" true) }}
   <div class="theme js-only">
-    <button class="btn-icon" id="theme-btn" type="button" popovertarget="theme-pop" aria-label="{{ partial "ui/t.html" (dict "k" "theme.current" "v" (dict "mode" (i18n "theme.system"))) }}" data-theme-btn>
-      {{ partial "ui/icon.html" (dict "name" "system" "class" "i i-20") }}
+    <button class="btn btn-ghost btn-icon" id="theme-btn" type="button" popovertarget="theme-pop" aria-label="{{ partial "ui/t.html" (dict "k" "theme.current" "v" (dict "mode" (i18n "theme.system"))) }}" data-theme-btn>
+      {{ partial "ui/icon.html" (dict "name" "monitor" "class" "i i-20") }}
     </button>
     <div id="theme-pop" class="pop theme-pop" popover>
       <fieldset>
         <legend>{{ i18n "theme" }}</legend>
         {{ range slice "light" "dark" "system" }}
-        <label><input type="radio" name="crane-theme" value="{{ . }}"{{ if eq . "system" }} checked{{ end }}>{{ partial "ui/icon.html" (cond (eq . "light") "sun" (cond (eq . "dark") "moon" "system")) }}{{ i18n (printf "theme.%s" .) }}</label>
+        <label><input type="radio" name="crane-theme" value="{{ . }}"{{ if eq . "system" }} checked{{ end }}>{{ partial "ui/icon.html" (cond (eq . "light") "sun" (cond (eq . "dark") "moon" "monitor")) }}{{ i18n (printf "theme.%s" .) }}</label>
         {{ end }}
       </fieldset>
     </div>
   </div>
   {{ with site.Params.sourceURL }}<a class="bar-link bar-source" href="{{ . }}" rel="noopener">{{ i18n "source" }}</a>{{ end }}
-  <a class="btn-icon menu-btn" href="#site-nav" data-menu-open aria-haspopup="dialog">{{ partial "ui/icon.html" (dict "name" "menu" "class" "i i-20") }}<span>{{ i18n "menu" }}</span></a>
+  <a class="btn btn-ghost menu-btn" href="#site-nav" data-menu-open aria-haspopup="dialog"{{ with $docs }} data-docs-href="{{ .RelPermalink }}" data-docs-label="{{ i18n "docs" }}"{{ end }}>{{ partial "ui/icon.html" (dict "name" "menu" "class" "i i-20") }}<span>{{ i18n "menu" }}</span></a>
 </div>
 </header>

@@ -16,7 +16,15 @@ export function ready(fn: () => void): void {
   }
 }
 
-/** Иконка из спрайта страницы. */
+let sprite: string | undefined;
+
+/** Адрес символа Lucide в общем спрайте сайта (адрес с отпечатком лежит в meta crane-sprite). */
+export function iconHref(name: string): string {
+  sprite ??= document.querySelector<HTMLMetaElement>('meta[name="crane-sprite"]')?.content ?? "";
+  return `${sprite}#i-${name}`;
+}
+
+/** Иконка Lucide из спрайта. */
 export function icon(name: string, extra = ""): SVGSVGElement {
   const ns = "http://www.w3.org/2000/svg";
   const svg = document.createElementNS(ns, "svg");
@@ -25,7 +33,7 @@ export function icon(name: string, extra = ""): SVGSVGElement {
   svg.setAttribute("focusable", "false");
   svg.dataset.icon = name;
   const use = document.createElementNS(ns, "use");
-  use.setAttribute("href", `#i-${name}`);
+  use.setAttribute("href", iconHref(name));
   svg.append(use);
   return svg;
 }

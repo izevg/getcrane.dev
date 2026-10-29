@@ -1,0 +1,32 @@
+{{- /*
+  Ряд чипов блока «Ответ CRANE». Вход: dict "page" "chips" (строка "term:id, xref:путь, label:текст") "more" (путь) "pos" "text" (HTML ответа для проверки дубля ссылки).
+  term и xref — чипы-ссылки с подсказкой; label — неинтерактивная метка; more — чип «Подробнее: <title цели>» последним.
+  Неизвестный id или путь ломает сборку; во втором упоминании цели more (чип или текст ответа) — тоже.
+*/ -}}
+{{- $p := .page -}}
+{{- $items := slice -}}
+{{- with .chips }}{{ range split . "," }}{{ with trim . " \n\t" }}{{ $items = $items | append . }}{{ end }}{{ end }}{{ end -}}
+{{- if gt (len $items) 4 }}{{ errorf "threat: chips — не больше 4 чипов, указано %d (%s)" (len $items) .pos }}{{ end -}}
+{{- $moreTarget := false -}}
+{{- with .more }}
+  {{- $moreTarget = site.GetPage (strings.TrimSuffix "/" (strings.TrimPrefix "/" .)) -}}
+  {{- if not $moreTarget }}{{ errorf "threat: more — страница %q не найдена (%s)" . $.pos }}{{ end -}}
+  {{- if findRE (printf `href="%s(?:#[^"]*)?"` (replaceRE `[.+?*()|\[\]{}^$\\]` `\$0` $moreTarget.RelPermalink)) $.text }}{{ errorf "threat: в тексте ответа есть ссылка на цель more %q; оставьте только чип «Подробнее» (%s)" . $.pos }}{{ end -}}
+{{- end -}}
+{{- if or $items $moreTarget }}
+<div class="threat-chips">
+  {{- range $items }}
+    {{- $kind := index (split . ":") 0 -}}
+    {{- $val := trim (strings.TrimPrefix (printf "%s:" $kind) .) " " -}}
+    {{- if eq $kind "term" }}{{ partial "tips/term.html" (dict "page" $p "id" $val "class" "ref-chip" "icon" "book-open" "pos" $.pos) }}
+    {{- else if eq $kind "xref" }}
+      {{- if and $moreTarget (eq (strings.TrimSuffix "/" (strings.TrimPrefix "/" (index (split $val "#") 0))) (strings.TrimSuffix "/" (strings.TrimPrefix "/" $.more))) }}{{ errorf "threat: чип xref:%s дублирует more (%s)" $val $.pos }}{{ end -}}
+      {{ partial "tips/xref.html" (dict "page" $p "arg" $val "class" "ref-chip" "icon" "file-text" "pos" $.pos) }}
+    {{- else if eq $kind "label" }}<span class="ref-chip is-label">{{ $val }}</span>
+    {{- else }}{{ errorf "threat: чип %q: ожидается term:<id>, xref:<путь> или label:<текст> (%s)" . $.pos }}{{ end }}
+  {{- end }}
+  {{- with $moreTarget }}
+  <a class="ref-chip is-more" href="{{ .RelPermalink }}">{{ partial "ui/t.html" (dict "k" "threat.more" "v" (dict "title" .Title)) }}{{ partial "ui/icon.html" "arrow-right" }}</a>
+  {{- end }}
+</div>
+{{- end -}}

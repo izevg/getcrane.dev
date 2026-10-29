@@ -26,4 +26,5 @@ runs:
           echo "::error::Нет package-lock.json. Выполните npm install в репозитории сайта и закоммитьте lock-файл: CI ставит зависимости только через npm ci."
           exit 1
         fi
-        npm ci
+        # Chromium для mermaid-cli в CI не нужен: диаграммы лежат в репозитории готовыми SVG (npm run mermaid выполняется локально).
+        PUPPETEER_SKIP_DOWNLOAD=1 npm ci

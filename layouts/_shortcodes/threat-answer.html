@@ -1,0 +1,14 @@
+{{- /*
+  Блок «Ответ CRANE» внутри {{< threat >}}: список из 3–4 фактов (term, xref, env, cite внутри работают), ряд чипов и чип «Подробнее».
+  0 или больше 5 пунктов ломают сборку, 1–2 и 5 — предупреждение. Чипы и more берутся из параметров threat.
+*/ -}}
+{{- if not .Parent }}{{ errorf "threat-answer: допустим только внутри threat (%s)" .Position }}{{ end -}}
+{{- $html := partial "ui/inner.html" (dict "page" .Page "inner" .Inner) -}}
+{{- $n := len (findRE `<li[\s>]` $html) -}}
+{{- if or (eq $n 0) (gt $n 5) }}{{ errorf "threat-answer: список ответа — 3–4 пункта, найдено %d (%s)" $n .Position }}{{ end -}}
+{{- if or (lt $n 3) (gt $n 4) }}{{ warnf "threat-answer: целевой размер списка — 3–4 пункта, найдено %d (%s)" $n .Position }}{{ end -}}
+<div class="threat-block threat-answer">
+  <h4 class="threat-h">{{ partial "ui/icon.html" (dict "name" "shield-check" "class" "i i-18") }}<span>{{ i18n "threat.answer" }}</span></h4>
+  {{ $html }}
+  {{ partial "ui/threat-chips.html" (dict "page" .Page "chips" (.Parent.Get "chips") "more" (.Parent.Get "more") "pos" .Position "text" $html) }}
+</div>

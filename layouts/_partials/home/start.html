@@ -1,5 +1,5 @@
-{{- /* Полоса «Начало работы»: подписи — title страниц. */ -}}
+{{- /* Полоса «Начало работы»: кнопки-ссылки secondary sm со стрелкой, подписи — title страниц. */ -}}
 <section class="section container" aria-labelledby="s-h">
   <h2 id="s-h">{{ i18n "home.getting" }}</h2>
-  <ul class="strip">{{ range .d.start }}{{ with partial "home/page.html" . }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}{{ end }}</ul>
+  <ul class="strip">{{ range .d.start }}{{ with partial "home/page.html" . }}<li><a class="btn btn-secondary" href="{{ .RelPermalink }}">{{ .Title }}{{ partial "ui/icon.html" "arrow-right" }}</a></li>{{ end }}{{ end }}</ul>
 </section>

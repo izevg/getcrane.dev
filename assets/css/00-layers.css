@@ -1,2 +1,5 @@
-/* Порядок слоёв: что ниже, то сильнее. Токены: primitive → semantic → component. */
-@layer reset, primitive, semantic, component, base, layout, page, a11y;
+/*
+ * Порядок слоёв: что правее, то сильнее. Токены: primitive → semantic → component (token-слой component лежит в tokens/component.css).
+ * Стили элементов (base) и каркас (layout) слабее компонентов: чипы, кнопки и подсказки обязаны побеждать базовый `a` без !important.
+ */
+@layer reset, primitive, semantic, base, layout, component, page, a11y;

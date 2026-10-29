@@ -1,10 +1,10 @@
-import { $, $$, readStore, writeStore } from "./lib/dom";
+import { $, $$, iconHref, readStore, writeStore } from "./lib/dom";
 import { t } from "./lib/strings";
 
 const KEY = "crane.colorScheme";
 type Mode = "light" | "dark" | "system";
 const MODES: readonly Mode[] = ["light", "dark", "system"];
-const ICONS: Record<Mode, string> = { light: "sun", dark: "moon", system: "system" };
+const ICONS: Record<Mode, string> = { light: "sun", dark: "moon", system: "monitor" };
 const dark = matchMedia("(prefers-color-scheme: dark)");
 
 function isMode(value: string | null): value is Mode {
@@ -31,7 +31,7 @@ function apply(mode: Mode): void {
 function sync(mode: Mode): void {
   const button = $("[data-theme-btn]");
   button?.setAttribute("aria-label", t("theme.current", { mode: t(`theme.${mode}`) }));
-  button?.querySelector("use")?.setAttribute("href", `#i-${ICONS[mode]}`);
+  button?.querySelector("use")?.setAttribute("href", iconHref(ICONS[mode]));
   for (const input of $$<HTMLInputElement>('input[name="crane-theme"]')) {
     input.checked = input.value === mode;
   }

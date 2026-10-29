@@ -11,5 +11,8 @@
     {{ with $p.OutputFormats.Get "markdown" }}<a href="{{ .RelPermalink }}" type="text/markdown">{{ i18n "md.link" }}</a>{{ end }}
   </nav>
   <p class="footer-fonts">{{ i18n "footer.fonts" }}</p>
+  {{- with resources.Get "icons/LICENSE" }}{{ $lic := . | resources.Copy "licenses/lucide.txt" }}
+  <p class="footer-fonts"><a href="{{ $lic.RelPermalink }}">{{ i18n "footer.icons" }}</a></p>
+  {{- end }}
 </div>
 </footer>

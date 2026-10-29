@@ -11,8 +11,8 @@
   {{- with $p.Params.description }}<p class="lead">{{ partial "util/typo.html" (dict "html" (. | htmlEscape) "lang" $lang) }}</p>{{ end }}
   {{- with $p.OutputFormats.Get "markdown" }}
   <div class="page-actions">
-    <button class="btn-text js-only" type="button" data-copy-md="{{ .RelPermalink }}">{{ partial "ui/icon.html" "copy" }}<span>{{ i18n "copy.md" }}</span></button>
-    <a href="{{ .RelPermalink }}" type="text/markdown">{{ i18n "md.link" }}</a>
+    <button class="btn btn-secondary btn-sm js-only" type="button" data-copy-md="{{ .RelPermalink }}">{{ partial "ui/icon.html" "copy" }}<span>{{ i18n "copy.md" }}</span></button>
+    <a class="btn btn-ghost btn-sm" href="{{ .RelPermalink }}" type="text/markdown">{{ partial "ui/icon.html" "file-text" }}{{ i18n "md.link" }}</a>
   </div>
   {{- end }}
 </header>

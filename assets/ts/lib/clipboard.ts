@@ -1,6 +1,8 @@
 import { t } from "./strings";
 
+/** Текстовая кнопка держит «Скопировано» 2 с; иконка копирования возвращается через 1200 мс, как COPIED_MS консоли. */
 const FEEDBACK_MS = 2000;
+const ICON_FEEDBACK_MS = 1200;
 const timers = new WeakMap<HTMLElement, number>();
 
 /** Общая live-область страницы (одна на страницу, aria-live=polite). */
@@ -45,9 +47,10 @@ export function copyFetched(url: string): Promise<boolean> {
   return load.then(writeText, () => false);
 }
 
-/** Состояние кнопки после копирования: «Скопировано» на 2 с, объявление в live-области, при ошибке — сообщение. */
+/** Состояние кнопки после копирования: «Скопировано» на 2 с (иконка — 1,2 с), объявление в live-области, при ошибке — сообщение. */
 export function feedback(button: HTMLElement, ok: boolean, okText: string, onError?: () => void): void {
-  const label = button.querySelector<HTMLElement>(".copy-label, span");
+  const iconOnly = button.classList.contains("copy-btn");
+  const label = iconOnly ? null : button.querySelector<HTMLElement>(".copy-label, span");
   const original = button.dataset.label ?? label?.textContent ?? button.getAttribute("aria-label") ?? "";
   button.dataset.label = original;
   window.clearTimeout(timers.get(button));
@@ -71,6 +74,6 @@ export function feedback(button: HTMLElement, ok: boolean, okText: string, onErr
       } else {
         button.setAttribute("aria-label", original);
       }
-    }, FEEDBACK_MS),
+    }, iconOnly ? ICON_FEEDBACK_MS : FEEDBACK_MS),
   );
 }

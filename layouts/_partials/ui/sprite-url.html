@@ -1,0 +1,12 @@
+{{- /*
+  Спрайт Lucide: <symbol id="i-<имя>"> из дословных файлов assets/icons/svg, один отпечатанный файл на сайт (кэшируется между страницами).
+  Выход: адрес спрайта. Вызывать через partialCached.
+*/ -}}
+{{- $parts := slice -}}
+{{- range resources.Match "icons/svg/*.svg" -}}
+  {{- $name := strings.TrimSuffix ".svg" (path.Base .Name) -}}
+  {{- $inner := replaceRE `(?s)^.*?<svg[^>]*>\s*(.*?)\s*</svg>\s*$` "$1" .Content -}}
+  {{- $parts = $parts | append (printf `<symbol id="i-%s" viewBox="0 0 24 24">%s</symbol>` $name $inner) -}}
+{{- end -}}
+{{- $sprite := resources.FromString "icons/sprite.svg" (printf `<svg xmlns="http://www.w3.org/2000/svg">%s</svg>` (delimit $parts "")) | fingerprint -}}
+{{- return $sprite.RelPermalink -}}

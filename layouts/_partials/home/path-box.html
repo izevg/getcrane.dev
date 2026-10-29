@@ -1,0 +1,12 @@
+{{- /* Узел схемы: плитка с иконкой, подпись, необязательное пояснение, галочка прохода. Вход: dict "icon" "label" "note" "href" "edge" "group". */ -}}
+{{- $inner := printf `<span class="pkg-tile">%s</span><span class="pkg-text"><span class="pkg-label">%s%s</span>%s</span>%s`
+    (partial "ui/icon.html" (dict "name" .icon "class" "i i-20"))
+    (cond (ne (.group | default "") "") (printf `<span class="sr">%s: </span>` .group) "")
+    (.label | htmlEscape)
+    (cond (ne (.note | default "") "") (printf `<span class="pkg-note">%s</span>` (.note | htmlEscape)) "")
+    (partial "ui/icon.html" (dict "name" "check" "class" "i i-16 pkg-tick")) -}}
+{{- if .href -}}
+<a class="pkg-box" href="{{ .href }}">{{ $inner | safeHTML }}</a>
+{{- else -}}
+<span class="pkg-box">{{ $inner | safeHTML }}</span>
+{{- end -}}

@@ -1,0 +1,32 @@
+@layer layout {
+  /*
+   * Текст статьи и вертикальный ритм (ui-spec-delta 4.1). Отступ — свойство пары соседей: правила стоят от слабых к сильным,
+   * поэтому на стыке побеждает больший: абзац 20 < блок 24 < заголовок (h2 56, h3 36, h4 28); заголовок → следующий элемент 16/12/8.
+   * Колонка текста ограничена --measure; таблицы, код, вкладки и карточки могут быть шире.
+   */
+  .prose > :where(p, ul, ol, dl, blockquote, h2, h3, h4) { max-inline-size: var(--measure); }
+  .prose > * + * { margin-block-start: var(--space-5); }
+  .prose > :where(.code, .table-wrap, .callout, .aud-block, .dev-panel, .tabs, .threat, .cards, .shot, .diagram, details, figure) { margin-block-start: var(--space-6); }
+  .prose > :where(.code, .table-wrap, .callout, .aud-block, .dev-panel, .tabs, .threat, .cards, .shot, .diagram, details, figure) + * { margin-block-start: var(--space-6); }
+  .prose > h2 { margin-block-start: var(--space-14); }
+  .prose > h3 { margin-block-start: 2.25rem; }
+  .prose > h4 { margin-block-start: 1.75rem; }
+  .prose > h2 + * { margin-block-start: var(--space-4); }
+  .prose > h3 + * { margin-block-start: var(--space-3); }
+  .prose > h4 + * { margin-block-start: var(--space-2); }
+  .prose > :where(h3, h4) + :where(.code, .table-wrap, .callout, .aud-block, .dev-panel, .tabs, .threat, .cards, .shot, .diagram, figure) { margin-block-start: var(--space-3); }
+  .prose :where(ul, ol) { padding-inline-start: 1.4em; }
+  .prose li + li { margin-block-start: var(--space-2); }
+  .prose li > :where(ul, ol, p, pre, figure, .code) { margin-block-start: var(--space-2); }
+  .prose dt { font-weight: 650; }
+  .prose dd { margin-inline-start: var(--space-4); }
+  .prose dt + dd, .prose dd + dt { margin-block-start: var(--space-2); }
+  @media (min-width: 40rem) {
+    .prose :is(p, li) { hyphens: auto; }
+    .prose :is(a, code, kbd) { hyphens: manual; }
+  }
+  @supports (text-wrap: pretty) { .prose p { text-wrap: pretty; } }
+  .prose blockquote:not(.callout) {
+    border-inline-start: 3px solid var(--border); padding-inline-start: var(--space-4); color: var(--muted-foreground);
+  }
+}

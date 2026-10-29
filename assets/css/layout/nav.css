@@ -17,7 +17,7 @@
   .tree summary::before {
     content: ""; flex: none; inline-size: 20px; block-size: 20px; margin-inline-start: -4px;
     background: var(--muted-foreground);
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E") center / 16px no-repeat;
+    mask: var(--icon-chevron-right) center / 16px no-repeat;
     transition: transform var(--dur-base) var(--ease-out);
   }
   .tree details[open] > summary::before { transform: rotate(90deg); }
@@ -35,16 +35,31 @@
     display: block; padding: 3px var(--space-3); color: var(--muted-foreground); text-decoration: none;
     font-size: var(--type-small); line-height: 1.4; border-inline-start: 2px solid var(--border);
   }
-  .toc a:hover { color: var(--foreground); }
+  .toc a:hover { color: var(--foreground); background: var(--accent); }
   .toc a[aria-current="true"] { color: var(--foreground); border-inline-start-color: var(--toc-active); }
   .toc-inline { border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); margin-block: var(--space-4); }
   .toc-inline > summary { padding: var(--space-3) var(--space-4); font-weight: 650; }
+  .toc-inline > summary, .terms-block > summary, .env-mentions > summary, .diagram-src > summary {
+    display: flex; align-items: center; gap: var(--space-2); list-style: none; border-radius: var(--radius);
+  }
+  .toc-inline > summary::-webkit-details-marker, .terms-block > summary::-webkit-details-marker,
+  .env-mentions > summary::-webkit-details-marker, .diagram-src > summary::-webkit-details-marker { display: none; }
+  .toc-inline > summary::before, .terms-block > summary::before, .env-mentions > summary::before, .diagram-src > summary::before {
+    content: ""; flex: none; inline-size: 16px; block-size: 16px; background: var(--muted-foreground);
+    mask: var(--icon-chevron-right) center / 16px no-repeat;
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+  .toc-inline[open] > summary::before, .terms-block[open] > summary::before, .env-mentions[open] > summary::before, .diagram-src[open] > summary::before { transform: rotate(90deg); }
+  @media (prefers-reduced-motion: reduce) {
+    .toc-inline > summary::before, .terms-block > summary::before, .env-mentions > summary::before, .diagram-src > summary::before { transition: none; }
+  }
   .toc-inline > nav { padding: 0 var(--space-4) var(--space-3); }
 
   /* Крошки. */
   .crumbs { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-1); font-size: var(--type-small); color: var(--muted-foreground); }
   .crumbs li + li::before { content: "/"; padding-inline-end: var(--space-1); color: var(--hint); }
-  .crumbs a { color: var(--muted-foreground); }
+  .crumbs a { color: var(--muted-foreground); text-decoration: none; }
+  .crumbs a:hover { color: var(--foreground); text-decoration: underline; }
   .crumbs [aria-current] { color: var(--foreground); }
   @media (max-width: 39.99rem) {
     .crumbs li:not(.crumb-parent) {
@@ -52,7 +67,6 @@
     }
     .crumbs li::before { content: none !important; }
     .crumb-parent a::before { content: "← "; }
-    .crumb-parent a { text-decoration: none; }
   }
 
   /* Шапка страницы. */
@@ -73,15 +87,7 @@
   .chips-row { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-3); align-items: center; }
   .heading-chips { margin-block-start: var(--space-2); }
   .lead { font-size: var(--type-lead); line-height: 1.55; color: var(--muted-foreground); max-inline-size: 60ch; }
-  .page-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; font-size: var(--type-small); }
-
-  .btn-text {
-    display: inline-flex; align-items: center; gap: var(--space-2); min-block-size: 32px; padding: 0 var(--space-3);
-    background: var(--card); border: 1px solid var(--input); border-radius: var(--radius); color: var(--foreground); font-size: var(--type-small);
-  }
-  .btn-text:hover { background: var(--accent); }
-  .btn-text:active { background: var(--surface-high); }
-  @media (pointer: coarse) { .btn-text { min-block-size: 44px; } }
+  .page-actions { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-3); align-items: center; }
 
   /* Предыдущая / следующая. */
   .pager { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); margin-block-start: var(--space-12); }

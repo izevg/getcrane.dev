@@ -1,0 +1,29 @@
+{{- /*
+  «Веб-консоль»: три снимка Storybook с подписью-ссылкой на гарантию. Выводится, если у записи console[] заполнены подпись и alt в языке страницы
+  и есть файлы снимка. Подпись каждого снимка заканчивается «Демонстрационные данные» / «Demo data»: витрина содержит вымышленные пакеты и имена.
+*/ -}}
+{{- $lang := .lang -}}
+{{- $items := slice -}}
+{{- range .d.console -}}
+  {{- $item := . -}}
+  {{- $t := index $item $lang | default dict -}}
+  {{- $pic := partial "home/shot.html" (dict "cfg" $item "lang" $lang "eager" false) -}}
+  {{- if and $t.caption (trim (string $pic) " \n") -}}
+    {{- with partial "home/page.html" $item.href }}{{ $items = $items | append (dict "pic" $pic "caption" $t.caption "href" .RelPermalink) }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+{{- if $items }}
+<section class="section container" aria-labelledby="c-h">
+  <h2 id="c-h">{{ i18n "home.console" }}</h2>
+  <ul class="grid grid-c">
+    {{- range $items }}
+    <li>
+      <figure class="console-shot">
+        <div class="window">{{ .pic }}</div>
+        <figcaption><a href="{{ .href }}">{{ .caption }}</a> <span class="demo">{{ i18n "screenshot.demo" }}</span></figcaption>
+      </figure>
+    </li>
+    {{- end }}
+  </ul>
+</section>
+{{- end }}

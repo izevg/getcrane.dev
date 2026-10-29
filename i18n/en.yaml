@@ -136,3 +136,28 @@ home.start: Where to start
 home.formats: Five ecosystems
 home.deploy: Deployment
 home.getting: Getting started
+
+threat.what: Threat
+threat.answer: CRANE response
+threat.flow: "Diagram: threat and response"
+threat.more: "Learn more: {title}"
+
+code.lang.shell: Shell
+code.lang.terminal: Terminal
+code.lang.dotenv: .env
+code.lang.yaml: YAML
+code.lang.toml: TOML
+code.lang.json: JSON
+code.lang.ini: INI
+code.lang.sql: SQL
+code.lang.http: HTTP
+code.lang.dockerfile: Dockerfile
+code.lang.mermaid: Mermaid
+code.lang.output: Output
+code.lang.text: Output
+code.lang.other: Code
+footer.icons: Lucide icons, ISC
+search.error.docs: Open the documentation
+home.console: Web console
+home.oss: "Open source · {license}"
+screenshot.demo: Demo data

@@ -3,6 +3,9 @@ import { announce } from "./lib/clipboard";
 import { t } from "./lib/strings";
 
 const BUNDLE = "/pagefind/";
+const GAP = 8;
+const MARGIN = 16;
+const LOADING_MS = 300;
 
 let loading: Promise<void> | undefined;
 
@@ -25,11 +28,55 @@ function load(): Promise<void> {
       document.body.append(tpl.content.cloneNode(true));
     }
     await customElements.whenDefined("pagefind-modal");
+    watchQuery();
   });
   return loading;
 }
 
+/** Ряд фильтров показывается после первого запроса: до ввода значений у фильтров нет, пустые списки только шумят. */
+function watchQuery(): void {
+  const modal = $("pagefind-modal");
+  if (!modal) {
+    return;
+  }
+  const sync = (): void => {
+    const value = $<HTMLInputElement>("input", modal)?.value ?? "";
+    modal.toggleAttribute("data-q", value.trim() !== "");
+  };
+  modal.addEventListener("input", sync);
+  modal.addEventListener("close", () => modal.removeAttribute("data-q"), { capture: true });
+}
+
+/** Видимая ошибка у триггера: popover с текстом и ссылкой на документацию; live-регион остаётся. */
+function showError(trigger: HTMLElement): void {
+  let pop = $("#search-error");
+  if (!pop) {
+    pop = document.createElement("div");
+    pop.id = "search-error";
+    pop.className = "pop search-error";
+    pop.setAttribute("popover", "auto");
+    pop.setAttribute("role", "alert");
+    const text = document.createElement("p");
+    text.textContent = t("search.error");
+    pop.append(text);
+    const href = trigger.dataset.docsHref;
+    if (href) {
+      const link = document.createElement("a");
+      link.href = href;
+      link.textContent = t("search.error.docs");
+      pop.append(link);
+    }
+    document.body.append(pop);
+  }
+  const rect = trigger.getBoundingClientRect();
+  const vw = document.documentElement.clientWidth;
+  pop.style.top = `${Math.round(rect.bottom + GAP)}px`;
+  pop.style.right = `${Math.max(MARGIN, Math.round(vw - rect.right))}px`;
+  pop.togglePopover(true);
+}
+
 async function open(trigger: HTMLElement): Promise<void> {
+  const slow = window.setTimeout(() => announce(t("search.loading")), LOADING_MS);
   try {
     await load();
     const modal = $<HTMLElement & { open?: () => void }>("pagefind-modal");
@@ -38,6 +85,9 @@ async function open(trigger: HTMLElement): Promise<void> {
   } catch {
     loading = undefined;
     announce(t("search.error"));
+    showError(trigger);
+  } finally {
+    window.clearTimeout(slow);
   }
 }
 

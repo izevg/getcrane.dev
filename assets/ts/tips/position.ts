@@ -13,6 +13,7 @@ export function place(trigger: Element, tip: HTMLElement): void {
   if (top + h > vh - MARGIN && rect.top - GAP - h >= MARGIN) {
     top = rect.top - GAP - h;
   }
+  tip.dataset.side = top < rect.top ? "top" : "bottom";
   tip.style.left = `${Math.round(left)}px`;
   tip.style.top = `${Math.round(top)}px`;
 }

@@ -1,0 +1,34 @@
+@layer component {
+  /* Карточки ссылок: текст только из title и description цели. Ссылка на заголовке растянута на карточку (один таб-стоп). */
+  .cards { container-type: inline-size; }
+  .cards-list { list-style: none; padding: 0; display: grid; gap: var(--space-4); grid-template-columns: minmax(0, 1fr); }
+  @container (min-width: 40rem) { .cards-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .card-link {
+    position: relative; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-card);
+    box-shadow: var(--shadow-subtle); padding: var(--space-4) var(--space-5);
+    transition: transform var(--dur-instant) var(--ease-out);
+  }
+  .card-link::before {
+    content: ""; position: absolute; inset: -1px; border-radius: inherit; box-shadow: var(--shadow-card); opacity: 0; pointer-events: none;
+    transition: opacity var(--dur-instant) var(--ease-out);
+  }
+  .card-link:hover { transform: translateY(-2px); transition-duration: var(--dur-fast); }
+  .card-link:hover::before { opacity: 1; transition-duration: var(--dur-fast); }
+  .card-link:has(a:focus-visible) { outline: 2px solid var(--ring); outline-offset: 2px; }
+  .card-link-head { display: flex; align-items: center; gap: var(--space-2); font-weight: 600; color: var(--foreground); }
+  .card-link-head > .i:first-child { color: var(--muted-foreground); }
+  .card-link-title { color: var(--foreground); text-decoration: none; }
+  .card-link-title:focus-visible { outline: none; }
+  .card-link-title::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+  .card-link-go { margin-inline-start: auto; color: var(--muted-foreground); transition: transform var(--dur-instant) var(--ease-out); }
+  .card-link:hover .card-link-go { transform: translateX(2px); transition-duration: var(--dur-fast); }
+  .card-link-desc {
+    margin-block-start: var(--space-1); color: var(--muted-foreground); font-size: var(--type-small); line-height: 1.5;
+    hyphens: manual; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card-link, .card-link:hover { transform: none; }
+    .card-link-go, .card-link:hover .card-link-go { transform: none; }
+  }
+  @media (forced-colors: active) { .card-link { border: 1px solid CanvasText; } }
+}

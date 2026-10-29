@@ -22,7 +22,7 @@ function selectAll(node: Element): void {
 }
 
 function initCodeCopy(): void {
-  for (const block of $$(".code")) {
+  for (const block of $$(".code:not([data-output])")) {
     const slot = $(".code-actions", block);
     const code = $("pre code", block);
     if (!slot || !code) {
@@ -30,12 +30,12 @@ function initCodeCopy(): void {
     }
     const button = document.createElement("button");
     button.type = "button";
-    button.className = "btn-icon copy-btn";
+    button.className = "btn btn-ghost btn-icon btn-sm copy-btn";
     button.setAttribute("aria-label", t("copy.code"));
-    const label = document.createElement("span");
-    label.className = "copy-label";
-    label.textContent = t("copy.code");
-    button.append(icon("copy"), icon("check"), label);
+    const pair = document.createElement("span");
+    pair.className = "copy-ico";
+    pair.append(icon("copy"), icon("check"));
+    button.append(pair);
     button.addEventListener("click", () => {
       void writeText(codeText(code)).then((ok) => feedback(button, ok, t("copied"), () => selectAll(code)));
     });
@@ -106,7 +106,10 @@ function initRegions(): void {
   const observer = new ResizeObserver((entries) => {
     for (const { target } of entries) {
       const el = target as HTMLElement;
-      if (el.matches("[data-table]")) {
+      if (el.matches("[data-scroll]")) {
+        const caption = document.getElementById(el.dataset.scrollLabel ?? "")?.textContent?.trim();
+        check(el, () => caption ?? t("table.default"), true);
+      } else if (el.matches("[data-table]")) {
         check(el, () => el.querySelector("caption")?.textContent?.trim() ?? nearestHeading(el) ?? t("table.default"), true);
       } else {
         const lang = el.closest<HTMLElement>(".code")?.dataset.lang ?? "";
@@ -114,7 +117,7 @@ function initRegions(): void {
       }
     }
   });
-  for (const el of $$("[data-table], .code pre")) {
+  for (const el of $$("[data-table], [data-scroll], .code pre")) {
     observer.observe(el);
   }
 }

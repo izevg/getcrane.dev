@@ -1,0 +1,8 @@
+{{- /* Иконка раздела по пути страницы без языка (data/icons.yaml, section): самое длинное совпадение по сегментам. Вход: путь. */ -}}
+{{- $path := . -}}
+{{- $best := "" -}}
+{{- $icon := "file-text" -}}
+{{- range $prefix, $name := site.Data.icons.section -}}
+  {{- if and (or (eq $path $prefix) (hasPrefix $path (printf "%s/" $prefix))) (gt (len $prefix) (len $best)) }}{{ $best = $prefix }}{{ $icon = $name }}{{ end -}}
+{{- end -}}
+{{- return $icon -}}

@@ -52,7 +52,7 @@ export function loadPages(): Page[] {
 
 /** Тело без блоков кода и встроенного кода: для проверок текста. Номера строк сохраняются. */
 export function stripCode(body: string): string {
-  const noFences = body.replace(/^(\s*)(`{3,}|~{3,})[^\n]*\n[\s\S]*?^\1\2[^\n]*$/gm, (m) => m.replace(/[^\n]/g, " "));
+  const noFences = body.replace(/^([ \t]*)(`{3,}|~{3,})[^\n]*\n[\s\S]*?^\1\2[^\n]*$/gm, (m) => m.replace(/[^\n]/g, " "));
   return noFences.replace(/`[^`\n]*`/g, (m) => " ".repeat(m.length));
 }
 

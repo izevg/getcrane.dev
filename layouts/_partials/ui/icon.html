@@ -1,4 +1,9 @@
-{{- /* Иконка из спрайта. Вход: имя (строка) или dict "name" "class". Декор: aria-hidden. */ -}}
+{{- /*
+  Иконка Lucide из спрайта. Вход: имя (строка) или dict "name" "class". Имя может быть смысловым (data/icons.yaml, alias) или именем Lucide.
+  Декор: aria-hidden. Неизвестное имя ломает сборку.
+*/ -}}
 {{- $name := . -}}{{- $class := "i i-16" -}}
 {{- if reflect.IsMap . }}{{ $name = .name }}{{ with .class }}{{ $class = . }}{{ end }}{{ end -}}
-<svg class="{{ $class }}" aria-hidden="true" focusable="false"><use href="#i-{{ $name }}"/></svg>
+{{- $name = index site.Data.icons.alias $name | default $name -}}
+{{- if not (resources.Get (printf "icons/svg/%s.svg" $name)) }}{{ errorf "icon: нет иконки %q в assets/icons/svg (добавьте имя в assets/icons/manifest.json и выполните scripts/sync-icons.ts)" $name }}{{ end -}}
+<svg class="{{ $class }}" aria-hidden="true" focusable="false"><use href="{{ partialCached "ui/sprite-url.html" "sprite" }}#i-{{ $name }}"/></svg>

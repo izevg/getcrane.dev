@@ -6,6 +6,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="crane-sprite" content="{{ partialCached "ui/sprite-url.html" "sprite" }}">
 {{ partial "head/meta.html" . }}
 {{ partial "head/theme-init.html" }}
 <link rel="preload" href="/fonts/onest-{{ if eq $lang "ru" }}cyrillic{{ else }}latin{{ end }}-wght-normal.woff2" as="font" type="font/woff2" crossorigin>

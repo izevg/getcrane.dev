@@ -1,0 +1,18 @@
+{{- /*
+  Снимок экрана консоли для главной по записи data/home.yaml (screens.hero или console[]): светлый и тёмный варианты по теме сайта;
+  на EN — вариант English в обеих темах (тёмного EN пока нет). Пустой alt или нет файлов: пустая строка.
+  Вход: dict "cfg" "lang" "eager". Выход: HTML.
+*/ -}}
+{{- $cfg := .cfg -}}
+{{- $alt := (index $cfg .lang).alt | default "" -}}
+{{- if $alt -}}
+  {{- if eq .lang "en" -}}
+    {{- $en := partial "ui/shot-picture.html" (dict "story" $cfg.story "variant" $cfg.enVariant "alt" $alt "class" "" "eager" .eager) -}}
+    {{- if not (trim (string $en) " \n") }}{{ $en = partial "ui/shot-picture.html" (dict "story" $cfg.story "variant" $cfg.light "alt" $alt "class" "" "eager" .eager) }}{{ end -}}
+    {{- $en -}}
+  {{- else -}}
+    {{- $l := partial "ui/shot-picture.html" (dict "story" $cfg.story "variant" $cfg.light "alt" $alt "class" "shot-light" "eager" .eager) -}}
+    {{- $d := partial "ui/shot-picture.html" (dict "story" $cfg.story "variant" $cfg.dark "alt" $alt "class" "shot-dark" "eager" false) -}}
+    {{- if and (trim (string $l) " \n") (trim (string $d) " \n") }}{{ $l }}{{ $d }}{{ end -}}
+  {{- end -}}
+{{- end -}}

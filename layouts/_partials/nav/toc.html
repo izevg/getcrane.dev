@@ -1,12 +1,11 @@
 {{- /*
-  Оглавление: h2 и h3 страницы + «Источники», если они есть. Скрыто при менее трёх h2.
+  Оглавление: h2 и h3 страницы + «Источники», если они есть. Считаются все h2 (рекурсивно по дереву фрагментов) плюс «Источники»; скрыто при менее трёх.
   Вход: dict "page" "inline" (true — сворачиваемый блок для узких экранов).
 */ -}}
 {{- $p := .page -}}
-{{- $heads := slice -}}
-{{- range $p.Fragments.Headings }}{{ $heads = $heads | append . }}{{ end -}}
+{{- $heads := partial "nav/toc-flat.html" $p.Fragments.Headings -}}
 {{- $hasSources := $p.Scratch.Get "sources" -}}
-{{- $count := len $heads -}}
+{{- $count := len (where $heads "level" 2) -}}
 {{- if $hasSources }}{{ $count = add $count 1 }}{{ end -}}
 {{- if ge $count 3 -}}
 {{- $list := partial "nav/toc-list.html" (dict "heads" $heads "sources" $hasSources) -}}

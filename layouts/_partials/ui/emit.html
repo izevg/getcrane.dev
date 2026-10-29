@@ -1,0 +1,14 @@
+{{- /*
+  Вывод HTML из встраиваемого шорткода (term, xref, env, cite). Вход: dict "ctx" (контекст шорткода) "html".
+  Внутри другого шорткода, который сам прогоняет .Inner через Markdown (tab, threat-what, threat-answer, in-development), готовый HTML
+  не переживает Goldmark при unsafe: false (теги превращаются в «raw HTML omitted»). Поэтому вложенный шорткод отдаёт токен ❬sha1❭,
+  а HTML кладёт в Scratch страницы; партиал ui/inner.html подставляет HTML обратно уже после Markdown.
+*/ -}}
+{{- if .ctx.Parent -}}
+  {{- $html := string .html -}}
+  {{- $key := crypto.SHA1 $html -}}
+  {{- .ctx.Page.Scratch.SetInMap "tok" $key $html -}}
+  ❬{{ $key }}❭
+{{- else -}}
+  {{- .html -}}
+{{- end -}}

@@ -1,4 +1,4 @@
-// Снимок токенов веб-консоли CRANE: assets/css/tokens/console.css.
+// Снимок токенов веб-консоли CRANE: assets/css/tokens/console.css (цвета, радиусы, тени) и motion.css (easing и длительности).
 //   node scripts/sync-tokens.ts [--source <tokens.css>]   записать снимок
 //   node scripts/sync-tokens.ts --check [--source …]      сверить (для CI основного репозитория CRANE)
 // Источник по умолчанию: ../CRANE/web/src/shared/styles/tokens.css или $CRANE_TOKENS_SOURCE.
@@ -8,6 +8,7 @@ import { dirname, join, resolve } from "node:path";
 import { ROOT } from "./lib/content.ts";
 
 const OUT = join(ROOT, "assets", "css", "tokens", "console.css");
+const MOTION_OUT = join(ROOT, "assets", "css", "tokens", "motion.css");
 const args = process.argv.slice(2);
 const check = args.includes("--check");
 const srcArg = args.indexOf("--source");
@@ -48,6 +49,19 @@ ${indent(light, 2)}
 `;
 }
 
+/** Токены движения консоли (motion.css): easing и длительности, в слой semantic. Комментарии источника не переносятся. */
+export function renderMotion(css: string, commit: string): string {
+  const src = css.replace(/\/\*[\s\S]*?\*\//g, "").replace(/[ \t]+\n/g, "\n").replace(/\n{2,}/g, "\n").trim() + "\n";
+  return `/*
+ * Снимок токенов движения веб-консоли CRANE (easing и длительности).
+ * Источник: web/src/shared/styles/motion.css, коммит CRANE ${commit}.
+ * Файл генерируется скриптом scripts/sync-tokens.ts и руками не правится.
+ */
+@layer semantic {
+${indent(src, 2)}}
+`;
+}
+
 /** Строка с коммитом не участвует в сверке: сверяются значения токенов. */
 const body = (text: string): string => text.replace(/коммит CRANE [0-9a-f]+/, "коммит CRANE <sha>");
 
@@ -57,14 +71,18 @@ if (!existsSync(source)) {
 }
 const commit = execFileSync("git", ["-C", dirname(source), "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim();
 const next = render(readFileSync(source, "utf8"), commit);
+const motionSource = join(dirname(source), "motion.css");
+const nextMotion = renderMotion(readFileSync(motionSource, "utf8"), commit);
 if (check) {
   const current = existsSync(OUT) ? readFileSync(OUT, "utf8") : "";
-  if (body(current) !== body(next)) {
+  const currentMotion = existsSync(MOTION_OUT) ? readFileSync(MOTION_OUT, "utf8") : "";
+  if (body(current) !== body(next) || body(currentMotion) !== body(nextMotion)) {
     process.stderr.write("tokens: снимок расходится с консолью; выполните npm run tokens:sync в репозитории сайта\n");
     process.exit(1);
   }
   process.stdout.write("tokens: снимок совпадает с консолью\n");
 } else {
   writeFileSync(OUT, next);
+  writeFileSync(MOTION_OUT, nextMotion);
   process.stdout.write(`tokens: записан ${OUT} (коммит CRANE ${commit})\n`);
 }

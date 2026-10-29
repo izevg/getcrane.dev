@@ -1,0 +1,30 @@
+{{- /*
+  {{< threat summary="…" more="путь" chips="term:id, xref:путь, label:текст" flow="шаг 1 | шаг 2 | шаг 3" >}}
+    {{< threat-what >}}…{{< /threat-what >}}
+    {{< threat-answer >}}- факт…{{< /threat-answer >}}
+  {{< /threat >}}
+  Ставится сразу под Markdown-заголовком угрозы (### Имя {#id}): заголовок — обычный h3 для якорей, xref и оглавления.
+  summary обязателен, до 140 знаков; flow — ровно 3 шага до 40 знаков (больше 40 — предупреждение, больше 60 — ошибка). Остальные проверки — в threat-answer и ui/threat-chips.html.
+*/ -}}
+{{- $summary := .Get "summary" -}}
+{{- if not $summary }}{{ errorf "threat: не задан summary (%s)" .Position }}{{ end -}}
+{{- if gt (strings.RuneCount $summary) 140 }}{{ errorf "threat: summary длиннее 140 знаков (%d, %s)" (strings.RuneCount $summary) .Position }}{{ end -}}
+{{- $steps := slice -}}
+{{- with .Get "flow" }}{{ range split (replaceRE `\s*\\?\|\s*` "|" .) "|" }}{{ $steps = $steps | append (trim . " \n\t") }}{{ end }}{{ end -}}
+{{- if and $steps (ne (len $steps) 3) }}{{ errorf "threat: flow — ровно 3 шага через |, указано %d (%s)" (len $steps) .Position }}{{ end -}}
+<div class="threat">
+  <p class="threat-summary">{{ partial "ui/inner.html" (dict "page" .Page "inner" $summary "display" "inline") }}</p>
+  {{- if $steps }}
+  <ol class="threat-flow" aria-label="{{ i18n "threat.flow" }}">
+    {{- range $i, $s := $steps }}
+    {{- if gt (strings.RuneCount $s) 60 }}{{ errorf "threat: шаг flow длиннее 60 знаков: %q (%s)" $s $.Position }}{{ else if gt (strings.RuneCount $s) 40 }}{{ warnf "threat: шаг flow длиннее 40 знаков (%d): %q (%s)" (strings.RuneCount $s) $s $.Position }}{{ end }}
+    {{- $icon := index (slice "crosshair" "user-round" "shield-check") $i }}
+    <li class="threat-step threat-step-{{ add $i 1 }}">
+      {{- if lt $i 2 }}<svg class="threat-arrow" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M3 12h16m-5-5 5 5-5 5"/></svg>{{ end -}}
+      <span class="threat-node"><span class="threat-ico">{{ partial "ui/icon.html" $icon }}</span><span>{{ $s }}</span></span>
+    </li>
+    {{- end }}
+  </ol>
+  {{- end }}
+  {{ .Inner }}
+</div>

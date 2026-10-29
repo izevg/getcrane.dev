@@ -23,51 +23,72 @@ hero:
 
 # Схема «путь пакета» в hero: upstream → группа CRANE → клиент сборки.
 # Подписи узлов — метки до 2 слов. Узлы группы — ссылки на страницы гарантий.
+# icon — имя Lucide (assets/icons/manifest.json); note — необязательная строка-пояснение под подписью (пустая не выводится).
 path:
-  upstream: { ru: "Публичный реестр", en: "Public registry" }
-  client:   { ru: "Сборка", en: "Build" }
+  upstream: { icon: globe, ru: "Публичный реестр", en: "Public registry", note: { ru: "", en: "" } }
+  client:   { icon: package, ru: "Сборка", en: "Build", note: { ru: "", en: "" } }
   nodes:
-    - { href: features/security/namespace-reservation,  ru: "Namespace", en: "Namespace" }
-    - { href: features/security/upstream-quarantine,    ru: "Карантин", en: "Quarantine" }
-    - { href: features/security/digest-verification,    ru: "Дайджест", en: "Digest" }
-    - { href: features/security/immutable-versions,     ru: "Неизменяемость", en: "Immutability" }
+    - { href: features/security/namespace-reservation,  icon: folder-lock, ru: "Namespace", en: "Namespace", note: { ru: "", en: "" } }
+    - { href: features/security/upstream-quarantine,    icon: hourglass, ru: "Карантин", en: "Quarantine", note: { ru: "", en: "" } }
+    - { href: features/security/digest-verification,    icon: fingerprint-pattern, ru: "Дайджест", en: "Digest", note: { ru: "", en: "" } }
+    - { href: features/security/immutable-versions,     icon: lock, ru: "Неизменяемость", en: "Immutability", note: { ru: "", en: "" } }
+
+# Снимки Storybook веб-консоли (data/screenshot-variants.yaml — размеры вариантов, static/screens/<история>/<вариант>.<ext> — файлы).
+# light / dark — варианты историй для светлой и тёмной темы; enVariant — вариант English для EN-страницы (пока без тёмного: светлый снимок в обеих темах).
+# Пустой alt не выводит снимок. Подписи всегда заканчиваются пометкой «Демонстрационные данные» / «Demo data» (добавляет шаблон).
+screens:
+  hero: { story: S2Package, light: DesktopLight, dark: DesktopDark, enVariant: English, ru: { alt: "" }, en: { alt: "" } }
+
+# Секция «Веб-консоль»: три снимка с подписью-ссылкой на гарантию. Секция выводится, если заполнена подпись (caption) хотя бы у одной записи.
+console:
+  - { story: S3Versions, light: Desktop1440Sheet, dark: Desktop1440Dark, enVariant: English, href: features/security/immutable-versions, ru: { caption: "", alt: "" }, en: { caption: "", alt: "" } }
+  - { story: S9Journal, light: Desktop1440, dark: DesktopDark, enVariant: English, href: features/security/security-journal, ru: { caption: "", alt: "" }, en: { caption: "", alt: "" } }
+  - { story: S1Search, light: DesktopLight, dark: DesktopDark, enVariant: English, href: features/security/supply-chain-threats, ru: { caption: "", alt: "" }, en: { caption: "", alt: "" } }
 
 # Карточки гарантий: 6–8 штук. Первые две занимают по 6 колонок из 12 на широком экране.
 # href — страница Features; current — необязательная страница текущего состояния, со status которой
 # сверяется availability (available | in-development).
 guarantees:
   - href: features/security/immutable-versions
+    icon: lock
     current: formats/cargo
     availability: available
     ru: { title: "Неизменяемые версии", claim: "Выпущенную версию нельзя перезаписать, а номер удалённой версии нельзя занять снова.", limit: "CRANE не оценивает содержимое версии: он хранит и скрывает, но не судит, безопасна ли она." }
     en: { title: "Immutable versions", claim: "A released version cannot be overwritten, and the number of a deleted version cannot be taken again.", limit: "CRANE does not judge the content of a version: it stores and hides it, but does not decide whether it is safe." }
   - href: features/security/digest-verification
+    icon: fingerprint-pattern
     availability: available
     ru: { title: "Проверка дайджестов", claim: "Файлы хранятся по SHA-256, а скачанное из upstream сверяется с ожидаемым дайджестом.", limit: "Где upstream не сообщает ожидаемый дайджест, сверять не с чем." }
     en: { title: "Digest verification", claim: "Files are stored under their SHA-256, and what is fetched from an upstream is checked against the expected digest.", limit: "Where the upstream gives no expected digest, there is nothing to check against." }
   - href: features/security/namespace-reservation
+    icon: folder-lock
     current: configure/namespaces
     availability: available
     ru: { title: "Резервирование namespace", claim: "Внутреннее имя никогда не отдаётся из upstream: на него proxy отвечает 404.", limit: "Пакеты npm без scope этой защитой не покрываются." }
     en: { title: "Namespace reservation", claim: "An internal name is never served from an upstream: the proxy answers 404 for it.", limit: "Unscoped npm packages are not covered by this protection." }
   - href: features/security/public-upstreams-only
+    icon: globe-lock
     availability: available
     ru: { title: "Только публичные upstream", claim: "Адреса upstream встроены в бинарник; приватный или произвольный реестр подключить нельзя.", limit: "Пакет, перенесённый вручную в hosted, CRANE проверяет как обычную публикацию, а отвечает за него публикующий." }
     en: { title: "Public upstreams only", claim: "Upstream addresses are built into the binary; a private or arbitrary registry cannot be attached.", limit: "A package moved into a hosted repository by hand gets the checks of a normal publication, and the publisher is accountable for it." }
   - href: features/security/egress-guard
+    icon: shield-ban
     availability: available
     ru: { title: "Контроль исходящих запросов", claim: "Каждый адрес после DNS и каждый redirect проверяются: запрос не уйдёт во внутреннюю сеть.", limit: "Сеть вокруг процесса защищают правила развёртывания, а не CRANE." }
     en: { title: "Egress control", claim: "Every address after DNS and every redirect is checked, so a request does not reach the internal network.", limit: "The network around the process is protected by the deployment's rules, not by CRANE." }
   - href: features/security/fail-closed
+    icon: door-closed
     availability: available
     ru: { title: "Отказ в закрытую сторону", claim: "Без каталога CRANE отвечает 503, а не отдаёт пакеты без проверок.", limit: "Цена — недоступность чтения, пока каталог не вернётся." }
     en: { title: "Fail closed", claim: "Without its catalog CRANE answers 503 instead of serving packages unchecked.", limit: "The price is that reads are unavailable until the catalog is back." }
   - href: features/security/upstream-quarantine
+    icon: hourglass
     current: configure/upstream-quarantine
     availability: in-development
     ru: { title: "Карантин новых версий", claim: "Свежая версия из upstream выдерживается окном до выдачи клиентам proxy.", limit: "Окно выигрывает время, но не обнаруживает вредоносность." }
     en: { title: "Quarantine for new versions", claim: "A fresh upstream version waits out a window before proxy clients receive it.", limit: "The window buys time; it does not detect malware." }
   - href: features/security/vulnerability-flow
+    icon: radar
     current: configure/vulnerability-feeds
     availability: in-development
     ru: { title: "Поток уязвимостей", claim: "Advisory из открытых фидов сопоставляются с инвентарём по PURL, вредоносные версии блокируются.", limit: "CRANE агрегирует открытые фиды и не ведёт собственных исследований." }
@@ -106,14 +127,17 @@ formats: [cargo, npm, pypi, maven, nuget]
 # Карточки развёртывания.
 deploy:
   - id: binary
+    icon: terminal
     href: reference/server-cli
     ru: { title: "Один бинарник", text: "Сервер, миграции и проба готовности — роли одного бинарника crane в одном образе.", command: "crane migrate" }
     en: { title: "One binary", text: "The server, migrations and the readiness probe are roles of one crane binary in one image.", command: "crane migrate" }
   - id: compose
+    icon: container
     href: deploy/docker-compose
     ru: { title: "Docker Compose на одном узле", text: "Caddy, PostgreSQL и CRANE; S3 и Valkey подключаются override-файлами.", command: "docker compose --project-directory . -f deploy/compose/docker-compose.yaml up -d --wait" }
     en: { title: "Docker Compose on one node", text: "Caddy, PostgreSQL and CRANE; S3 and Valkey are added with override files.", command: "docker compose --project-directory . -f deploy/compose/docker-compose.yaml up -d --wait" }
   - id: kubernetes
+    icon: ship-wheel
     href: deploy/kubernetes-helm
     ru: { title: "Kubernetes и Helm", text: "Helm-чарт с внешними PostgreSQL, Valkey и S3. Функциональность в разработке.", command: "" }
     en: { title: "Kubernetes and Helm", text: "A Helm chart with external PostgreSQL, Valkey and S3. This functionality is in development.", command: "" }

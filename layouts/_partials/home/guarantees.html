@@ -1,6 +1,7 @@
 {{- /* Карточки гарантий. href — целевая страница Features (всегда available), current — необязательная
      страница текущего состояния (configure/…, formats/…). availability обязана совпадать со status страницы current:
-     главная не обещает того, чего нет в текущей версии. Без current сверять не с чем — решает availability. */ -}}
+     главная не обещает того, чего нет в текущей версии. Без current сверять не с чем — решает availability.
+     Иконка карточки — поле icon (Lucide) в плитке на --brand-container; граница — единый знак ruler-dimension-line. */ -}}
 {{- $lang := .lang -}}
 <section class="section container" aria-labelledby="g-h">
   <h2 id="g-h">{{ i18n "home.guarantees" }}</h2>
@@ -15,12 +16,12 @@
         {{- if ne (eq .Params.status "in-development") $dev }}{{ errorf "home: availability у %s не совпадает со status страницы %s" $item.href .Path }}{{ end }}
       {{- end }}{{ end }}
     <li class="card">
-      <h3><a href="{{ .RelPermalink }}">{{ $t.title | default .Title }}</a>{{ if $dev }}<span class="badge badge-dev">{{ partial "ui/icon.html" "clock" }}{{ i18n "status.in-development" }}</span>{{ end }}</h3>
+      <h3>{{ with $item.icon }}<span class="tile">{{ partial "ui/icon.html" (dict "name" . "class" "i i-20") }}</span>{{ end }}<a href="{{ .RelPermalink }}">{{ $t.title | default .Title }}</a>{{ if $dev }}<span class="badge badge-dev">{{ partial "ui/icon.html" "clock" }}{{ i18n "status.in-development" }}</span>{{ end }}</h3>
       {{- with $t.claim }}<p class="claim">{{ . }}</p>{{ end }}
       {{- with $t.limit }}<p class="limit">{{ partial "ui/icon.html" "limits" }}<span><b>{{ i18n "home.limit" }}</b> {{ . }}</span></p>{{ end }}
     </li>
     {{- end }}
     {{- end }}
   </ul>
-  {{ with partial "home/page.html" "features/security" }}<a class="more-link" href="{{ .RelPermalink }}">{{ i18n "home.guarantees.all" }} →</a>{{ end }}
+  {{ with partial "home/page.html" "features/security" }}<a class="more-link" href="{{ .RelPermalink }}">{{ i18n "home.guarantees.all" }}{{ partial "ui/icon.html" "arrow-right" }}</a>{{ end }}
 </section>

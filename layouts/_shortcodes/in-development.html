@@ -9,6 +9,6 @@
   {{ partial "ui/icon.html" (dict "name" "clock" "class" "i i-20") }}
   <div>
     <p>{{ i18n "in-development" }}</p>
-    <p>{{ .Inner | $p.RenderString }}</p>
+    <p>{{ partial "ui/inner.html" (dict "page" $p "inner" .Inner "display" "inline") }}</p>
   </div>
 </div>

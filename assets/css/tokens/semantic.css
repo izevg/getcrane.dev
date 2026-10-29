@@ -19,9 +19,12 @@
     --space-2: var(--p-space-2);
     --space-3: var(--p-space-3);
     --space-4: var(--p-space-4);
+    --space-5: var(--p-space-5);
     --space-6: var(--p-space-6);
     --space-8: var(--p-space-8);
+    --space-10: var(--p-space-10);
     --space-12: var(--p-space-12);
+    --space-14: var(--p-space-14);
     --space-16: var(--p-space-16);
     --space-24: var(--p-space-24);
     --space-section: clamp(4rem, 2.5rem + 5vw, 7.5rem);
@@ -39,6 +42,7 @@
     --lh-body: 1.6;
 
     --radius-sm: 4px;
+    --radius-chip: 6px;
   }
 
   :root:lang(ru) {

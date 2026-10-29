@@ -1,63 +1,27 @@
 // Диаграммы mermaid → два статических SVG (светлый и тёмный) в assets/diagrams/<хэш>.{light,dark}.svg. SVG лежат в репозитории.
 // Хэш — первые 16 знаков SHA-256 от исходника без краевых пробелов; тот же расчёт в layouts/_markup/render-codeblock-mermaid.html.
+// Локальный тяжёлый шаг (Chromium): в CI рендера нет, там scripts/check-mermaid.ts проверяет готовые SVG.
 // Перерисовываются только диаграммы без SVG; при смене токенов или темы (отпечаток в manifest.json) — все. Лишние SVG удаляются.
 // Браузер: переменная PUPPETEER_EXECUTABLE_PATH (headless Chromium/Chrome); без неё puppeteer берёт свой кэш.
 // У читателя JS для диаграмм нет.
 import { spawnSync } from "node:child_process";
-import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { ROOT, loadPages } from "./lib/content.ts";
+import { ROOT } from "./lib/content.ts";
 import { themeConfig, type Theme } from "./lib/mermaid-theme.ts";
+import { DIAGRAMS_DIR, MANIFEST, collectDiagrams, themeStamp, type Manifest } from "./lib/mermaid-sources.ts";
 
 if (process.env.CRANE_SKIP_MERMAID) {
   process.stdout.write("mermaid: пропущено (CRANE_SKIP_MERMAID)\n");
   process.exit(0);
 }
 
-const HASH_LEN = 16;
-const OUT = join(ROOT, "assets", "diagrams");
-const MANIFEST = join(OUT, "manifest.json");
-const FENCE = /^([ \t]*)(`{3,})mermaid([^\n]*)\n([\s\S]*?)^\1\2[ \t]*$/gm;
-const CAPTION = /caption="([^"]*)"/;
-
-function dedent(code: string, indent: string): string {
-  return code
-    .split("\n")
-    .map((l) => (l.startsWith(indent) ? l.slice(indent.length) : l))
-    .join("\n");
-}
-
-interface Entry {
-  caption: Record<string, string>;
-  pages: string[];
-}
-interface Manifest {
-  theme: string;
-  diagrams: Record<string, Entry>;
-}
-
-const sources = new Map<string, string>();
-const entries = new Map<string, Entry>();
-for (const p of loadPages()) {
-  for (const m of p.body.matchAll(FENCE)) {
-    const code = dedent(m[4] ?? "", m[1] ?? "").trim();
-    const hash = createHash("sha256").update(code).digest("hex").slice(0, HASH_LEN);
-    sources.set(hash, code);
-    const entry = entries.get(hash) ?? { caption: {}, pages: [] };
-    const caption = CAPTION.exec(m[3] ?? "")?.[1];
-    if (caption) {
-      entry.caption[p.lang] = caption;
-    }
-    entry.pages.push(`${p.file}:${p.bodyLine + p.body.slice(0, m.index).split("\n").length - 1}`);
-    entries.set(hash, entry);
-  }
-}
+const OUT = DIAGRAMS_DIR;
+const { sources, entries } = collectDiagrams();
 
 mkdirSync(OUT, { recursive: true });
-const tokensFile = readFileSync(join(ROOT, "assets", "css", "tokens", "console.css"), "utf8");
-const stamp = createHash("sha256").update(tokensFile).update(readFileSync(join(ROOT, "scripts", "lib", "mermaid-theme.ts"))).digest("hex");
+const stamp = themeStamp();
 const previous: Manifest | undefined = existsSync(MANIFEST) ? (JSON.parse(readFileSync(MANIFEST, "utf8")) as Manifest) : undefined;
 const fresh = previous?.theme === stamp;
 

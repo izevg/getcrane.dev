@@ -1,12 +1,5 @@
-/** Тайминги подсказок. Единственный источник: CSS получает значения через переменные, которые выставляет applyTiming(). */
+/** Тайминги подсказок (JS-часть). Длительности анимации живут в CSS и берутся из токенов движения консоли. */
 export const OPEN_DELAY_MS = 120;
 export const CLOSE_DELAY_MS = 150;
-/** Появление: 150 мс ease-out; закрытие быстрее появления. */
-export const ENTER_MS = 150;
-export const EXIT_MS = 90;
-
-export function applyTiming(): void {
-  const style = document.documentElement.style;
-  style.setProperty("--tip-enter", `${ENTER_MS}ms`);
-  style.setProperty("--tip-exit", `${EXIT_MS}ms`);
-}
+/** Окно после закрытия слоя, в котором соседний триггер открывается мгновенно и без анимации входа (GROUP_TIMEOUT_MS консоли). */
+export const GROUP_TIMEOUT_MS = 300;

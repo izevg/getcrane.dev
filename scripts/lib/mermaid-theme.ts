@@ -5,7 +5,7 @@ import { ROOT } from "./content.ts";
 export type Theme = "light" | "dark";
 
 /** Пары --имя: #hex из снимка токенов; блок тёмной темы переопределяет светлую. */
-function tokens(): Record<Theme, Record<string, string>> {
+export function tokensFor(): Record<Theme, Record<string, string>> {
   const css = readFileSync(join(ROOT, "assets", "css", "tokens", "console.css"), "utf8");
   const darkAt = css.indexOf(':root[data-theme="dark"]');
   const mediaAt = css.indexOf("@media (prefers-color-scheme: dark)");
@@ -18,7 +18,7 @@ function tokens(): Record<Theme, Record<string, string>> {
 
 /** Переменные темы mermaid в hex токенов консоли (mermaid сам считает производные цвета и не понимает var()). */
 export function themeConfig(theme: Theme): Record<string, unknown> {
-  const t = tokens()[theme];
+  const t = tokensFor()[theme];
   const c = (name: string): string => {
     const v = t[name];
     if (!v) {
@@ -29,6 +29,7 @@ export function themeConfig(theme: Theme): Record<string, unknown> {
   return {
     theme: "base",
     themeVariables: {
+      darkMode: theme === "dark",
       background: c("--background"),
       fontFamily: '"Onest Variable", ui-sans-serif, system-ui, sans-serif',
       fontSize: "14px",
@@ -48,8 +49,8 @@ export function themeConfig(theme: Theme): Record<string, unknown> {
       nodeTextColor: c("--foreground"),
       clusterBkg: c("--muted"),
       clusterBorder: c("--border"),
-      titleColor: c("--foreground"),
-      edgeLabelBackground: c("--background"),
+      titleColor: c("--muted-foreground"),
+      edgeLabelBackground: c("--card"),
       noteBkgColor: c("--warning-bg"),
       noteTextColor: c("--foreground"),
       noteBorderColor: c("--warning-strong"),

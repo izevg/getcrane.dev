@@ -32,7 +32,7 @@
   :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
   :focus:not(:focus-visible) { outline: none; }
 
-  a { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
+  a { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
   a:hover { color: var(--link-hover); text-decoration-thickness: 2px; }
 
   h1, h2, h3, h4 { text-wrap: balance; overflow-wrap: break-word; hyphens: manual; }
@@ -70,27 +70,6 @@
     transform: translateY(-200%);
   }
   .skip:focus { transform: none; }
-
-  /* Текст статьи. Колонка текста ограничена --measure; таблицы, код и вкладки могут быть шире. */
-  .prose > :where(p, ul, ol, dl, blockquote, h2, h3, h4) { max-inline-size: var(--measure); }
-  .prose > * + * { margin-block-start: var(--space-4); }
-  .prose > h2 { margin-block-start: var(--space-12); }
-  .prose > h3 { margin-block-start: var(--space-8); }
-  .prose > h4 { margin-block-start: var(--space-6); }
-  .prose > :where(h2, h3, h4) + * { margin-block-start: var(--space-3); }
-  .prose :where(ul, ol) { padding-inline-start: 1.4em; }
-  .prose li + li { margin-block-start: var(--space-2); }
-  .prose li > :where(ul, ol, p, pre, figure, .code) { margin-block-start: var(--space-2); }
-  .prose dt { font-weight: 650; }
-  .prose dd { margin-inline-start: var(--space-4); }
-  @media (min-width: 40rem) {
-    .prose :is(p, li) { hyphens: auto; }
-    .prose :is(a, code, kbd) { hyphens: manual; }
-  }
-  @supports (text-wrap: pretty) { .prose p { text-wrap: pretty; } }
-  .prose blockquote:not(.callout) {
-    border-inline-start: 3px solid var(--border); padding-inline-start: var(--space-4); color: var(--muted-foreground);
-  }
 
   /* Заголовки со ссылкой-якорем и чипами. */
   .prose :is(h2, h3, h4) { position: relative; isolation: isolate; }

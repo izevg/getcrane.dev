@@ -12,7 +12,7 @@
 
   @media (forced-colors: active) {
     /* Граница, несущая смысл, — border/outline, а не фон и не тень. */
-    .callout, .aud-block, .card, .chip, .badge, .tabs, .tip, .pop, .terms-block, .toc-inline, .pager a, .children li, .dev-panel, .code, .table-wrap {
+    .callout, .aud-block, .chip, .badge, .tabs, .tip, .pop, .terms-block, .toc-inline, .pager a, .children li, .dev-panel, .code, .table-wrap {
       border: 1px solid CanvasText;
     }
     .callout { border-inline-start: 4px solid CanvasText; }
@@ -29,7 +29,6 @@
     a.term { text-decoration-style: dotted; }
     .hero::before { display: none; }
     .logo-mark { forced-color-adjust: none; }
-    .pkg-path::before, .pkg-path::after { background: CanvasText; }
     svg { forced-color-adjust: auto; }
   }
 }

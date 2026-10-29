@@ -1,26 +1,37 @@
 {{- /*
-  Диаграмма mermaid. SVG (светлый и тёмный) рендерит scripts/render-mermaid.ts при сборке в CI → assets/diagrams/<хэш>.{light,dark}.svg;
-  у читателя JS для диаграмм нет. Хэш — первые 16 знаков SHA-256 от исходника без краевых пробелов (тот же расчёт в скрипте).
-  SVG лежат в репозитории; без них сборка падает (в любом окружении).
-  Подпись обязательна: ```mermaid {caption="…"}.
+  Диаграмма mermaid. SVG (светлый и тёмный) рендерит scripts/render-mermaid.ts локально (npm run mermaid) → assets/diagrams/<хэш>.{light,dark}.svg;
+  в CI рендера нет, scripts/check-mermaid.ts проверяет наличие и актуальность файлов. У читателя JS для диаграмм нет.
+  Хэш — первые 16 знаков SHA-256 от исходника без краевых пробелов (тот же расчёт в скрипте). Без SVG сборка в production падает.
+  Подпись обязательна: ```mermaid {caption="…"}. Целевая топология: {caption="…" state="target"} — бейдж «Целевое состояние» в начале подписи.
+  Структура: figure → рамка → регион прокрутки (role и tabindex ставит остров при переполнении) → обёртка role=img → inline-SVG.
 */ -}}
 {{- $src := trim .Inner " \n\r\t" -}}
 {{- $h := substr (crypto.SHA256 $src) 0 16 -}}
 {{- $light := resources.Get (printf "diagrams/%s.light.svg" $h) -}}
 {{- $dark := resources.Get (printf "diagrams/%s.dark.svg" $h) -}}
 {{- $cap := .Attributes.caption -}}
+{{- $state := .Attributes.state -}}
+{{- if and $state (ne $state "target") (ne $state "current") }}{{ errorf "mermaid: state=%q: допустимы target и current (%s)" $state .Page.Path }}{{ end -}}
 {{- if not $cap }}{{ warnidf "mermaid-caption" "mermaid: у диаграммы нет подписи (caption) в %s" .Page.Path }}{{ end -}}
 {{- $capid := printf "dg-%s-cap" $h -}}
-<figure class="diagram">
+{{- $width := 0 -}}
+{{- with $light }}{{ with findRESubmatch `viewBox="[-\d.]+ [-\d.]+ ([\d.]+) [\d.]+"` .Content 1 }}{{ $width = int (float (index (index . 0) 1)) }}{{ end }}{{ end -}}
+<figure class="diagram"{{ with $state }} data-state="{{ . }}"{{ end }}>
 {{- if and $light $dark }}
-  <div class="diagram-img diagram-light" role="img" aria-labelledby="{{ $capid }}" data-pagefind-ignore>{{ $light.Content | safeHTML }}</div>
-  <div class="diagram-img diagram-dark" role="img" aria-labelledby="{{ $capid }}" data-pagefind-ignore>{{ $dark.Content | safeHTML }}</div>
+  <div class="diagram-frame" data-pagefind-ignore>
+    {{- range slice (dict "t" "light" "r" $light) (dict "t" "dark" "r" $dark) }}
+    <div class="diagram-scroll diagram-{{ .t }}" data-scroll data-scroll-label="{{ $capid }}"{{ if $width }} style="--dg-w: {{ $width }}px"{{ end }}><div class="diagram-svg" role="img" aria-labelledby="{{ $capid }}">{{ .r.Content | safeHTML }}</div></div>
+    {{- end }}
+  </div>
 {{- else }}
   {{- if hugo.IsProduction }}{{ errorf "mermaid: нет SVG для диаграммы %s:%d, выполните npm run mermaid" .Page.File.Path .Position.LineNumber }}{{ else }}{{ warnidf "mermaid-svg" "mermaid: нет SVG для диаграммы %s:%d, выполните npm run mermaid" .Page.File.Path .Position.LineNumber }}{{ end }}
 {{- end }}
-  <figcaption id="{{ $capid }}"{{ if not $cap }} class="sr"{{ end }}>{{ $cap | default (i18n "diagram.default") }}</figcaption>
+  <figcaption id="{{ $capid }}"{{ if not $cap }} class="sr"{{ end }}>
+    {{- with $state }}<span class="badge badge-{{ . }}">{{ partial "ui/icon.html" (cond (eq . "target") "target" "current") }}{{ i18n (printf "state.%s" .) }}</span>{{ end -}}
+    <span>{{ $cap | default (i18n "diagram.default") }}</span>
+  </figcaption>
   <details class="diagram-src" data-pagefind-ignore{{ if not (and $light $dark) }} open{{ end }}>
     <summary>{{ i18n "diagram.text" }}</summary>
-    <div class="code" data-lang="mermaid"><div class="code-head"><span class="code-lang">mermaid</span><span class="code-actions"></span></div><pre class="chroma"><code class="language-mermaid" data-lang="mermaid">{{ $src }}</code></pre></div>
+    <div class="code" data-lang="mermaid"><div class="code-head"><span class="code-lang">{{ i18n "code.lang.mermaid" }}</span><span class="code-actions"></span></div><pre class="chroma"><code class="language-mermaid" data-lang="mermaid">{{ $src }}</code></pre></div>
   </details>
 </figure>

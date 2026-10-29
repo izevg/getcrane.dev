@@ -1,4 +1,4 @@
-{{- /* Четыре входа по аудиториям. Карточка не растягивает одну ссылку: ссылок несколько. */ -}}
+{{- /* Четыре входа по аудиториям. Карточка не растягивает одну ссылку: ссылок несколько. Знаки аудиторий те же, что в чипах и блоках. */ -}}
 {{- $lang := .lang -}}
 <section class="section container" aria-labelledby="a-h">
   <h2 id="a-h">{{ i18n "home.start" }}</h2>
@@ -6,7 +6,7 @@
     {{- range .d.audiences }}
     {{- $t := index . $lang -}}
     <li class="card card-aud">
-      <h3>{{ partial "ui/icon.html" (dict "name" .id "class" "i i-20") }}{{ i18n (printf "role.%s" .id) }}</h3>
+      <h3><span class="tile">{{ partial "ui/icon.html" (dict "name" .id "class" "i i-20") }}</span>{{ i18n (printf "role.%s" .id) }}</h3>
       <p class="seeks">{{ $t.seeks }}</p>
       <ul>{{ range .links }}{{ with partial "home/page.html" . }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}{{ end }}</ul>
     </li>

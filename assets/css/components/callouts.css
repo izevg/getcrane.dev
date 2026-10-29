@@ -22,7 +22,7 @@
   details.callout > summary::-webkit-details-marker { display: none; }
   details.callout > summary::after {
     content: ""; margin-inline-start: auto; inline-size: 16px; block-size: 16px; background: currentColor;
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center / 16px no-repeat;
+    mask: var(--icon-chevron-down) center / 16px no-repeat;
     transition: transform var(--dur-base) var(--ease-out);
   }
   details.callout[open] > summary::after { transform: rotate(180deg); }
@@ -48,7 +48,7 @@
   .aud-block > summary::-webkit-details-marker { display: none; }
   .aud-block > summary::before {
     content: ""; flex: none; inline-size: 16px; block-size: 16px; background: var(--muted-foreground);
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E") center / 16px no-repeat;
+    mask: var(--icon-chevron-right) center / 16px no-repeat;
     transition: transform var(--dur-base) var(--ease-out);
   }
   .aud-block[open] > summary::before { transform: rotate(90deg); }

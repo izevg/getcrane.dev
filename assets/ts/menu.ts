@@ -19,11 +19,21 @@ export function initMenu(): void {
   head.className = "menu-dialog-head";
   const close = document.createElement("button");
   close.type = "button";
-  close.className = "btn-icon";
+  close.className = "btn btn-ghost btn-icon";
   close.setAttribute("aria-label", t("menu.close"));
   close.append(icon("x", "i-20"));
   head.append(close);
   dialog.append(head);
+  const docsHref = link.dataset.docsHref;
+  const docsLabel = link.dataset.docsLabel;
+  if (docsHref && docsLabel) {
+    // «Документация» ниже 48rem выпадает из шапки: первый пункт меню.
+    const docs = document.createElement("a");
+    docs.className = "btn btn-ghost menu-docs";
+    docs.href = docsHref;
+    docs.textContent = docsLabel;
+    head.prepend(docs);
+  }
   document.body.append(dialog);
 
   const button = document.createElement("button");

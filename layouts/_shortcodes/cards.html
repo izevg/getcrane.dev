@@ -1,0 +1,27 @@
+{{- /*
+  {{< cards "deploy/s3-storage" "deploy/valkey-cache" >}}: карточки ссылок для «Что дальше», «Связанные настройки», «Связанные страницы».
+  Текст карточки — только title и description страницы-цели; писатель его не повторяет. Неизвестный путь ломает сборку.
+  Ссылка стоит на заголовке и растянута на карточку (один таб-стоп); описание связано через aria-describedby.
+*/ -}}
+{{- $p := .Page -}}
+{{- $ord := .Ordinal -}}
+{{- if not .Params }}{{ errorf "cards: не указан ни один путь (%s)" .Position }}{{ end -}}
+<div class="cards">
+<ul class="cards-list">
+  {{- range $i, $arg := .Params }}
+  {{- $path := strings.TrimSuffix "/" (strings.TrimPrefix "/" $arg) -}}
+  {{- $t := site.GetPage $path -}}
+  {{- if not $t }}{{ errorf "cards: страница %q не найдена (%s)" $path $.Position }}{{ end -}}
+  {{- if $t.Eq $p }}{{ errorf "cards: ссылка на собственную страницу %q (%s)" $path $.Position }}{{ end -}}
+  {{- $did := printf "card-%d-%d-d" $ord $i }}
+  <li class="card-link">
+    <p class="card-link-head">{{ partial "ui/icon.html" (dict "name" (partial "ui/section-icon.html" $path) "class" "i i-16") }}<a class="card-link-title" href="{{ $t.RelPermalink }}"{{ if $t.Params.description }} aria-describedby="{{ $did }}"{{ end }}>{{ $t.Title }}</a>
+      {{- if eq $t.Params.status "in-development" }}<span class="badge badge-dev">{{ partial "ui/icon.html" "clock" }}{{ i18n "status.in-development" }}</span>{{ end -}}
+      {{ partial "ui/icon.html" (dict "name" "arrow-right" "class" "i i-16 card-link-go") }}</p>
+    {{- with $t.Params.description }}
+    <p class="card-link-desc" id="{{ $did }}">{{ . }}</p>
+    {{- end }}
+  </li>
+  {{- end }}
+</ul>
+</div>

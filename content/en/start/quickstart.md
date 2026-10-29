@@ -44,7 +44,7 @@ cp .env.dist .env
 
 Set three values in `.env`. The {{< env "CRANE_NAMESPACES" >}} line already exists and is empty; add the other two lines.
 
-```ini
+```dotenv
 CRANE_NAMESPACES=cargo:acme-*
 CRANE_CARGO_PROXY_REPOS=crates-io
 CRANE_NPM_PROXY_REPOS=npmjs

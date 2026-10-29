@@ -15,7 +15,7 @@ terms: [blob, upstream, security-journal, static-token, fail-closed]
 
 ## Путь запроса {#request-path}
 
-```mermaid
+```mermaid {caption="Путь запроса через текущее развёртывание: клиент, Caddy, crane и хранилища."}
 flowchart LR
   client["Клиент пакетов"] -->|"HTTPS, токен"| caddy["Caddy: TLS"]
   caddy -->|"сеть edge, HTTP"| crane["crane"]

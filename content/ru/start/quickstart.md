@@ -44,7 +44,7 @@ cp .env.dist .env
 
 В `.env` задайте три значения. Строка {{< env "CRANE_NAMESPACES" >}} уже есть и пуста, две остальные строки нужно добавить.
 
-```ini
+```dotenv
 CRANE_NAMESPACES=cargo:acme-*
 CRANE_CARGO_PROXY_REPOS=crates-io
 CRANE_NPM_PROXY_REPOS=npmjs

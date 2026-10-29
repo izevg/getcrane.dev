@@ -72,7 +72,7 @@ The S3 keys live only in files. They are not in the environment, in the URL or i
    0
    ```
 
-3. If `seaweedfs-init` failed, read its log. The service tries 30 times to create the bucket, then prints `бакет <name> не создан` ("bucket <name> was not created") and exits with code `1`.
+3. If `seaweedfs-init` failed, read its log. The service tries 30 times to create the bucket, then prints `бакет <name> не создан` (“bucket `<name>` was not created”) and exits with code `1`.
 
 ## What the override changes {#override}
 

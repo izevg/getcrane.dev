@@ -55,7 +55,7 @@ The server records every entry applied at startup in the audit log on behalf of 
 
 Check the reservation on a separate test stand where the catalog and blobs live in memory (`memory`). A reservation is written to the catalog and stays there forever in a persistent catalog. Reserve a name that certainly exists on crates.io and request it through a Cargo proxy repository.
 
-```ini
+```dotenv
 CRANE_NAMESPACES=cargo:serde
 CRANE_CARGO_PROXY_REPOS=crates-io
 ```

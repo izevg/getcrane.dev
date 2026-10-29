@@ -55,7 +55,7 @@ terms: [namespace, dependency-confusion, proxy-repository, workspace]
 
 Проверьте действие резервирования на отдельном тестовом стенде, где каталог и blob лежат в памяти (`memory`). Резервирование записывается в каталог, а в постоянном каталоге остаётся навсегда. Зарезервируйте имя, которое точно есть в crates.io, и запросите его через proxy-репозиторий Cargo.
 
-```ini
+```dotenv
 CRANE_NAMESPACES=cargo:serde
 CRANE_CARGO_PROXY_REPOS=crates-io
 ```

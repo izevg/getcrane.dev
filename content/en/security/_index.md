@@ -15,7 +15,7 @@ The target guarantees of the product are described in the {{< xref "features/sec
 
 ## The request path {#request-path}
 
-```mermaid
+```mermaid {caption="The request path through the current deployment: client, Caddy, crane and storage."}
 flowchart LR
   client["Package client"] -->|"HTTPS, token"| caddy["Caddy: TLS"]
   caddy -->|"edge network, HTTP"| crane["crane"]

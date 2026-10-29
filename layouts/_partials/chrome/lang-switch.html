@@ -1,0 +1,15 @@
+{{- /* Переключатель языка: ссылка на ту же страницу другого языка (якорь дописывает JS). Вход: dict "page" "nav" (true в шапке; false в подвале, где уже есть nav). */ -}}
+{{- $p := .page -}}
+{{- if .nav }}<nav class="lang-switch" aria-label="{{ i18n "lang.label" }}">{{ else }}<span class="lang-switch" role="group" aria-label="{{ i18n "lang.label" }}">{{ end }}
+{{- range site.Languages }}
+  {{- $l := . -}}
+  {{- $short := upper $l.Lang -}}
+  {{- if eq $l.Lang $p.Language.Lang }}
+  <span aria-current="true" lang="{{ $l.LanguageCode }}">{{ $short }}</span>
+  {{- else }}
+    {{- $href := printf "/%s/" $l.Lang -}}
+    {{- range $p.AllTranslations }}{{ if eq .Language.Lang $l.Lang }}{{ $href = .RelPermalink }}{{ end }}{{ end }}
+  <a href="{{ $href }}" hreflang="{{ $l.LanguageCode }}" lang="{{ $l.LanguageCode }}" aria-label="{{ i18n (printf "lang.%s" $l.Lang) }}" data-lang-link>{{ $short }}</a>
+  {{- end }}
+{{- end }}
+{{ if .nav }}</nav>{{ else }}</span>{{ end }}

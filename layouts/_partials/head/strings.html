@@ -1,0 +1,5 @@
+{{- /* Строки для островов JS: один JSON на страницу, текст из каталога языка. */ -}}
+{{- $keys := slice "copy.code" "copied" "copy.md" "copied.md" "copy.error" "env.copied" "env.group" "env.copy" "theme" "theme.light" "theme.dark" "theme.system" "theme.current" "menu" "menu.close" "search.placeholder" "search.error" "filter.section" "filter.audience" "filter.genre" "filter.status" "filter.reset" "search.trigger" "toc" "code.label" "table.default" "env.back" -}}
+{{- $m := dict -}}
+{{- range $keys }}{{ $m = merge $m (dict . (i18n .)) }}{{ end -}}
+<script type="application/json" id="ui-strings">{{ $m | jsonify | safeHTML }}</script>

@@ -1,0 +1,12 @@
+# Исключения орфографии, которых нет в глоссарии: имена продуктов и протоколов. По одному слову в строке.
+CRANE
+Cargo
+npm
+PyPI
+Maven
+NuGet
+PostgreSQL
+Valkey
+Helm
+Kubernetes
+Caddy

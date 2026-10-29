@@ -1,0 +1,70 @@
+/* Слой component: только ссылки на semantic, без hex. */
+@layer component {
+  :root {
+    --callout-note-bg: var(--info-bg);
+    --callout-note-edge: var(--info-strong);
+    --callout-note-border: color-mix(in srgb, var(--info-strong) 30%, transparent);
+    --callout-note-title: var(--info);
+    --callout-tip-bg: var(--success-bg);
+    --callout-tip-edge: var(--success-strong);
+    --callout-tip-border: color-mix(in srgb, var(--success-strong) 30%, transparent);
+    --callout-tip-title: var(--success);
+    --callout-important-bg: var(--brand-container);
+    --callout-important-edge: var(--brand);
+    --callout-important-border: var(--brand-border);
+    --callout-important-title: var(--brand);
+    --callout-warning-bg: var(--warning-bg);
+    --callout-warning-edge: var(--warning-strong);
+    --callout-warning-border: color-mix(in srgb, var(--warning-strong) 35%, transparent);
+    --callout-warning-title: var(--warning);
+    --callout-caution-bg: var(--error-bg);
+    --callout-caution-edge: var(--error-strong);
+    --callout-caution-border: color-mix(in srgb, var(--error-strong) 35%, transparent);
+    --callout-caution-title: var(--error);
+    --callout-limits-bg: var(--limits-bg);
+    --callout-limits-stripe: var(--limits-stripe);
+    --callout-limits-border: var(--border);
+    --callout-limits-title: var(--foreground);
+
+    --audience-block-bg: var(--card);
+    --audience-block-border: var(--border);
+
+    --chip-bg: var(--muted);
+    --chip-fg: var(--muted-foreground);
+    --chip-border: transparent;
+    --badge-genre-fg: var(--muted-foreground);
+    --badge-genre-border: var(--input);
+    --badge-state-target-fg: var(--brand);
+    --badge-state-target-border: var(--brand-border);
+    --badge-state-current-fg: var(--foreground);
+    --badge-state-current-border: var(--input);
+    --badge-status-dev-bg: var(--warning-bg);
+    --badge-status-dev-fg: var(--warning);
+
+    --syn-keyword: var(--brand);
+    --syn-string: var(--success);
+    --syn-number: var(--char-digit);
+    --syn-attr: var(--info);
+    --syn-comment: var(--hint);
+    --syn-punct: var(--muted-foreground);
+    --syn-error: var(--error);
+
+    --tooltip-bg: var(--popover);
+    --tooltip-fg: var(--popover-foreground);
+    --tooltip-border: var(--border);
+    --tooltip-shadow: var(--shadow-card);
+
+    --toc-active: var(--brand);
+    --nav-active-bg: var(--sidebar-accent);
+    --nav-active-fg: var(--sidebar-accent-foreground);
+    --nav-active-bar: var(--brand);
+    --hero-grid-line: var(--border);
+
+    --env-bg: var(--code-bg);
+    --env-fg: var(--foreground);
+    --env-underline: var(--link);
+    --env-underline-active: var(--brand);
+    --ref-target-bg: var(--brand-container);
+    --ref-target-bar: var(--brand);
+  }
+}

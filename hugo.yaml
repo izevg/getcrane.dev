@@ -1,0 +1,130 @@
+# Конфигурация сайта getcrane.dev. Нужен Hugo extended >= 0.157 (см. package.json, поле hugo).
+baseURL: https://getcrane.dev/
+title: CRANE
+defaultContentLanguage: en
+defaultContentLanguageInSubdir: true
+# Корень «/» — отдельный EN-лендинг (формат RootHTML), поэтому редирект Hugo на язык по умолчанию выключен.
+disableDefaultLanguageRedirect: true
+disableHugoGeneratorInject: true
+disableKinds: [taxonomy, term, rss]
+enableGitInfo: false
+timeout: 120s
+
+languages:
+  en:
+    languageCode: en
+    languageName: English
+    contentDir: content/en
+    weight: 1
+  ru:
+    languageCode: ru
+    languageName: Русский
+    contentDir: content/ru
+    weight: 2
+
+params:
+  # Ссылки на репозитории. Пустое значение: ссылка не выводится, сборка пишет предупреждение.
+  sourceURL: ""
+  siteSourceURL: https://github.com/izevg/getcrane.dev
+  license: Apache-2.0
+  # Режим проверки env: true — неизвестное CRANE_* в блоке кода ломает сборку (MUST по ui-spec).
+  envStrict: true
+  # Снимки экрана: true — отсутствующий файл ломает сборку, false — выводится плейсхолдер.
+  screenshotsRequired: false
+
+# Выходные форматы: HTML, Markdown-версия страницы, llms.txt и llms-full.txt.
+outputs:
+  home: [HTML, LLMS, LLMSFull]
+  section: [HTML, Markdown]
+  page: [HTML, Markdown]
+
+# Только главная EN дополнительно пишется в корень: «/» (лендинг) и «/llms.txt».
+cascade:
+  - target:
+      kind: home
+      lang: en
+    outputs: [HTML, RootHTML, LLMS, LLMSRoot, LLMSFull]
+
+mediaTypes:
+  text/markdown:
+    suffixes: [md]
+
+outputFormats:
+  # ugly: файл лежит рядом с каталогом страницы: /en/start/quickstart.md
+  Markdown:
+    mediaType: text/markdown
+    baseName: index
+    isPlainText: true
+    rel: alternate
+    ugly: true
+  LLMS:
+    mediaType: text/plain
+    baseName: llms
+    isPlainText: true
+    notAlternative: true
+    permalinkable: false
+  LLMSRoot:
+    mediaType: text/plain
+    baseName: llms
+    isPlainText: true
+    notAlternative: true
+    permalinkable: false
+    root: true
+  LLMSFull:
+    mediaType: text/plain
+    baseName: llms-full
+    isPlainText: true
+    notAlternative: true
+    permalinkable: false
+  RootHTML:
+    mediaType: text/html
+    baseName: index
+    isHTML: true
+    notAlternative: true
+    permalinkable: false
+    root: true
+
+markup:
+  goldmark:
+    renderer:
+      # Сырой HTML в тексте не нужен: разметка идёт шорткодами и render-хуками.
+      unsafe: false
+    parser:
+      autoHeadingID: true
+      autoHeadingIDType: github
+      wrapStandAloneImageWithinParagraph: false
+      attribute:
+        block: true
+        title: true
+    extensions:
+      # Кавычки и тире ставит писатель; шаблон их не заменяет.
+      typographer:
+        disable: true
+      linkify: false
+      strikethrough: true
+      table: true
+      taskList: true
+  highlight:
+    noClasses: false
+    codeFences: true
+    guessSyntax: false
+    lineNos: false
+    tabWidth: 2
+  tableOfContents:
+    startLevel: 2
+    endLevel: 3
+
+minify:
+  tdewolff:
+    html:
+      keepQuotes: true
+      keepEndTags: true
+      keepWhitespace: true
+
+build:
+  buildStats:
+    enable: false
+
+sitemap:
+  changefreq: weekly
+  priority: 0.5

@@ -1,0 +1,6 @@
+{{- /* Изображения только локальные: внешние запросы во время работы страницы запрещены. */ -}}
+{{- $dest := .Destination -}}
+{{- if or (hasPrefix $dest "http://") (hasPrefix $dest "https://") (hasPrefix $dest "//") }}{{ errorf "image: внешняя картинка %q в %s; положите файл в assets или static" $dest .Page.Path }}{{ end -}}
+{{- $res := .PageInner.Resources.Get $dest | default (resources.Get $dest) -}}
+<img src="{{ with $res }}{{ .RelPermalink }}{{ else }}{{ $dest | safeURL }}{{ end }}" alt="{{ .PlainText }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ with $res }} width="{{ .Width }}" height="{{ .Height }}"{{ end }} loading="lazy" decoding="async">
+{{- /* Без хвостового перевода строки. */ -}}

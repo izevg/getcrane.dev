@@ -1,0 +1,42 @@
+{{- /*
+  Слой подсказки для переменной окружения (общий для инлайн-варианта и блоков кода).
+  Вход: dict "r" (результат env/lookup.html) "url" (адрес справочника). Идентификатор: env-<anchor> или env-<anchor>-file.
+*/ -}}
+{{- $r := .r -}}
+{{- $e := $r.e -}}
+{{- $lang := site.Language.Lang -}}
+{{- $id := printf "env-%s%s" $r.anchor (cond $r.isFile "-file" "") -}}
+{{- $purpose := index $e $lang -}}
+{{- $d := $e.default -}}
+{{- $def := "" -}}
+{{- if $e.secret }}{{ $def = "" }}
+{{- else if eq (printf "%T" $d) "<nil>" }}{{ $def = i18n "env.none" }}
+{{- else if eq (string $d) "" }}{{ $def = i18n "env.empty" }}
+{{- else }}{{ $def = printf "<code>%s</code>" (string $d | htmlEscape) }}{{ end -}}
+<div id="{{ $id }}" class="tip tip-env" popover="manual" aria-label="{{ $r.name }}">
+  <div class="tip-head"><code>{{ $r.name }}</code><span class="badge badge-genre">{{ if $e.required }}{{ i18n "env.required" }}{{ else }}{{ i18n "env.optional" }}{{ end }}</span></div>
+  {{- if $r.isFile }}
+  <p class="tip-desc" id="{{ $id }}-d">{{ partial "ui/t.html" (dict "k" "env.fileOf" "v" (dict "name" $r.base)) }}</p>
+  {{- else }}
+  <p class="tip-desc" id="{{ $id }}-d">{{ $purpose }}</p>
+  {{- end }}
+  {{- if $e.secret }}
+  <p class="tip-hint">{{ partial "ui/t.html" (dict "k" "env.secret" "v" (dict "name" $r.base)) }}</p>
+  {{- end }}
+  {{- $scope := $e.scope | default "server" }}
+  {{- $compose := ne $scope "server" }}
+  <dl>
+    {{- if not $e.secret }}<dt>{{ i18n "env.default" }}</dt><dd>{{ $def | safeHTML }}</dd>{{ end }}
+    {{- if not $compose }}
+    <dt>{{ i18n "env.file" }}</dt><dd>{{ if $e.file }}{{ $r.base }}_FILE{{ else }}{{ i18n "env.none" }}{{ end }}</dd>
+    <dt>{{ i18n "env.toml" }}</dt><dd>{{ with $e.toml }}{{ . }}{{ else }}{{ i18n "env.envOnly" }}{{ end }}</dd>
+    {{- end }}
+  </dl>
+  {{- if eq $scope "compose" }}<p class="tip-hint">{{ i18n "env.compose" }}</p>{{ else if eq $scope "ci" }}<p class="tip-hint">{{ i18n "env.ci" }}</p>{{ end }}
+  <div class="tip-actions" data-env-actions>
+    <button type="button" class="btn-text" data-copy-name="{{ $r.name }}">{{ partial "ui/icon.html" "copy" }}<span>{{ i18n "env.copy" }}</span></button>
+    <a class="btn-text" href="{{ .url }}#{{ $r.anchor }}{{ if $r.isFile }}-file{{ end }}">{{ i18n "env.ref" }}</a>
+    {{- if and $e.file (not $r.isFile) (not $compose) }}<button type="button" class="btn-text" data-copy-name="{{ $r.base }}_FILE">{{ partial "ui/icon.html" "copy" }}<span>{{ $r.base }}_FILE</span></button>{{ end }}
+  </div>
+  <p class="tip-hint" data-env-group hidden></p>
+</div>

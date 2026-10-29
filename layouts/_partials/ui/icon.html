@@ -1,0 +1,4 @@
+{{- /* Иконка из спрайта. Вход: имя (строка) или dict "name" "class". Декор: aria-hidden. */ -}}
+{{- $name := . -}}{{- $class := "i i-16" -}}
+{{- if reflect.IsMap . }}{{ $name = .name }}{{ with .class }}{{ $class = . }}{{ end }}{{ end -}}
+<svg class="{{ $class }}" aria-hidden="true" focusable="false"><use href="#i-{{ $name }}"/></svg>

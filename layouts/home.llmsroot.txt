@@ -1,0 +1,2 @@
+{{- /* llms.txt по llmstxt.org: описание, страницы языка с description, ссылка на другой язык. Для EN также корневой /llms.txt (формат LLMSRoot). */ -}}
+{{ partial "llms/index.txt" . }}

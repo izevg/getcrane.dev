@@ -1,0 +1,12 @@
+{{- /* Главная. Порядок секций (безопасность первой) = порядок DOM = порядок фокуса. Вход: dict "page" "root". */ -}}
+{{- $p := .page -}}
+{{- $lang := $p.Language.Lang -}}
+{{- $d := site.Data.home -}}
+<main id="content" class="home">
+  {{ partial "home/hero.html" (dict "page" $p "root" .root "d" $d "lang" $lang) }}
+  {{ partial "home/guarantees.html" (dict "d" $d "lang" $lang) }}
+  {{ partial "home/audiences.html" (dict "d" $d "lang" $lang) }}
+  {{ partial "home/formats.html" (dict "d" $d "lang" $lang) }}
+  {{ partial "home/deploy.html" (dict "d" $d "lang" $lang) }}
+  {{ partial "home/start.html" (dict "d" $d "lang" $lang) }}
+</main>

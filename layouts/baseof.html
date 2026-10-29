@@ -1,0 +1,9 @@
+{{- /*
+  Общий каркас. Документ разбит на две части (document/top, document/bottom), потому что корневой лендинг
+  (home.roothtml.html) собирает ту же страницу без блоков и должен знать, что он «корневой».
+  .Content вычисляется до head: шорткоды и render-хуки при рендере ставят флаги (острова JS, подсказки).
+*/ -}}
+{{- $_ := .Content -}}
+{{- partial "document/top.html" (dict "page" . "root" false) -}}
+{{- block "main" . }}{{ end -}}
+{{- partial "document/bottom.html" . -}}

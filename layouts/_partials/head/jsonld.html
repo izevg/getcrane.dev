@@ -1,0 +1,28 @@
+{{- /* JSON-LD: SoftwareApplication на главной, TechArticle + BreadcrumbList на страницах, DefinedTermSet на глоссарии. */ -}}
+{{- $p := .page -}}
+{{- $lang := $p.Language.Lang -}}
+{{- $org := dict "@type" "Organization" "name" site.Title "url" "https://getcrane.dev/" -}}
+{{- $graph := slice -}}
+{{- if $p.IsHome -}}
+  {{- $app := dict "@type" "SoftwareApplication" "name" site.Title "applicationCategory" "DeveloperApplication" "operatingSystem" "Linux" "license" "https://www.apache.org/licenses/LICENSE-2.0" "url" $p.Permalink "inLanguage" $p.Language.LanguageCode -}}
+  {{- with .desc }}{{ $app = merge $app (dict "description" .) }}{{ end -}}
+  {{- $graph = $graph | append $app -}}
+{{- else -}}
+  {{- $art := dict "@type" "TechArticle" "headline" $p.Title "inLanguage" $p.Language.LanguageCode "url" $p.Permalink "publisher" $org "isPartOf" (dict "@type" "WebSite" "name" site.Title "url" "https://getcrane.dev/") -}}
+  {{- with $p.Params.description }}{{ $art = merge $art (dict "description" .) }}{{ end -}}
+  {{- $graph = $graph | append $art -}}
+  {{- $items := slice -}}
+  {{- range $i, $a := $p.Ancestors.Reverse -}}
+    {{- if not $a.IsHome }}{{ $items = $items | append (dict "@type" "ListItem" "position" (add (len $items) 1) "name" $a.Title "item" $a.Permalink) }}{{ end -}}
+  {{- end -}}
+  {{- $items = $items | append (dict "@type" "ListItem" "position" (add (len $items) 1) "name" $p.Title "item" $p.Permalink) -}}
+  {{- $graph = $graph | append (dict "@type" "BreadcrumbList" "itemListElement" $items) -}}
+  {{- if eq $p.Params.layout "glossary" -}}
+    {{- $terms := slice -}}
+    {{- range $id, $e := site.Data.glossary -}}
+      {{- with index $e $lang }}{{ $terms = $terms | append (dict "@type" "DefinedTerm" "@id" (printf "%s#%s" $p.Permalink $id) "name" .term "description" .def "inLanguage" $p.Language.LanguageCode) }}{{ end -}}
+    {{- end -}}
+    {{- $graph = $graph | append (dict "@type" "DefinedTermSet" "name" $p.Title "inLanguage" $p.Language.LanguageCode "hasDefinedTerm" $terms) -}}
+  {{- end -}}
+{{- end -}}
+<script type="application/ld+json">{{ dict "@context" "https://schema.org" "@graph" $graph | jsonify | safeHTML }}</script>

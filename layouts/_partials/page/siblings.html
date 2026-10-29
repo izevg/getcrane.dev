@@ -1,0 +1,10 @@
+{{- /* «Что дальше» для страниц in-development: соседние страницы раздела по навигации. Вход: страница. */ -}}
+{{- $p := . -}}
+{{- with where $p.CurrentSection.RegularPages "RelPermalink" "ne" $p.RelPermalink -}}
+<section data-pagefind-ignore>
+  <h2>{{ i18n "nav.next-steps" }}</h2>
+  <ul class="children">
+    {{- range .ByWeight }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ with .Params.description }}<p>{{ . }}</p>{{ end }}</li>{{ end }}
+  </ul>
+</section>
+{{- end -}}

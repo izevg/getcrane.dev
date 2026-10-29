@@ -1,0 +1,16 @@
+{{- /*
+  Острова JS (TypeScript → esbuild внутри Hugo). Грузятся как module, то есть отложенно; страница читается без них.
+  chrome — на каждой странице; article — на текстовых; tips и tabs — только если на странице есть их разметка (флаги ставят шорткоды и render-хуки).
+*/ -}}
+{{- $p := . -}}
+{{- $names := slice "chrome" -}}
+{{- if not $p.IsHome }}{{ $names = $names | append "article" }}{{ end -}}
+{{- if $p.Scratch.Get "f-tips" }}{{ $names = $names | append "tips" }}{{ end -}}
+{{- if $p.Scratch.Get "f-tabs" }}{{ $names = $names | append "tabs" }}{{ end -}}
+{{- range $names -}}
+  {{- $src := resources.Get (printf "ts/%s.ts" .) -}}
+  {{- if not $src }}{{ errorf "js: нет assets/ts/%s.ts" . }}{{ end -}}
+  {{- $opts := dict "target" "es2022" "format" "esm" "minify" hugo.IsProduction "targetPath" (printf "js/%s.js" .) -}}
+  {{- $js := $src | js.Build $opts | fingerprint -}}
+  <script type="module" src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
+{{ end -}}

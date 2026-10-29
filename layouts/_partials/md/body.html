@@ -1,0 +1,42 @@
+{{- /*
+  Чистый Markdown страницы для .md-версии и llms-full: шорткоды сайта заменяются обычным Markdown, остальное — как написал автор.
+  term → слово, xref → ссылка, cite → ссылка на источник, env → `имя`, tabs → жирная подпись клиента,
+  screenshot → подпись, in-development → фиксированная фраза и текст. Вход: dict "page".
+*/ -}}
+{{- $p := .page -}}
+{{- $lang := $p.Language.Lang -}}
+{{- $s := $p.RawContent -}}
+{{- range findRESubmatch `(?s)\{\{<\s*in-development\s*>\}\}(.*?)\{\{<\s*/in-development\s*>\}\}` $s -}}
+  {{- $s = replace $s (index . 0) (printf "%s %s" (i18n "in-development") (trim (index . 1) " \n")) -}}
+{{- end -}}
+{{- range findRESubmatch `\{\{<\s*term\s+"([^"]+)"(?:\s+"([^"]*)")?\s*>\}\}` $s -}}
+  {{- $rep := index . 2 -}}
+  {{- if not $rep }}{{ with index site.Data.glossary (index . 1) }}{{ $rep = (index . $lang).term }}{{ end }}{{ end -}}
+  {{- $s = replace $s (index . 0) $rep -}}
+{{- end -}}
+{{- range findRESubmatch `\{\{<\s*xref\s+"([^"#]+)(?:#([^"]+))?"(?:\s+"([^"]*)")?\s*>\}\}` $s -}}
+  {{- $m := . -}}
+  {{- with site.GetPage (strings.TrimSuffix "/" (index $m 1)) -}}
+    {{- $href := .Permalink -}}
+    {{- if index $m 2 }}{{ $href = printf "%s#%s" .Permalink (index $m 2) }}{{ end -}}
+    {{- $s = replace $s (index $m 0) (printf "[%s](%s)" ((index $m 3) | default .Title) $href) -}}
+  {{- end -}}
+{{- end -}}
+{{- range findRESubmatch `\{\{<\s*cite\s+"([^"]+)"\s*>\}\}` $s -}}
+  {{- $m := . -}}
+  {{- with index site.Data.sources (index $m 1) -}}
+    {{- $s = replace $s (index $m 0) (printf "[%s](%s)" (.short | default .publisher) .url) -}}
+  {{- end -}}
+{{- end -}}
+{{- range findRESubmatch `\{\{<\s*env\s+"([^"]+)"\s*>\}\}` $s -}}
+  {{- $s = replace $s (index . 0) (printf "`%s`" (index . 1)) -}}
+{{- end -}}
+{{- range findRESubmatch `\{\{<\s*tab\s+"([^"]+)"\s*>\}\}` $s -}}
+  {{- $s = replace $s (index . 0) (printf "**%s**\n\n" (index . 1)) -}}
+{{- end -}}
+{{- range findRESubmatch `\{\{<\s*screenshot[^>]*?alt="([^"]*)"[^>]*>\}\}` $s -}}
+  {{- $s = replace $s (index . 0) (partial "ui/t.html" (dict "k" "screenshot.placeholder" "v" (dict "alt" (index . 1)))) -}}
+{{- end -}}
+{{- $s = replaceRE `\{\{<\s*/?(?:tabs|tab|env-table)[^>]*>\}\}` "" $s -}}
+{{- $s = replaceRE `(?m)\s\{#([A-Za-z0-9_-]+)\s+[^}]*\}$` " {#${1}}" $s -}}
+{{- return $s -}}

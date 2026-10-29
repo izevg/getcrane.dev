@@ -1,0 +1,22 @@
+@layer page {
+  /* Глоссарий. */
+  .glossary { margin-block-start: var(--space-8); max-inline-size: var(--measure); }
+  .gl-entry { padding: var(--space-4); border-block-end: 1px solid var(--border); border-inline-start: 3px solid transparent; }
+  .gl-entry dt { font-weight: 650; font-size: var(--type-h3); }
+  .gl-entry dd { margin: var(--space-2) 0 0; }
+  .gl-see { margin-block-start: var(--space-2); font-size: var(--type-small); color: var(--muted-foreground); }
+  .gl-entry:target { background: var(--ref-target-bg); border-inline-start-color: var(--ref-target-bar); }
+
+  /* Справочник переменных окружения. */
+  .env-table tbody tr:target > * { background: var(--ref-target-bg); }
+  .env-table tbody tr:target > th { box-shadow: inset 3px 0 0 var(--ref-target-bar); }
+  .env-table tbody tr { scroll-margin-top: calc(var(--header-height) + 8px); }
+  .env-table th[scope="row"] { min-inline-size: 14rem; }
+  .env-name { display: inline-flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+  .env-name a { text-decoration: none; }
+  .env-name a:hover { text-decoration: underline; }
+  .env-table .req-yes { font-weight: 650; }
+  .env-mentions { margin-block-start: var(--space-2); font-size: var(--type-caption); font-weight: 400; }
+  .env-mentions ul { padding-inline-start: 1.2em; margin-block-start: var(--space-1); }
+  .env-back { margin-block-end: var(--space-4); font-size: var(--type-small); }
+}

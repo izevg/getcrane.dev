@@ -1,0 +1,60 @@
+{{- /*
+  {{< env-table >}} (все scope="server"), group="network" (группа server), scope="compose", scope="ci": справочник переменных из data/env.yaml.
+  Строка tr id=<anchor>; для file: true в ячейке «Из файла» есть id=<anchor>-file; для secret: true значение по умолчанию не показывается.
+  Для scope: compose и ci «Из файла» и «Ключ TOML» не применимы. Подсказки env на этой странице не выводятся (см. env.html);
+  Колонка «Назначение» берёт table.<lang> (markdown), иначе однострочное <lang>; подсказка env всегда берёт однострочное. Вместо подсказок — «Где упоминается (N)»: страницы того же языка, где переменная встречена в тексте или в блоке кода.
+*/ -}}
+{{- $want := .Get "scope" | default "server" -}}
+{{- $group := .Get "group" -}}
+{{- $groups := slice "config" "network" "access" "storage" "limits" "repositories" "logging" -}}
+{{- if and $group (not (in $groups $group)) }}{{ errorf "env-table: неизвестная группа %q (%s); допустимы %s" $group .Position (delimit $groups ", ") }}{{ end -}}
+{{- if and $group (ne $want "server") }}{{ errorf "env-table: group применим только к scope=server (%s)" .Position }}{{ end -}}
+{{- $p := .Page -}}
+{{- $lang := $p.Language.Lang -}}
+{{- $env := site.Data.env | default dict -}}
+<div class="table-wrap" role="region" tabindex="0" aria-label="{{ i18n "table.default" }}" data-table>
+<table class="env-table">
+  <thead>
+    <tr>
+      <th scope="col">{{ i18n "env.name" }}</th>
+      <th scope="col">{{ i18n "env.purpose" }}</th>
+      <th scope="col">{{ i18n "env.default" }}</th>
+      <th scope="col">{{ i18n "env.required" }}</th>
+      <th scope="col">{{ i18n "env.file" }}</th>
+      <th scope="col">{{ i18n "env.toml" }}</th>
+    </tr>
+  </thead>
+  <tbody>
+  {{- range $name, $e := $env }}
+    {{- $scope := $e.scope | default "server" -}}
+    {{- if and (eq $want $scope) (or (not $group) (eq $group ($e.group | default ""))) }}
+    {{- $anchor := $e.anchor | default (lower (replace $name "_" "-")) -}}
+    {{- $d := $e.default -}}
+    {{- $pat := printf `(?:^|[^A-Za-z0-9_])%s(?:_FILE)?(?:[^A-Za-z0-9_]|$)` $name -}}
+    {{- $mentions := slice -}}
+    {{- range site.RegularPages }}{{ if and (ne .RelPermalink $p.RelPermalink) (findRE $pat .RawContent 1) }}{{ $mentions = $mentions | append . }}{{ end }}{{ end }}
+    <tr id="{{ $anchor }}">
+      <th scope="row">
+        <span class="env-name"><a href="#{{ $anchor }}"><code>{{ $name }}</code></a><button type="button" class="btn-icon js-only" data-copy-name="{{ $name }}" aria-label="{{ i18n "env.copy" }}">{{ partial "ui/icon.html" "copy" }}</button></span>
+        {{- if $mentions }}
+        <details class="env-mentions"><summary>{{ partial "ui/t.html" (dict "k" "env.mentions" "v" (dict "n" (len $mentions))) }}</summary>
+          <ul>{{ range $mentions }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}</ul>
+        </details>
+        {{- end }}
+      </th>
+      <td>{{ with $e.table }}{{ with index . $lang }}{{ . | $p.RenderString (dict "display" "block") }}{{ else }}{{ index $e $lang }}{{ end }}{{ else }}{{ index $e $lang }}{{ end }}</td>
+      <td>
+        {{- if $e.secret }}—
+        {{- else if eq (printf "%T" $d) "<nil>" }}{{ i18n "env.none" }}
+        {{- else if eq (string $d) "" }}{{ i18n "env.empty" }}
+        {{- else }}<code>{{ string $d }}</code>{{ end -}}
+      </td>
+      <td>{{ if $e.required }}<span class="req-yes">{{ i18n "env.yes" }}</span>{{ else }}{{ i18n "env.no" }}{{ end }}</td>
+      <td>{{ if ne $scope "server" }}—{{ else if $e.file }}<span id="{{ $anchor }}-file"><code>{{ $name }}_FILE</code></span>{{ else }}{{ i18n "env.none" }}{{ end }}</td>
+      <td>{{ if ne $scope "server" }}—{{ else if $e.toml }}<code>{{ $e.toml }}</code>{{ else }}{{ i18n "env.envOnly" }}{{ end }}</td>
+    </tr>
+    {{- end }}
+  {{- end }}
+  </tbody>
+</table>
+</div>

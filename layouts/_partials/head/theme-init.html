@@ -1,0 +1,2 @@
+{{- /* Синхронный скрипт до таблицы стилей: ставит data-theme и color-scheme, чтобы не было кадра чужой темы. До 1 КБ. Логика как в консоли (ключ crane.colorScheme). */ -}}
+<script>(()=>{const d=document.documentElement;let m="system";try{const s=localStorage.getItem("crane.colorScheme");if(s==="light"||s==="dark"||s==="system")m=s}catch{}const k=m==="dark"||m==="system"&&matchMedia("(prefers-color-scheme:dark)").matches;d.dataset.theme=k?"dark":"light";d.style.colorScheme=k?"dark":"light";d.classList.add("js")})()</script>

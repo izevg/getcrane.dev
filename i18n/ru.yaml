@@ -1,0 +1,138 @@
+# Строки интерфейса (RU). Ключи плоские, плейсхолдеры в одинарных фигурных скобках: {q}, {n}, {name}.
+# Набор ключей совпадает с en.yaml; сверку выполняет scripts/check-content.ts.
+skip: Перейти к содержимому
+docs: Документация
+nav.sections: Разделы документации
+nav.breadcrumb: Навигационная цепочка
+nav.main: Основная навигация
+nav.pager: Предыдущая и следующая страницы
+nav.next-steps: Что дальше
+nav.footer: Ссылки подвала
+glossary.see: См. также
+list.children: В этом разделе
+sitemap: Карта сайта
+
+search.trigger: Поиск
+search.placeholder: Поиск по документации
+search.empty: По запросу «{q}» ничего не найдено. Проверьте написание или сбросьте фильтры.
+search.loading: Загрузка индекса…
+search.error: "Поиск недоступен: не удалось загрузить индекс. Обновите страницу."
+filter.section: Раздел
+filter.audience: Аудитория
+filter.genre: Жанр
+filter.status: Статус
+filter.reset: Сбросить фильтры
+
+theme: Тема
+theme.light: Светлая
+theme.dark: Тёмная
+theme.system: Как в системе
+theme.current: "Тема: {mode}"
+lang.label: Язык
+lang.ru: RU, русский
+lang.en: EN, English
+menu: Меню
+menu.close: Закрыть меню
+source: Исходный код
+toc: На этой странице
+terms: Термины на странице
+sources: Источники
+
+copy.code: Копировать код
+copied: Скопировано
+copy.md: Копировать как Markdown
+copied.md: Markdown скопирован
+md.link: Markdown-версия
+copy.error: Не удалось скопировать. Выделите текст вручную.
+
+prev: Назад
+next: Далее
+
+callout.note: Примечание
+callout.tip: Совет
+callout.important: Важно
+callout.warning: Внимание
+callout.caution: Осторожно
+callout.limits: Границы гарантии
+callout.developer: Для разработчика
+callout.platform: Для инженера платформы
+callout.security: Для специалиста по безопасности
+callout.auditor: Для аудитора
+
+audience.developer: Разработчик
+audience.platform: Платформа
+audience.security: Безопасность
+audience.auditor: Аудит
+audience.prefix: "Раздел для:"
+
+role.developer: Разработчик
+role.platform: Инженер платформы
+role.security: Специалист по безопасности
+role.auditor: Аудитор
+genre.tutorial: Руководство
+genre.how-to: Инструкция
+genre.reference: Справочник
+genre.explanation: Объяснение
+
+state.target: Целевое состояние
+state.current: Текущая версия
+status.available: Доступно
+status.in-development: В разработке
+in-development: Функциональность в разработке.
+
+term.more: Определение в глоссарии
+xref.more: Открыть страницу
+cite.list: К списку источников
+cite.accessed: Проверено {date}
+cite.back: Вернуться к упоминанию {n}
+cite.n: "Источник {n}"
+screenshot.placeholder: "Снимок экрана: {alt}"
+diagram.text: Текст диаграммы
+diagram.default: Диаграмма
+anchor: Ссылка на раздел «{title}»
+code.label: "Код: {lang}"
+table.default: Таблица
+tabs.default: Клиент
+new-window: (откроется в новом окне)
+
+env.required: Обязательная
+env.optional: Необязательная
+env.default: По умолчанию
+env.none: нет
+env.empty: пустая строка
+env.file: Из файла
+env.toml: Ключ TOML
+env.envOnly: только окружение
+env.fileOf: Путь к файлу со значением {name}
+env.copy: Копировать имя
+env.copied: "{name} скопирован"
+env.ref: В справочнике
+env.group: ← → — другие переменные блока
+env.mentions: Где упоминается ({n})
+env.back: ← Назад к «{title}»
+env.secret: "Секрет: передавайте через {name}_FILE"
+env.compose: Переменная файла .env для Docker Compose
+env.name: Переменная
+env.ci: Переменная конфигурации CI
+env.purpose: Назначение
+env.yes: Да
+env.no: Нет
+
+footer.license: "Лицензия: {name}"
+footer.vuln: Сообщить об уязвимости
+footer.fonts: Шрифты Onest и JetBrains Mono, лицензия SIL Open Font License 1.1
+
+404.title: Страница не найдена
+404.text: Адрес неверен или страница переехала. Откройте начало документации или воспользуйтесь поиском.
+404.home: Открыть документацию
+
+home.otherlang: English version
+home.path: Путь пакета через CRANE
+home.path.group: CRANE
+home.guarantees: Гарантии и их границы
+home.guarantees.all: Все гарантии
+home.limit: "Граница:"
+home.start: С чего начать
+home.formats: Пять экосистем
+home.deploy: Развёртывание
+home.getting: Начало работы

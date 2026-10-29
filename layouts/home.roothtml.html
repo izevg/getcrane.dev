@@ -1,0 +1,5 @@
+{{- /* Корень «/»: тот же EN-лендинг с заметной ссылкой на RU, без редиректа. canonical указывает на /en/. */ -}}
+{{- $_ := .Content -}}
+{{- partial "document/top.html" (dict "page" . "root" true) -}}
+{{- partial "home/landing.html" (dict "page" . "root" true) -}}
+{{- partial "document/bottom.html" . -}}

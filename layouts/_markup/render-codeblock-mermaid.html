@@ -1,0 +1,26 @@
+{{- /*
+  Диаграмма mermaid. SVG (светлый и тёмный) рендерит scripts/render-mermaid.ts при сборке в CI → assets/diagrams/<хэш>.{light,dark}.svg;
+  у читателя JS для диаграмм нет. Хэш — первые 16 знаков SHA-256 от исходника без краевых пробелов (тот же расчёт в скрипте).
+  Локально шаг пропускается переменной CRANE_SKIP_MERMAID=1; тогда вместо картинки выводится исходник (в production без SVG — ошибка сборки).
+  Подпись обязательна: ```mermaid {caption="…"}.
+*/ -}}
+{{- $src := trim .Inner " \n\r\t" -}}
+{{- $h := substr (crypto.SHA256 $src) 0 16 -}}
+{{- $light := resources.Get (printf "diagrams/%s.light.svg" $h) -}}
+{{- $dark := resources.Get (printf "diagrams/%s.dark.svg" $h) -}}
+{{- $cap := .Attributes.caption -}}
+{{- if not $cap }}{{ warnidf "mermaid-caption" "mermaid: у диаграммы нет подписи (caption) в %s" .Page.Path }}{{ end -}}
+{{- $capid := printf "dg-%s-cap" $h -}}
+<figure class="diagram">
+{{- if and $light $dark }}
+  <div class="diagram-img diagram-light" role="img" aria-labelledby="{{ $capid }}" data-pagefind-ignore>{{ $light.Content | safeHTML }}</div>
+  <div class="diagram-img diagram-dark" role="img" aria-labelledby="{{ $capid }}" data-pagefind-ignore>{{ $dark.Content | safeHTML }}</div>
+{{- else }}
+  {{- if hugo.IsProduction }}{{ errorf "mermaid: нет SVG для диаграммы %s в %s; выполните npm run mermaid (или задайте HUGO_ENV=development для локальной сборки без диаграмм)" $h .Page.Path }}{{ end }}
+{{- end }}
+  <figcaption id="{{ $capid }}"{{ if not $cap }} class="sr"{{ end }}>{{ $cap | default (i18n "diagram.default") }}</figcaption>
+  <details class="diagram-src" data-pagefind-ignore{{ if not (and $light $dark) }} open{{ end }}>
+    <summary>{{ i18n "diagram.text" }}</summary>
+    <div class="code" data-lang="mermaid"><div class="code-head"><span class="code-lang">mermaid</span><span class="code-actions"></span></div><pre class="chroma"><code class="language-mermaid" data-lang="mermaid">{{ $src }}</code></pre></div>
+  </details>
+</figure>

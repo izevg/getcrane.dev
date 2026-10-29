@@ -1,0 +1,4 @@
+{{- /* {{< tabs "Клиент" >}}{{< tab "Cargo" >}}…{{< /tab >}}{{< /tabs >}}. Без JS панели идут стеком с видимым заголовком клиента; остров tabs.ts собирает вкладки. */ -}}
+{{- $label := .Get 0 | default (i18n "tabs.default") -}}
+{{- .Page.Scratch.Set "f-tabs" true -}}
+<div class="tabs" data-tabs data-label="{{ $label }}">{{ .Inner }}</div>

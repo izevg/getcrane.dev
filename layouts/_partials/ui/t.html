@@ -1,0 +1,4 @@
+{{- /* Строка интерфейса с подстановкой: partial "ui/t.html" (dict "k" "cite.accessed" "v" (dict "date" $d)). Плейсхолдеры в каталоге — {name}. */ -}}
+{{- $s := i18n .k -}}
+{{- range $key, $val := .v }}{{ $s = replace $s (printf "{%s}" $key) (string $val) }}{{ end -}}
+{{- return $s -}}

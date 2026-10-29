@@ -1,0 +1,18 @@
+{{- /* Шапка страницы внутри main: крошки, h1, метки, лид, действия. Вход: страница. */ -}}
+{{- $p := . -}}
+{{- $lang := $p.Language.Lang -}}
+<header class="page-head">
+  {{ partial "nav/breadcrumbs.html" $p }}
+  <h1>{{ partial "util/typo.html" (dict "html" ($p.Title | htmlEscape) "lang" $lang) }}</h1>
+  <div class="chips-row">
+    {{- with $p.Params.audience }}{{ partial "ui/audience-chips.html" (dict "keys" . "ctx" $p.Path) }}{{ end }}
+    {{ partial "ui/badges.html" $p }}
+  </div>
+  {{- with $p.Params.description }}<p class="lead">{{ partial "util/typo.html" (dict "html" (. | htmlEscape) "lang" $lang) }}</p>{{ end }}
+  {{- with $p.OutputFormats.Get "markdown" }}
+  <div class="page-actions">
+    <button class="btn-text js-only" type="button" data-copy-md="{{ .RelPermalink }}">{{ partial "ui/icon.html" "copy" }}<span>{{ i18n "copy.md" }}</span></button>
+    <a href="{{ .RelPermalink }}" type="text/markdown">{{ i18n "md.link" }}</a>
+  </div>
+  {{- end }}
+</header>

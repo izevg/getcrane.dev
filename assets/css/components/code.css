@@ -1,0 +1,52 @@
+@layer component {
+  /* Блок кода. Шапка резервируется всегда: кнопка копирования появляется на месте без сдвига. */
+  .code { background: var(--code-bg); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .code-head { display: flex; align-items: center; justify-content: space-between; min-block-size: 36px; padding: 0 var(--space-2) 0 var(--space-4); }
+  .code-lang { font-size: var(--type-caption); color: var(--muted-foreground); font-family: var(--font-mono); }
+  .code-actions { display: inline-flex; min-block-size: 32px; }
+  .code pre {
+    margin: 0; padding: var(--space-3) var(--space-4) var(--space-4); overflow: auto;
+    font-size: var(--type-code); line-height: 1.6; tab-size: 2; color: var(--foreground);
+  }
+  .code pre code { font-size: inherit; white-space: pre; background: none; padding: 0; }
+  .copy-btn { gap: 6px; font-size: var(--type-caption); }
+  .copy-btn .copy-label { display: none; }
+  @media (min-width: 48rem) { .copy-btn .copy-label { display: inline; } }
+  .copy-btn[data-state="copied"] { color: var(--success); }
+  .copy-btn[data-state="error"] { color: var(--error); }
+  .copy-btn [data-icon="check"], .copy-btn[data-state="copied"] [data-icon="copy"] { display: none; }
+  .copy-btn[data-state="copied"] [data-icon="check"] { display: block; }
+
+  /* Подсветка Chroma: ровно семь ролей. Курсив только у комментариев. */
+  .chroma .k, .chroma .kc, .chroma .kd, .chroma .kn, .chroma .kp, .chroma .kr, .chroma .kt { color: var(--syn-keyword); }
+  .chroma .s, .chroma .sa, .chroma .sb, .chroma .sc, .chroma .dl, .chroma .sd, .chroma .s2, .chroma .se,
+  .chroma .sh, .chroma .si, .chroma .sx, .chroma .sr, .chroma .s1, .chroma .ss, .chroma .gi { color: var(--syn-string); }
+  .chroma .m, .chroma .mb, .chroma .mf, .chroma .mh, .chroma .mi, .chroma .il, .chroma .mo { color: var(--syn-number); }
+  .chroma .na, .chroma .nb, .chroma .bp, .chroma .nc, .chroma .nf, .chroma .fm, .chroma .nt, .chroma .nv,
+  .chroma .vc, .chroma .vg, .chroma .vi, .chroma .vm, .chroma .nd, .chroma .no { color: var(--syn-attr); }
+  .chroma .c, .chroma .ch, .chroma .cm, .chroma .c1, .chroma .cs, .chroma .cp, .chroma .cpf { color: var(--syn-comment); font-style: italic; }
+  .chroma .o, .chroma .ow, .chroma .p { color: var(--syn-punct); }
+  .chroma .err, .chroma .gd { color: var(--syn-error); background: none; }
+  .chroma .go { color: var(--muted-foreground); }
+  .chroma .gp { color: var(--syn-punct); user-select: none; -webkit-user-select: none; }
+
+  /* env в блоках кода: без подложки, подчёркивание цветом токена. */
+  .chroma a.env, .chroma span.env {
+    color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; cursor: pointer;
+  }
+  .chroma a.env:hover { text-decoration-thickness: 2px; color: inherit; }
+  .chroma .env[aria-expanded="true"] { text-decoration-thickness: 2px; text-decoration-color: var(--env-underline-active); }
+
+  /* Таблицы: регион со своим скроллом. */
+  .table-wrap { overflow-x: auto; max-inline-size: 100%; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); }
+  .table-wrap table { border-collapse: collapse; inline-size: 100%; font-size: var(--type-small); line-height: 1.5; }
+  .table-wrap caption { text-align: start; padding: var(--space-3) var(--space-4); font-weight: 650; }
+  .table-wrap :is(th, td) { padding: var(--space-2) var(--space-4); text-align: start; vertical-align: top; border-block-end: 1px solid var(--border); }
+  .table-wrap :is(th, td) code { overflow-wrap: normal; white-space: nowrap; }
+  .table-wrap thead th { font-weight: 650; background: var(--muted); white-space: nowrap; }
+  .table-wrap tbody tr:last-child > * { border-block-end: 0; }
+  .table-wrap tbody tr:hover { background: var(--row-hover-bg); }
+  .table-wrap tbody th { font-weight: 600; }
+  .ta-center { text-align: center !important; }
+  .ta-right { text-align: end !important; }
+}

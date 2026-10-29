@@ -1,0 +1,15 @@
+{{- /* Дерево разделов. Вход: dict "cur" (текущая страница) "pages" (список страниц уровня), "root" (true на верхнем уровне). Порядок — по weight. */ -}}
+{{- $cur := .cur -}}
+<ul{{ if .root }} class="tree"{{ end }}>
+{{- range .pages.ByWeight }}
+  {{- $dev := eq .Params.status "in-development" -}}
+  {{- if .IsSection }}
+  <li><details{{ if or (.Eq $cur) ($cur.IsDescendant .) }} open{{ end }}>
+    <summary><a href="{{ .RelPermalink }}"{{ if .Eq $cur }} aria-current="page"{{ end }}>{{ .Title }}</a></summary>
+    {{ partial "nav/tree.html" (dict "cur" $cur "pages" .Pages "root" false) }}
+  </details></li>
+  {{- else }}
+  <li><a href="{{ .RelPermalink }}"{{ if .Eq $cur }} aria-current="page"{{ end }}>{{ .Title }}{{ if $dev }} <span class="dev">· {{ i18n "status.in-development" }}</span>{{ end }}</a></li>
+  {{- end }}
+{{- end }}
+</ul>

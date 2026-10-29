@@ -1,0 +1,25 @@
+{{- /* Раздел «Источники»: добавляется автоматически, если на странице был хотя бы один cite. Вход: страница. */ -}}
+{{- $p := . -}}
+{{- $lang := $p.Language.Lang -}}
+{{- with $p.Scratch.Get "cites" -}}
+<section class="sources" data-pagefind-ignore>
+  <h2 id="sources">{{ i18n "sources" }}</h2>
+  <ol>
+    {{- range $i, $id := . }}
+    {{- $n := add $i 1 -}}
+    {{- $s := index site.Data.sources $id -}}
+    {{- $count := int (index ($p.Scratch.Get "cite-m" | default dict) $id) }}
+    <li id="source-{{ $n }}">
+      <span class="src-pub">{{ $s.publisher }}</span> — <a href="{{ $s.url }}" rel="noopener noreferrer">{{ $s.title }}</a>
+      <span class="src-meta">
+        {{- with $s.date }}{{ (time.AsTime .).Format "2006-01-02" }} · {{ end -}}
+        {{- partial "ui/t.html" (dict "k" "cite.accessed" "v" (dict "date" ((time.AsTime $s.accessed).Format "2006-01-02"))) -}}
+      </span>
+      {{- range seq $count }}
+      <a class="backref" href="#cite-{{ $n }}-{{ . }}" aria-label="{{ partial "ui/t.html" (dict "k" "cite.back" "v" (dict "n" .)) }}">↑</a>
+      {{- end }}
+    </li>
+    {{- end }}
+  </ol>
+</section>
+{{- end -}}

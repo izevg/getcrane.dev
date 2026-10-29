@@ -1,0 +1,18 @@
+{{- /*
+  Поиск переменной в data/env.yaml. Вход: имя. Выход: dict ("name" "base" "isFile" "e" "anchor") или nil.
+  Форма <ИМЯ>_FILE отдельной записью не заводится: выводится из file: true базовой записи.
+*/ -}}
+{{- $n := . -}}
+{{- $env := site.Data.env | default dict -}}
+{{- $res := false -}}
+{{- $e := index $env $n -}}
+{{- if $e -}}
+  {{- $res = dict "name" $n "base" $n "isFile" false "e" $e "anchor" ($e.anchor | default (lower (replace $n "_" "-"))) -}}
+{{- else if hasSuffix "_FILE" $n -}}
+  {{- $b := strings.TrimSuffix "_FILE" $n -}}
+  {{- $be := index $env $b -}}
+  {{- if and $be $be.file -}}
+    {{- $res = dict "name" $n "base" $b "isFile" true "e" $be "anchor" ($be.anchor | default (lower (replace $b "_" "-"))) -}}
+  {{- end -}}
+{{- end -}}
+{{- return $res -}}

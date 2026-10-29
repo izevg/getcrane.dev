@@ -1,0 +1,30 @@
+{{- /*
+  {{< xref "features/security/upstream-quarantine" >}} или {{< xref "deploy/docker-compose#steps" "запуск в Docker Compose" >}}.
+  Путь от корня языка, раздел без _index. Несуществующий путь ломает сборку. Существование якоря проверяет scripts/check-content.ts
+  (запрос .Fragments у чужой страницы из шорткода рискует циклической зависимостью рендера).
+*/ -}}
+{{- $arg := .Get 0 -}}
+{{- $p := .Page -}}
+{{- $path := $arg -}}{{- $anchor := "" -}}
+{{- with findRESubmatch `^([^#]*)#(.+)$` $arg }}{{ $path = index (index . 0) 1 }}{{ $anchor = index (index . 0) 2 }}{{ end -}}
+{{- $path = strings.TrimSuffix "/" (strings.TrimPrefix "/" $path) -}}
+{{- $t := site.GetPage $path -}}
+{{- if not $t }}{{ errorf "xref: страница %q не найдена (%s)" $path .Position }}{{ end -}}
+{{- if $t.Eq $p }}{{ errorf "xref: ссылка на собственную страницу %q; используйте обычную ссылку на якорь (%s)" $path .Position }}{{ end -}}
+{{- $text := .Get 1 | default $t.Title -}}
+{{- $href := cond (ne $anchor "") (printf "%s#%s" $t.RelPermalink $anchor) $t.RelPermalink -}}
+{{- $tid := printf "tip-x-%s" (replace $path "/" "-") -}}
+{{- $tips := $p.Scratch.Get "tips" | default dict -}}
+{{- if not (index $tips $tid) -}}
+  {{- $crumbs := slice -}}
+  {{- range $t.Ancestors.Reverse }}{{ if not .IsHome }}{{ $crumbs = $crumbs | append .Title }}{{ end }}{{ end -}}
+  {{- $html := printf `<div id="%s" class="tip tip-xref" popover="manual" role="tooltip">%s<p class="tip-title">%s</p><p class="tip-desc" id="%s-d">%s</p><p class="chips">%s</p><a class="tip-more btn-text" href="%s">%s</a></div>`
+        $tid
+        (cond (gt (len $crumbs) 0) (printf `<p class="tip-path">%s</p>` (delimit $crumbs " / " | htmlEscape)) "")
+        ($t.Title | htmlEscape) $tid (($t.Params.description | default "") | htmlEscape)
+        (partial "ui/badges.html" $t) $t.RelPermalink (i18n "xref.more") -}}
+  {{- $p.Scratch.SetInMap "tips" $tid ($html | safeHTML) -}}
+{{- end -}}
+{{- $p.Scratch.Set "f-tips" true -}}
+<a class="xref" href="{{ $href }}" data-tip="{{ $tid }}" aria-describedby="{{ $tid }}-d">{{ $text }}</a>
+{{- /* Без хвостового перевода строки: шорткод стоит в потоке текста. */ -}}

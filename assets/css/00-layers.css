@@ -1,0 +1,2 @@
+/* Порядок слоёв: что ниже, то сильнее. Токены: primitive → semantic → component. */
+@layer reset, primitive, semantic, component, base, layout, page, a11y;

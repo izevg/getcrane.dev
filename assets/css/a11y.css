@@ -1,0 +1,35 @@
+/* Режимы пользователя: повышенная контрастность, forced-colors, переходы между страницами. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+}
+::view-transition-group(root) { animation-duration: var(--dur-base); animation-timing-function: var(--ease-out); }
+
+@layer a11y {
+  @media (prefers-contrast: more) {
+    :root { --border: var(--input); --hint: var(--muted-foreground); }
+    .callout { --edge: 4px; }
+  }
+
+  @media (forced-colors: active) {
+    /* Граница, несущая смысл, — border/outline, а не фон и не тень. */
+    .callout, .aud-block, .card, .chip, .badge, .tabs, .tip, .pop, .terms-block, .toc-inline, .pager a, .children li, .dev-panel, .code, .table-wrap {
+      border: 1px solid CanvasText;
+    }
+    .callout { border-inline-start: 4px solid CanvasText; }
+    .callout-limits { border-inline-start: 4px double CanvasText; }
+    .callout-limits::before { content: none; }
+    .chip, .badge, a.cite { border: 1px solid CanvasText; }
+    .tab[aria-selected="true"] { background: Highlight; color: HighlightText; forced-color-adjust: none; }
+    .tree a[aria-current="page"] { background: Highlight; color: HighlightText; forced-color-adjust: none; }
+    .tree a[aria-current="page"]::before { content: none; }
+    .toc a[aria-current="true"] { border-inline-start: 4px solid Highlight; }
+    .env-table tbody tr:target > * { outline: 2px solid Highlight; outline-offset: -2px; }
+    .gl-entry:target { outline: 2px solid Highlight; }
+    .prose :is(h2, h3, h4):target::before, .sources li:target::before { content: none; }
+    a.term { text-decoration-style: dotted; }
+    .hero::before { display: none; }
+    .logo-mark { forced-color-adjust: none; }
+    .pkg-path::before, .pkg-path::after { background: CanvasText; }
+    svg { forced-color-adjust: auto; }
+  }
+}

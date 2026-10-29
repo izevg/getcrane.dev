@@ -1,0 +1,4 @@
+{{- /* Адрес страницы reference/environment-variables в языке страницы. Если страницы ещё нет, адрес строится по контракту. */ -}}
+{{- $u := "" -}}
+{{- with site.GetPage "reference/environment-variables" }}{{ $u = .RelPermalink }}{{ else }}{{ $u = relLangURL "reference/environment-variables/" }}{{ end -}}
+{{- return $u -}}

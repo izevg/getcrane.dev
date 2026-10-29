@@ -1,0 +1,12 @@
+{{- /* Крошки: Документация → разделы → текущая. Последний элемент — текст с aria-current. Вход: страница. */ -}}
+{{- $p := . -}}
+{{- $anc := slice -}}
+{{- range $p.Ancestors.Reverse }}{{ if not .IsHome }}{{ $anc = $anc | append . }}{{ end }}{{ end -}}
+<nav aria-label="{{ i18n "nav.breadcrumb" }}">
+  <ol class="crumbs">
+    {{- range $i, $a := $anc }}
+    <li{{ if eq $i (sub (len $anc) 1) }} class="crumb-parent"{{ end }}><a href="{{ $a.RelPermalink }}">{{ $a.Title }}</a></li>
+    {{- end }}
+    <li aria-current="page">{{ $p.Title }}</li>
+  </ol>
+</nav>

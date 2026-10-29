@@ -1,0 +1,39 @@
+{{- /* <title>, description, canonical, hreflang, Open Graph, JSON-LD. Вход: dict "page" "root". */ -}}
+{{- $p := .page -}}
+{{- $root := .root -}}
+{{- $lang := $p.Language.Lang -}}
+{{- $hero := dict -}}
+{{- with index site.Data.home "hero" }}{{ with index . $lang }}{{ $hero = . }}{{ end }}{{ end -}}
+{{- $title := "" -}}
+{{- $desc := "" -}}
+{{- if $p.IsHome -}}
+  {{- $title = cond (ne ($hero.title | default "") "") $hero.title (cond (ne ($hero.overline | default "") "") (printf "%s — %s" site.Title $hero.overline) site.Title) -}}
+  {{- $desc = $hero.lead | default "" -}}
+{{- else -}}
+  {{- $title = printf "%s — %s" $p.Title site.Title -}}
+  {{- $desc = $p.Params.description | default "" -}}
+{{- end -}}
+{{- $canonical := $p.Permalink -}}
+<title>{{ $title }}</title>
+{{ with $desc }}<meta name="description" content="{{ . }}">{{ end }}
+<link rel="canonical" href="{{ $canonical }}">
+{{- /* Корень «/» дублирует /en/: канонический адрес — /en/, hreflang не выводится. */ -}}
+{{ if not $root }}
+{{- range $p.AllTranslations }}
+<link rel="alternate" hreflang="{{ .Language.LanguageCode }}" href="{{ .Permalink }}">
+{{- if eq .Language.Lang "en" }}
+<link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">
+{{- end }}
+{{- end }}
+{{ end }}
+{{- with $p.OutputFormats.Get "markdown" }}
+<link rel="alternate" type="text/markdown" href="{{ .Permalink }}">
+{{- end }}
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:type" content="{{ if $p.IsHome }}website{{ else }}article{{ end }}">
+<meta property="og:title" content="{{ $title }}">
+{{ with $desc }}<meta property="og:description" content="{{ . }}">{{ end }}
+<meta property="og:url" content="{{ $canonical }}">
+<meta property="og:locale" content="{{ $p.Language.LanguageCode }}">
+<meta name="twitter:card" content="summary">
+{{ partial "head/jsonld.html" (dict "page" $p "title" $title "desc" $desc) }}

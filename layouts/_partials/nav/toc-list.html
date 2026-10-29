@@ -1,0 +1,13 @@
+{{- /* Список ссылок оглавления. Вход: dict "heads" "sources". */ -}}
+{{- $out := `<ol class="toc">` -}}
+{{- range .heads -}}
+  {{- $out = printf `%s<li><a href="#%s">%s</a>` $out .ID (.Title | htmlEscape) -}}
+  {{- with .Headings -}}
+    {{- $out = printf `%s<ol>` $out -}}
+    {{- range . }}{{ $out = printf `%s<li><a href="#%s">%s</a></li>` $out .ID (.Title | htmlEscape) }}{{ end -}}
+    {{- $out = printf `%s</ol>` $out -}}
+  {{- end -}}
+  {{- $out = printf `%s</li>` $out -}}
+{{- end -}}
+{{- if .sources }}{{ $out = printf `%s<li><a href="#sources">%s</a></li>` $out (i18n "sources") }}{{ end -}}
+{{- return (printf "%s</ol>" $out | safeHTML) -}}

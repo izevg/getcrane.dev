@@ -1,0 +1,22 @@
+{{- /*
+  Разметка модальной палитры поиска (Pagefind Component UI). Лежит в <template> и не загружает ничего:
+  остров search.ts вставляет её и подключает /pagefind/pagefind-component-ui.{js,css} только при первом намерении (клик, Ctrl/⌘ K).
+*/ -}}
+<template id="search-tpl" data-pagefind-ignore>
+  <pagefind-modal reset-on-close>
+    <pagefind-modal-header>
+      <pagefind-input placeholder="{{ i18n "search.placeholder" }}" autofocus></pagefind-input>
+    </pagefind-modal-header>
+    <pagefind-modal-body>
+      <pagefind-summary default-message=" "></pagefind-summary>
+      <pagefind-filter-dropdown filter="section" label="{{ i18n "filter.section" }}"></pagefind-filter-dropdown>
+      <pagefind-filter-dropdown filter="audience" label="{{ i18n "filter.audience" }}"></pagefind-filter-dropdown>
+      <pagefind-filter-dropdown filter="genre" label="{{ i18n "filter.genre" }}"></pagefind-filter-dropdown>
+      <pagefind-filter-dropdown filter="status" label="{{ i18n "filter.status" }}"></pagefind-filter-dropdown>
+      <pagefind-results></pagefind-results>
+    </pagefind-modal-body>
+    <pagefind-modal-footer>
+      <pagefind-keyboard-hints></pagefind-keyboard-hints>
+    </pagefind-modal-footer>
+  </pagefind-modal>
+</template>

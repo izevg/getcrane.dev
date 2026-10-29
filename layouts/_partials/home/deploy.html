@@ -1,0 +1,18 @@
+{{- /* Три карточки развёртывания. Пустой href — карточка без ссылки. */ -}}
+{{- $lang := .lang -}}
+<section class="section container" aria-labelledby="d-h">
+  <h2 id="d-h">{{ i18n "home.deploy" }}</h2>
+  <ul class="grid grid-d">
+    {{- range .d.deploy }}
+    {{- $t := index . $lang -}}
+    {{- $pg := partial "home/page.html" .href -}}
+    {{- if $t.title }}
+    <li class="card card-tile">
+      <h3>{{ if $pg }}<a href="{{ $pg.RelPermalink }}">{{ $t.title }}</a>{{ else }}{{ $t.title }}{{ end }}</h3>
+      {{- with $t.text }}<p>{{ . }}</p>{{ end }}
+      {{- with $t.command }}<code>{{ . }}</code>{{ end }}
+    </li>
+    {{- end }}
+    {{- end }}
+  </ul>
+</section>

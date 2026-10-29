@@ -1,0 +1,31 @@
+{{- /* Первый экран: overline, h1, лид, две кнопки, схема «путь пакета». Пустые поля data/home.yaml не выводятся. */ -}}
+{{- $lang := .lang -}}{{- $d := .d -}}
+{{- $h := index $d.hero $lang | default dict -}}
+{{- $path := $d.path -}}
+<section class="hero container" aria-labelledby="hero-h">
+  {{ with $h.overline }}<p class="overline">{{ . }}</p>{{ end }}
+  <h1 id="hero-h">{{ $h.title | default site.Title }}</h1>
+  {{ with $h.lead }}<p class="lead">{{ partial "util/typo.html" (dict "html" (. | htmlEscape) "lang" $lang) }}</p>{{ end }}
+  <div class="cta">
+    {{- with $d.hero.primary }}{{ with partial "home/page.html" .href }}<a class="btn btn-primary" href="{{ .RelPermalink }}">{{ index $.d.hero.primary $.lang | default .Title }}</a>{{ end }}{{ end }}
+    {{- with $d.hero.secondary }}{{ with partial "home/page.html" .href }}<a class="btn btn-secondary" href="{{ .RelPermalink }}">{{ index $.d.hero.secondary $.lang | default .Title }}</a>{{ end }}{{ end }}
+  </div>
+  {{- if .root }}
+  <p class="hero-lang"><a href="/ru/" hreflang="ru" lang="ru">{{ i18n "home.otherlang" }}</a></p>
+  {{- end }}
+  {{- $up := index $path.upstream $lang -}}{{- $cl := index $path.client $lang -}}
+  {{- if and $up $cl }}
+  <ol class="pkg-path" aria-label="{{ i18n "home.path" }}">
+    <li><span class="pkg-box">{{ $up }}{{ partial "ui/icon.html" (dict "name" "check" "class" "i i-16 pkg-ok") }}</span></li>
+    <li class="pkg-mid">
+      <span class="pkg-group-label">{{ i18n "home.path.group" }}</span>
+      <ul class="pkg-nodes">
+        {{- range $i, $n := $path.nodes }}{{ with partial "home/page.html" $n.href }}{{ $label := index $n $.lang | default .Title }}
+        <li><a class="pkg-box" href="{{ .RelPermalink }}">{{ $label }}<svg class="i i-16 pkg-ok" style="--i:{{ add $i 1 }}" aria-hidden="true" focusable="false"><use href="#i-check"/></svg></a></li>
+        {{- end }}{{ end }}
+      </ul>
+    </li>
+    <li><span class="pkg-box">{{ $cl }}{{ partial "ui/icon.html" (dict "name" "check" "class" "i i-16 pkg-ok") }}</span></li>
+  </ol>
+  {{- end }}
+</section>

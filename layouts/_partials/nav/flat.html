@@ -1,0 +1,4 @@
+{{- /* Плоский список страниц в порядке навигации (weight, разделы раскрыты). Вход: Pages уровня. */ -}}
+{{- $out := slice -}}
+{{- range .ByWeight }}{{ $out = $out | append . }}{{ if .IsSection }}{{ $out = $out | append (partial "nav/flat.html" .Pages) }}{{ end }}{{ end -}}
+{{- return $out -}}

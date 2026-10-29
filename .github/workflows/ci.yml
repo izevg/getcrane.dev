@@ -1,0 +1,27 @@
+name: CI
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  content:
+    name: Контент и сборка
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: ./.github/actions/setup
+      - name: Типы (скрипты и острова)
+        run: npm run typecheck
+      - name: Контент (паритет RU/EN, мета, слова, xref, i18n)
+        run: npm run check:content
+      - name: Орфография RU и EN
+        run: npm run check:spell
+      - name: Сборка (mermaid → Hugo → Pagefind)
+        run: npm run build
+      - name: Внутренние ссылки
+        run: npm run check:links

@@ -1,0 +1,7 @@
+{{ define "main" }}
+<main id="content" class="container notfound">
+  <h1>{{ i18n "404.title" }}</h1>
+  <p>{{ i18n "404.text" }}</p>
+  {{ with site.GetPage "start" }}<a class="btn btn-primary" href="{{ .RelPermalink }}">{{ i18n "404.home" }}</a>{{ end }}
+</main>
+{{ end }}

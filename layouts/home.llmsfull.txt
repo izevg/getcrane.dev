@@ -1,0 +1,11 @@
+{{- /* Все опубликованные страницы языка в порядке навигации: Markdown без шорткодов сайта (см. md/body.html). */ -}}
+{{- range partial "nav/flat.html" site.Home.Sections -}}
+# {{ .Title }}
+URL: {{ .Permalink }}
+{{ with .Params.description }}Description: {{ . }}
+{{ end }}
+{{ partial "md/body.html" (dict "page" .) }}
+
+---
+
+{{ end -}}

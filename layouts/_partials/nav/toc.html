@@ -1,0 +1,26 @@
+{{- /*
+  Оглавление: h2 и h3 страницы + «Источники», если они есть. Скрыто при менее трёх h2.
+  Вход: dict "page" "inline" (true — сворачиваемый блок для узких экранов).
+*/ -}}
+{{- $p := .page -}}
+{{- $heads := slice -}}
+{{- range $p.Fragments.Headings }}{{ $heads = $heads | append . }}{{ end -}}
+{{- $hasSources := $p.Scratch.Get "sources" -}}
+{{- $count := len $heads -}}
+{{- if $hasSources }}{{ $count = add $count 1 }}{{ end -}}
+{{- if ge $count 3 -}}
+{{- $list := partial "nav/toc-list.html" (dict "heads" $heads "sources" $hasSources) -}}
+{{- if .inline -}}
+<details class="toc-inline" data-pagefind-ignore>
+  <summary>{{ i18n "toc" }}</summary>
+  <nav aria-label="{{ i18n "toc" }}">{{ $list }}</nav>
+</details>
+{{- else -}}
+<aside class="toc-col" data-pagefind-ignore>
+  <nav aria-label="{{ i18n "toc" }}">
+    <p class="toc-title" aria-hidden="true">{{ i18n "toc" }}</p>
+    {{ $list }}
+  </nav>
+</aside>
+{{- end -}}
+{{- end -}}

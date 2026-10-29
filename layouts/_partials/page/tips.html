@@ -1,0 +1,8 @@
+{{- /* Слои подсказок term/xref/env: один на уникальный id, в конце main. Накапливаются шорткодами и render-хуками. Вход: страница. */ -}}
+{{- with .Scratch.Get "tips" -}}
+<div class="tips" data-pagefind-ignore>
+  {{- range $id, $html := . }}
+  {{ $html }}
+  {{- end }}
+</div>
+{{- end -}}

@@ -1,0 +1,16 @@
+{{- /* Назад / Далее по порядку страниц раздела (weight). Вход: страница. */ -}}
+{{- $p := . -}}
+{{- $list := $p.CurrentSection.RegularPages.ByWeight -}}
+{{- $prev := false -}}{{- $next := false -}}
+{{- range $i, $x := $list -}}
+  {{- if $x.Eq $p -}}
+    {{- if gt $i 0 }}{{ $prev = index $list (sub $i 1) }}{{ end -}}
+    {{- if lt (add $i 1) (len $list) }}{{ $next = index $list (add $i 1) }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+{{- if or $prev $next -}}
+<nav class="pager" aria-label="{{ i18n "nav.pager" }}" data-pagefind-ignore>
+  {{- with $prev }}<a class="prev" href="{{ .RelPermalink }}" rel="prev"><small>{{ i18n "prev" }}</small>{{ .Title }}</a>{{ end }}
+  {{- with $next }}<a class="next" href="{{ .RelPermalink }}" rel="next"><small>{{ i18n "next" }}</small>{{ .Title }}</a>{{ end }}
+</nav>
+{{- end -}}

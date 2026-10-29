@@ -1,0 +1,4 @@
+{{- /* Одна панель вкладок. Имя — подпись вкладки; ключ синхронизации между группами — имя в нижнем регистре. */ -}}
+{{- $name := .Get 0 -}}
+{{- if not $name }}{{ errorf "tab: не задано имя вкладки (%s)" .Position }}{{ end -}}
+<section class="tab-panel" data-tab="{{ lower $name }}"><p class="tab-title">{{ $name }}</p>{{ .Inner | .Page.RenderString (dict "display" "block") }}</section>

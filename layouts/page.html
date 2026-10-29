@@ -1,0 +1,21 @@
+{{- /* Текстовая страница: дерево · текст · оглавление. Страницы in-development: без «Терминов» и оглавления, с блоком «Что дальше». */ -}}
+{{ define "main" }}
+{{- $lang := .Language.Lang -}}
+{{- $dev := eq .Params.status "in-development" -}}
+<div class="container doc">
+  <div class="tree-col" id="site-nav"><nav aria-label="{{ i18n "nav.sections" }}" data-pagefind-ignore>{{ partial "nav/tree.html" (dict "cur" . "pages" site.Home.Sections "root" true) }}</nav></div>
+  <main id="content" class="doc-main">
+    {{ partial "page/header.html" . }}
+    {{- if not $dev }}{{ partial "page/terms-block.html" . }}{{ partial "nav/toc.html" (dict "page" . "inline" true) }}{{ end }}
+    <article class="prose" data-pagefind-body>
+      {{ partial "page/pagefind-meta.html" . }}
+      {{ partial "util/typo.html" (dict "html" .Content "lang" $lang) }}
+    </article>
+    {{ partial "page/sources.html" . }}
+    {{- if $dev }}{{ partial "page/siblings.html" . }}{{ end }}
+    {{ partial "nav/prevnext.html" . }}
+    {{ partial "page/tips.html" . }}
+  </main>
+  {{- if not $dev }}{{ partial "nav/toc.html" (dict "page" . "inline" false) }}{{ end }}
+</div>
+{{ end }}

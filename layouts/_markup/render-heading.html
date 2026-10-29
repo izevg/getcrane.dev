@@ -1,0 +1,9 @@
+{{- /* Заголовок с ссылкой-якорем (h2, h3) и чипами аудитории из атрибута: ## Заголовок {#id audience="security"}. */ -}}
+<h{{ .Level }} id="{{ .Anchor }}">{{ .Text }}
+{{- if and (ge .Level 2) (le .Level 3) -}}
+<a class="anchor" href="#{{ .Anchor }}" aria-label="{{ partial "ui/t.html" (dict "k" "anchor" "v" (dict "title" .PlainText)) }}" data-pagefind-ignore>#</a>
+{{- end -}}
+</h{{ .Level }}>
+{{- with .Attributes.audience }}
+{{ partial "ui/audience-chips.html" (dict "keys" . "ctx" $.Page.Path "class" "heading-chips") }}
+{{- end -}}

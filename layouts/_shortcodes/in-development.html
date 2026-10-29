@@ -1,0 +1,14 @@
+{{- /*
+  {{< in-development >}}Что именно отсутствует.{{< /in-development >}}
+  Фиксированная фраза + строка из шорткода. Допустим только при state: current и status: in-development; target + in-development ломает сборку.
+*/ -}}
+{{- $p := .Page -}}
+{{- if ne $p.Params.state "current" }}{{ errorf "in-development: допустим только при state: current (%s)" .Position }}{{ end -}}
+{{- if ne $p.Params.status "in-development" }}{{ errorf "in-development: в front matter должен быть status: in-development (%s)" .Position }}{{ end -}}
+<div class="dev-panel" role="note">
+  {{ partial "ui/icon.html" (dict "name" "clock" "class" "i i-20") }}
+  <div>
+    <p>{{ i18n "in-development" }}</p>
+    <p>{{ .Inner | $p.RenderString }}</p>
+  </div>
+</div>

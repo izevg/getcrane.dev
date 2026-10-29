@@ -1,0 +1,26 @@
+{{- /* Один CSS-файл с отпечатком: явный порядок склейки, слои объявлены в 00-layers.css. */ -}}
+{{- $files := slice
+  "css/00-layers.css"
+  "css/tokens/primitive.css"
+  "css/tokens/console.css"
+  "css/tokens/semantic.css"
+  "css/tokens/component.css"
+  "css/base/fonts.css"
+  "css/base/base.css"
+  "css/layout/shell.css"
+  "css/layout/nav.css"
+  "css/components/callouts.css"
+  "css/components/code.css"
+  "css/components/tips.css"
+  "css/components/blocks.css"
+  "css/pages/home.css"
+  "css/pages/reference.css"
+  "css/search.css"
+  "css/a11y.css"
+-}}
+{{- $parts := slice -}}
+{{- range $files -}}
+  {{- with resources.Get . }}{{ $parts = $parts | append . }}{{ else }}{{ errorf "css: файл %q не найден в assets" . }}{{ end -}}
+{{- end -}}
+{{- $css := $parts | resources.Concat "css/site.css" | minify | fingerprint -}}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">

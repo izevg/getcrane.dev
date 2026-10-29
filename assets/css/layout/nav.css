@@ -1,0 +1,110 @@
+@layer layout {
+  /* Дерево разделов. Ветки — details/summary, работает без JS. */
+  .tree, .tree ul { list-style: none; padding: 0; margin: 0; }
+  .tree ul { margin-inline-start: var(--space-3); padding-inline-start: var(--space-3); border-inline-start: 1px solid var(--border); }
+  .tree a {
+    display: block; padding: var(--space-1) var(--space-2); border-radius: var(--radius); color: var(--foreground);
+    text-decoration: none; font-size: var(--type-small); line-height: 1.4; position: relative;
+  }
+  .tree a:hover { background: var(--accent); color: var(--foreground); }
+  .tree a[aria-current="page"] { background: var(--nav-active-bg); color: var(--nav-active-fg); font-weight: 650; }
+  .tree a[aria-current="page"]::before {
+    content: ""; position: absolute; inset-block: 4px; inset-inline-start: 0; inline-size: 3px;
+    border-radius: 2px; background: var(--nav-active-bar);
+  }
+  .tree summary { display: flex; align-items: center; gap: var(--space-1); list-style: none; border-radius: var(--radius); }
+  .tree summary::-webkit-details-marker { display: none; }
+  .tree summary::before {
+    content: ""; flex: none; inline-size: 20px; block-size: 20px; margin-inline-start: -4px;
+    background: var(--muted-foreground);
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E") center / 16px no-repeat;
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+  .tree details[open] > summary::before { transform: rotate(90deg); }
+  .tree summary:hover { background: var(--accent); }
+  .tree summary > a { flex: 1; }
+  .tree summary > a:hover { background: transparent; }
+  .tree .dev { font-size: var(--type-caption); color: var(--warning); }
+  @media (prefers-reduced-motion: reduce) { .tree summary::before { transition: none; } }
+
+  /* Оглавление. */
+  .toc-title { font-size: var(--type-caption); font-weight: 650; color: var(--muted-foreground); text-transform: none; margin-block-end: var(--space-2); }
+  .toc, .toc ol { list-style: none; margin: 0; padding: 0; }
+  .toc ol { padding-inline-start: var(--space-3); }
+  .toc a {
+    display: block; padding: 3px var(--space-3); color: var(--muted-foreground); text-decoration: none;
+    font-size: var(--type-small); line-height: 1.4; border-inline-start: 2px solid var(--border);
+  }
+  .toc a:hover { color: var(--foreground); }
+  .toc a[aria-current="true"] { color: var(--foreground); border-inline-start-color: var(--toc-active); }
+  .toc-inline { border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); margin-block: var(--space-4); }
+  .toc-inline > summary { padding: var(--space-3) var(--space-4); font-weight: 650; }
+  .toc-inline > nav { padding: 0 var(--space-4) var(--space-3); }
+
+  /* Крошки. */
+  .crumbs { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-1); font-size: var(--type-small); color: var(--muted-foreground); }
+  .crumbs li + li::before { content: "/"; padding-inline-end: var(--space-1); color: var(--hint); }
+  .crumbs a { color: var(--muted-foreground); }
+  .crumbs [aria-current] { color: var(--foreground); }
+  @media (max-width: 39.99rem) {
+    .crumbs li:not(.crumb-parent) {
+      position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+    }
+    .crumbs li::before { content: none !important; }
+    .crumb-parent a::before { content: "← "; }
+    .crumb-parent a { text-decoration: none; }
+  }
+
+  /* Шапка страницы. */
+  .page-head > * + * { margin-block-start: var(--space-3); }
+  .page-head h1 { margin-block-start: var(--space-3); }
+  .chips { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; list-style: none; padding: 0; }
+  .chip, .badge {
+    display: inline-flex; align-items: center; gap: 6px; min-block-size: 24px; padding: 0 8px;
+    border: 1px solid var(--chip-border); border-radius: 999px; font-size: var(--type-caption); line-height: 1.2; white-space: nowrap;
+  }
+  .chip { background: var(--chip-bg); color: var(--chip-fg); }
+  .chip.is-primary { border-color: var(--input); }
+  .badge { background: transparent; }
+  .badge-genre { color: var(--badge-genre-fg); border-color: var(--badge-genre-border); }
+  .badge-target { color: var(--badge-state-target-fg); border-color: var(--badge-state-target-border); }
+  .badge-current { color: var(--badge-state-current-fg); border-color: var(--badge-state-current-border); }
+  .badge-dev { background: var(--badge-status-dev-bg); color: var(--badge-status-dev-fg); border-color: transparent; }
+  .chips-row { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-3); align-items: center; }
+  .heading-chips { margin-block-start: var(--space-2); }
+  .lead { font-size: var(--type-lead); line-height: 1.55; color: var(--muted-foreground); max-inline-size: 60ch; }
+  .page-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; font-size: var(--type-small); }
+
+  .btn-text {
+    display: inline-flex; align-items: center; gap: var(--space-2); min-block-size: 32px; padding: 0 var(--space-3);
+    background: var(--card); border: 1px solid var(--input); border-radius: var(--radius); color: var(--foreground); font-size: var(--type-small);
+  }
+  .btn-text:hover { background: var(--accent); }
+  .btn-text:active { background: var(--surface-high); }
+  @media (pointer: coarse) { .btn-text { min-block-size: 44px; } }
+
+  /* Предыдущая / следующая. */
+  .pager { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); margin-block-start: var(--space-12); }
+  .pager a {
+    display: block; padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-card);
+    background: var(--card); color: var(--foreground); text-decoration: none;
+  }
+  .pager a:hover { border-color: var(--input); }
+  .pager small { display: block; color: var(--muted-foreground); font-size: var(--type-caption); }
+  .pager .next { text-align: end; grid-column: 2; }
+  @media (max-width: 29.99rem) { .pager .next { grid-column: auto; } }
+
+  /* «Термины на странице». */
+  .terms-block { border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); margin-block-start: var(--space-6); }
+  .terms-block > summary { padding: var(--space-3) var(--space-4); font-weight: 650; }
+  .terms-block dl { padding: 0 var(--space-4) var(--space-4); margin: 0; font-size: var(--type-small); }
+  .terms-block dt { margin-block-start: var(--space-3); font-weight: 650; }
+  .terms-block dd { margin: 0; color: var(--muted-foreground); }
+
+  /* Список страниц раздела. */
+  .children { list-style: none; padding: 0; display: grid; gap: var(--space-3); margin-block-start: var(--space-6); }
+  .children li { border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); padding: var(--space-3) var(--space-4); }
+  .children a { font-weight: 650; }
+  .children p { color: var(--muted-foreground); font-size: var(--type-small); margin-block-start: var(--space-1); }
+  .children .chips { margin-block-start: var(--space-2); }
+}

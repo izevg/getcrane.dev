@@ -1,0 +1,138 @@
+# Строки интерфейса (EN). Ключи плоские, плейсхолдеры в одинарных фигурных скобках: {q}, {n}, {name}.
+# Набор ключей совпадает с ru.yaml; сверку выполняет scripts/check-content.ts.
+skip: Skip to content
+docs: Docs
+nav.sections: Documentation sections
+nav.breadcrumb: Breadcrumb
+nav.main: Main
+nav.pager: Previous and next pages
+nav.next-steps: What next
+nav.footer: Footer links
+glossary.see: See also
+list.children: In this section
+sitemap: Site map
+
+search.trigger: Search
+search.placeholder: Search the docs
+search.empty: No results for “{q}”. Check the spelling or clear the filters.
+search.loading: Loading the index…
+search.error: "Search is unavailable: the index failed to load. Reload the page."
+filter.section: Section
+filter.audience: Audience
+filter.genre: Genre
+filter.status: Status
+filter.reset: Clear filters
+
+theme: Theme
+theme.light: Light
+theme.dark: Dark
+theme.system: System
+theme.current: "Theme: {mode}"
+lang.label: Language
+lang.ru: RU, русский
+lang.en: EN, English
+menu: Menu
+menu.close: Close menu
+source: Source code
+toc: On this page
+terms: Terms on this page
+sources: Sources
+
+copy.code: Copy code
+copied: Copied
+copy.md: Copy as Markdown
+copied.md: Markdown copied
+md.link: Markdown version
+copy.error: Could not copy. Select the text manually.
+
+prev: Previous
+next: Next
+
+callout.note: Note
+callout.tip: Tip
+callout.important: Important
+callout.warning: Warning
+callout.caution: Caution
+callout.limits: Limits of the guarantee
+callout.developer: For developers
+callout.platform: For platform engineers
+callout.security: For security engineers
+callout.auditor: For auditors
+
+audience.developer: Developer
+audience.platform: Platform
+audience.security: Security
+audience.auditor: Audit
+audience.prefix: "Section for:"
+
+role.developer: Developer
+role.platform: Platform engineer
+role.security: Security engineer
+role.auditor: Auditor
+genre.tutorial: Tutorial
+genre.how-to: How-to guide
+genre.reference: Reference
+genre.explanation: Explanation
+
+state.target: Design
+state.current: Current
+status.available: Available
+status.in-development: In development
+in-development: This functionality is in development.
+
+term.more: Glossary entry
+xref.more: Open page
+cite.list: Go to sources
+cite.accessed: Accessed {date}
+cite.back: Back to mention {n}
+cite.n: "Source {n}"
+screenshot.placeholder: "Screenshot: {alt}"
+diagram.text: Diagram source
+diagram.default: Diagram
+anchor: Link to section “{title}”
+code.label: "Code: {lang}"
+table.default: Table
+tabs.default: Client
+new-window: (opens in a new window)
+
+env.required: Required
+env.optional: Optional
+env.default: Default
+env.none: none
+env.empty: empty string
+env.file: From file
+env.toml: TOML key
+env.envOnly: environment only
+env.fileOf: Path to a file holding {name}
+env.copy: Copy name
+env.copied: "{name} copied"
+env.ref: In the reference
+env.group: ← → — other variables in this block
+env.mentions: Mentioned on ({n})
+env.back: ← Back to “{title}”
+env.secret: "Secret: pass it through {name}_FILE"
+env.compose: Variable of the .env file for Docker Compose
+env.name: Variable
+env.ci: CI configuration variable
+env.purpose: Purpose
+env.yes: Yes
+env.no: No
+
+footer.license: "License: {name}"
+footer.vuln: Report a vulnerability
+footer.fonts: Fonts Onest and JetBrains Mono, SIL Open Font License 1.1
+
+404.title: Page not found
+404.text: The address is wrong or the page has moved. Open the documentation start page or use the search.
+404.home: Open the documentation
+
+home.otherlang: Русская версия
+home.path: Package path through CRANE
+home.path.group: CRANE
+home.guarantees: Guarantees and their limits
+home.guarantees.all: All guarantees
+home.limit: "Limit:"
+home.start: Where to start
+home.formats: Five ecosystems
+home.deploy: Deployment
+home.getting: Getting started

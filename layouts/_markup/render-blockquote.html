@@ -1,0 +1,34 @@
+{{- /*
+  GitHub-alerts → выноски (authoring.md). Типы: NOTE TIP IMPORTANT WARNING CAUTION, LIMITS и аудиторные DEVELOPER PLATFORM SECURITY AUDITOR.
+  Знак после типа: «-» свёрнуто, «+» развёрнуто (details). LIMITS сворачивать нельзя. Неизвестный тип ломает сборку.
+*/ -}}
+{{- if eq .Type "alert" -}}
+  {{- $t := lower .AlertType -}}
+  {{- $generic := slice "note" "tip" "important" "warning" "caution" -}}
+  {{- $aud := slice "developer" "platform" "security" "auditor" -}}
+  {{- $label := "" -}}
+  {{- if or (in $generic $t) (eq $t "limits") (in $aud $t) }}{{ $label = i18n (printf "callout.%s" $t) }}
+  {{- else }}{{ errorf "callout: неизвестный тип [!%s] в %s" .AlertType .Page.Path }}{{ end -}}
+  {{- if in $aud $t -}}
+<details class="aud-block aud-{{ $t }}"{{ if eq .AlertSign "+" }} open{{ end }}>
+  <summary>{{ partial "ui/icon.html" $t }}<span>{{ $label }}{{ with .AlertTitle }}<span class="aud-title">: {{ . }}</span>{{ end }}</span></summary>
+  <div class="aud-body">{{ .Text }}</div>
+</details>
+  {{- else -}}
+    {{- if and (eq $t "limits") .AlertSign }}{{ errorf "callout: [!LIMITS] нельзя сворачивать (%s)" .Page.Path }}{{ end -}}
+    {{- $title := or .AlertTitle $label -}}
+    {{- if .AlertSign -}}
+<details class="callout callout-{{ $t }}"{{ if eq .AlertSign "+" }} open{{ end }}>
+  <summary class="callout-title">{{ partial "ui/icon.html" (dict "name" (cond (eq $t "limits") "limits" $t) "class" "i i-16") }}<span>{{ $title }}</span></summary>
+  <div class="callout-body">{{ .Text }}</div>
+</details>
+    {{- else -}}
+<div class="callout callout-{{ $t }}" role="note">
+  <p class="callout-title">{{ partial "ui/icon.html" (dict "name" (cond (eq $t "limits") "limits" $t) "class" "i i-16") }}<span>{{ $title }}</span></p>
+  <div class="callout-body">{{ .Text }}</div>
+</div>
+    {{- end -}}
+  {{- end -}}
+{{- else -}}
+<blockquote>{{ .Text }}</blockquote>
+{{- end -}}

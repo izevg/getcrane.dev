@@ -1,0 +1,15 @@
+{{- /* Подвал: порядок ссылок одинаковый на всех страницах (WCAG 3.2.6). Вход: страница. */ -}}
+{{- $p := . -}}
+{{- $vuln := site.GetPage "security/vulnerability-disclosure" -}}
+<footer class="site-footer">
+<div class="container" data-pagefind-ignore>
+  <nav class="footer-grid" aria-label="{{ i18n "nav.footer" }}">
+    <span>{{ partial "ui/t.html" (dict "k" "footer.license" "v" (dict "name" site.Params.license)) }}</span>
+    {{ with site.Params.sourceURL }}<a href="{{ . }}" rel="noopener">{{ i18n "source" }}</a>{{ end }}
+    <a href="{{ with $vuln }}{{ .RelPermalink }}{{ else }}{{ relLangURL "security/vulnerability-disclosure/" }}{{ end }}">{{ i18n "footer.vuln" }}</a>
+    {{ partial "chrome/lang-switch.html" (dict "page" $p "nav" false) }}
+    {{ with $p.OutputFormats.Get "markdown" }}<a href="{{ .RelPermalink }}" type="text/markdown">{{ i18n "md.link" }}</a>{{ end }}
+  </nav>
+  <p class="footer-fonts">{{ i18n "footer.fonts" }}</p>
+</div>
+</footer>

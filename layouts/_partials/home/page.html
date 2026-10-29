@@ -1,0 +1,10 @@
+{{- /* Страница по пути от корня языка. Нет страницы: в production ошибка сборки, локально предупреждение. Вход: путь. */ -}}
+{{- $path := strings.TrimSuffix "/" . -}}
+{{- $pg := false -}}
+{{- if $path }}
+  {{- with site.GetPage $path }}{{ $pg = . }}
+  {{- else }}
+    {{- if hugo.IsProduction }}{{ errorf "home: страница %q из data/home.yaml не найдена" $path }}{{ else }}{{ warnidf "home-missing" "home: страница %q из data/home.yaml не найдена" $path }}{{ end -}}
+  {{- end }}
+{{- end -}}
+{{- return $pg -}}

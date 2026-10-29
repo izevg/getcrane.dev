@@ -1,0 +1,3 @@
+# Индексируются только страницы с data-pagefind-body (статьи); лендинг, 404 и корень без него пропускаются.
+site: public
+output_subdir: pagefind

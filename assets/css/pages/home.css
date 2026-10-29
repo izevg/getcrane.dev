@@ -1,0 +1,123 @@
+@layer page {
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-block-size: 44px;
+    padding: 0 var(--space-6); border-radius: var(--radius); border: 1px solid transparent; font-weight: 600; text-decoration: none;
+  }
+  @media (min-width: 48rem) { .btn { min-block-size: 48px; } }
+  .btn-primary { background: var(--primary); color: var(--primary-foreground); }
+  .btn-primary:hover { background: var(--primary-hover); color: var(--primary-foreground); }
+  .btn-primary:active { background: var(--primary-active); }
+  :root[data-theme="dark"] .btn-primary { border-color: var(--brand); }
+  .btn-secondary { background: var(--card); color: var(--foreground); border-color: var(--input); }
+  .btn-secondary:hover { background: var(--accent); color: var(--foreground); }
+  .btn-secondary:active { background: var(--surface-high); }
+
+  .home { flex: 1; }
+  .section { padding-block-start: var(--space-section); }
+  .section + .section, .hero + .section { content-visibility: auto; contain-intrinsic-size: auto 40rem; }
+  .section > h2 { margin-block-end: var(--space-6); }
+  .overline { font-size: var(--type-caption); font-weight: 650; color: var(--brand); letter-spacing: 0.04em; margin-block-end: var(--space-3); }
+
+  /* Hero. */
+  .hero { position: relative; padding-block: var(--space-12) var(--space-8); isolation: isolate; }
+  .hero::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background-image: linear-gradient(var(--hero-grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--hero-grid-line) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(ellipse 70% 80% at 50% 40%, #000 20%, transparent 75%);
+  }
+  .hero h1 { font-size: var(--type-display); line-height: 1.05; font-weight: 650; letter-spacing: -0.02em; max-inline-size: 18ch; text-wrap: balance; }
+  .hero .lead { margin-block-start: var(--space-4); }
+  .cta { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-block-start: var(--space-6); }
+  .hero-lang { margin-block-start: var(--space-4); font-size: var(--type-small); }
+  .hero-lang a { font-weight: 650; }
+
+  /* Схема «путь пакета»: ol, линия — декор. Вертикальная ниже 64rem. */
+  .pkg-path { list-style: none; padding: 0; margin-block-start: var(--space-12); position: relative; display: flex; flex-direction: column; gap: var(--space-6); padding-inline-start: var(--space-8); }
+  .pkg-path::before, .pkg-path::after { content: ""; position: absolute; inset-block: 12px; inset-inline-start: 11px; inline-size: 2px; background: var(--border); }
+  .pkg-path::after { background: var(--success-strong); transform-origin: top; animation: fill-y 1.6s var(--ease-in-out) 0.1s backwards; }
+  .pkg-box {
+    position: relative; display: block; background: var(--card); border: 1px solid var(--input); border-radius: var(--radius);
+    padding: var(--space-3) var(--space-4); color: var(--foreground); text-decoration: none; font-weight: 600;
+  }
+  .pkg-path > li { position: relative; }
+  .pkg-path > li::before {
+    content: ""; position: absolute; inset-inline-start: calc(-1 * var(--space-8) + 3px); inset-block-start: 14px; inline-size: 18px; block-size: 18px;
+    border-radius: 50%; background: var(--background); border: 2px solid var(--input);
+  }
+  a.pkg-box:hover { background: var(--accent); color: var(--foreground); }
+  .pkg-ok {
+    position: absolute; inset-block-start: 50%; inset-inline-end: var(--space-3); inline-size: 16px; block-size: 16px; margin-block-start: -8px; color: var(--success-strong);
+    animation: pop 300ms var(--ease-out) calc(0.25s + var(--i, 0) * 0.28s) backwards;
+  }
+  .pkg-box { padding-inline-end: calc(var(--space-4) + 24px); }
+  .pkg-group-label { display: block; font-size: var(--type-caption); color: var(--muted-foreground); margin-block-end: var(--space-2); }
+  .pkg-nodes { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  .pkg-nodes > li { flex: 1 1 11rem; }
+  .pkg-code { font-family: var(--font-mono); font-weight: 500; }
+  @media (min-width: 64rem) {
+    .pkg-path { flex-direction: row; align-items: center; padding-inline-start: 0; gap: var(--space-8); }
+    .pkg-path::before, .pkg-path::after { inset-block: auto; inset-inline: 0; inset-block-start: 50%; inline-size: auto; block-size: 2px; margin-block-start: -1px; }
+    .pkg-path::after { transform-origin: left; animation-name: fill-x; }
+    .pkg-path > li::before { content: none; }
+    .pkg-path > li { background: var(--background); padding-inline: var(--space-2); }
+    .pkg-path > li.pkg-mid { flex: 1; }
+  }
+  @keyframes fill-x { from { transform: scaleX(0); } }
+  @keyframes fill-y { from { transform: scaleY(0); } }
+  @keyframes pop { from { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .pkg-path::after, .pkg-ok { animation: none; } }
+
+  /* Карточки. */
+  .card {
+    position: relative; container-type: inline-size; background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-card); box-shadow: var(--shadow-subtle); padding: var(--space-6);
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+  .card::before {
+    content: ""; position: absolute; inset: -1px; border-radius: inherit; box-shadow: var(--shadow-card); opacity: 0; pointer-events: none;
+    transition: opacity var(--dur-instant) var(--ease-out);
+  }
+  .card:hover { transform: translateY(-2px); }
+  .card:hover::before { opacity: 1; }
+  .card:has(a:focus-visible) { outline: 2px solid var(--ring); outline-offset: 2px; }
+  .card h3 a { color: var(--foreground); text-decoration: none; }
+  .card h3 a:focus-visible { outline: none; }
+  .card h3 a::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+  .card h3 { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+  .card p { margin-block-start: var(--space-3); }
+  .claim { font-size: var(--type-body); }
+  .limit { display: flex; gap: var(--space-2); align-items: flex-start; color: var(--muted-foreground); font-size: var(--type-small); }
+  .limit .i { margin-block-start: 3px; }
+  .limit b { font-weight: 650; }
+  @container (max-width: 18rem) { .limit { flex-direction: column; gap: var(--space-1); } }
+  @media (prefers-reduced-motion: reduce) { .card { transition: none; } .card:hover { transform: none; } }
+
+  .grid { list-style: none; padding: 0; display: grid; gap: var(--space-6); }
+  .grid-g { grid-template-columns: 1fr; }
+  @media (min-width: 40rem) { .grid-g { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 64rem) {
+    .grid-g { grid-template-columns: repeat(12, 1fr); }
+    .grid-g > li { grid-column: span 4; }
+    .grid-g > li:nth-child(-n + 2) { grid-column: span 6; }
+  }
+  .more-link { margin-block-start: var(--space-6); display: inline-block; font-weight: 650; }
+  .grid-a { grid-template-columns: 1fr; }
+  @media (min-width: 40rem) { .grid-a { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 80rem) { .grid-a { grid-template-columns: repeat(4, 1fr); } }
+  .card-aud .seeks { color: var(--muted-foreground); font-size: var(--type-small); }
+  .card-aud ul { list-style: none; padding: 0; margin-block-start: var(--space-3); display: grid; gap: var(--space-2); }
+  .card-aud h3 { gap: var(--space-2); }
+  .grid-f { grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: var(--space-4); }
+  @media (min-width: 64rem) { .grid-f { grid-template-columns: repeat(5, 1fr); } }
+  .card-tile { padding: var(--space-4); }
+  .card-tile p { font-size: var(--type-small); color: var(--muted-foreground); }
+  .grid-d { grid-template-columns: 1fr; }
+  @media (min-width: 48rem) { .grid-d { grid-template-columns: repeat(3, 1fr); } }
+  .card-tile code { display: block; margin-block-start: var(--space-3); overflow-wrap: anywhere; }
+  .strip { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-6); }
+  .strip a { font-weight: 600; }
+
+  .notfound { padding-block: var(--space-16); max-inline-size: var(--measure); }
+  .notfound p { margin-block: var(--space-4) var(--space-6); }
+}

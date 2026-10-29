@@ -1,0 +1,8 @@
+{{- /* Фильтры и метаданные Pagefind. Значения — локализованные подписи: индекс отдельный на язык. Вход: страница. */ -}}
+{{- $p := . -}}
+{{- $top := $p.FirstSection -}}
+<span hidden data-pagefind-meta="description[data-v]" data-v="{{ $p.Params.description }}"></span>
+{{- with $top }}<span hidden data-pagefind-filter="section[data-v]" data-v="{{ .Title }}"></span>{{ end }}
+{{- range $p.Params.audience }}<span hidden data-pagefind-filter="audience[data-v]" data-v="{{ i18n (printf "audience.%s" .) }}"></span>{{ end }}
+{{- with $p.Params.genre }}<span hidden data-pagefind-filter="genre[data-v]" data-v="{{ i18n (printf "genre.%s" .) }}"></span>{{ end }}
+<span hidden data-pagefind-filter="status[data-v]" data-v="{{ if eq $p.Params.status "in-development" }}{{ i18n "status.in-development" }}{{ else }}{{ i18n "status.available" }}{{ end }}"></span>

@@ -1,0 +1,13 @@
+{{- /* Пять экосистем: текстовые плитки без логотипов и цветов экосистем. Строка — description страницы формата. */ -}}
+{{- $names := dict "cargo" "Cargo" "npm" "npm" "pypi" "PyPI" "maven" "Maven" "nuget" "NuGet" -}}
+<section class="section container" aria-labelledby="f-h">
+  <h2 id="f-h">{{ i18n "home.formats" }}</h2>
+  <ul class="grid grid-f">
+    {{- range .d.formats }}
+    {{- $id := . -}}
+    {{- with partial "home/page.html" (printf "formats/%s" $id) }}
+    <li class="card card-tile"><h3><a href="{{ .RelPermalink }}">{{ index $names $id | default $id }}</a></h3>{{ with .Params.description }}<p>{{ . }}</p>{{ end }}</li>
+    {{- end }}
+    {{- end }}
+  </ul>
+</section>

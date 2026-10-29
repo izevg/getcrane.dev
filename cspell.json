@@ -1,0 +1,20 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "import": ["@cspell/dict-ru_ru/cspell-ext.json"],
+  "dictionaryDefinitions": [
+    { "name": "glossary", "path": ".cache/glossary-words.txt", "addWords": false },
+    { "name": "extra", "path": "scripts/spell-extra.txt", "addWords": false }
+  ],
+  "dictionaries": ["glossary", "extra"],
+  "overrides": [{ "filename": "content/ru/**", "language": "en,ru" }],
+  "files": ["content/**/*.md", "i18n/*.yaml", "data/home.yaml"],
+  "ignoreRegExpList": [
+    "/^\\s*```[\\s\\S]*?^\\s*```/gm",
+    "/`[^`\\n]+`/g",
+    "/\\{\\{[\\s\\S]*?\\}\\}/g",
+    "/https?:\\/\\/\\S+/g",
+    "/\\{#[\\w-]+[^}]*\\}/g",
+    "/^---[\\s\\S]*?^---/m"
+  ]
+}

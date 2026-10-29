@@ -1,0 +1,15 @@
+{{- /* Четыре входа по аудиториям. Карточка не растягивает одну ссылку: ссылок несколько. */ -}}
+{{- $lang := .lang -}}
+<section class="section container" aria-labelledby="a-h">
+  <h2 id="a-h">{{ i18n "home.start" }}</h2>
+  <ul class="grid grid-a">
+    {{- range .d.audiences }}
+    {{- $t := index . $lang -}}
+    <li class="card card-aud">
+      <h3>{{ partial "ui/icon.html" (dict "name" .id "class" "i i-20") }}{{ i18n (printf "role.%s" .id) }}</h3>
+      <p class="seeks">{{ $t.seeks }}</p>
+      <ul>{{ range .links }}{{ with partial "home/page.html" . }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}{{ end }}</ul>
+    </li>
+    {{- end }}
+  </ul>
+</section>

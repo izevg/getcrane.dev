@@ -1,0 +1,34 @@
+{{- /*
+  Неразрывные пробелы в текстовых узлах HTML (ui-spec, «Переносы и типографика»).
+  Вход: dict "html" (строка HTML или обычный текст, экранированный заранее) "lang" ("ru" | "en").
+  Теги, а также содержимое pre/code/kbd/samp/script/style/textarea/svg не трогаются.
+  RU: после однобуквенных слов, перед тире, между числом и единицей, «т. е.», «т. д.».
+  EN: между числом и единицей. Выход: safeHTML.
+*/ -}}
+{{- $lang := .lang -}}
+{{- $out := slice -}}
+{{- $skip := 0 -}}
+{{- range findRE `<[^>]*>|[^<]+` .html -}}
+  {{- if hasPrefix . "<" -}}
+    {{- with findRESubmatch `^<(/?)(?:pre|code|kbd|samp|script|style|textarea|svg)[\s>/]` . -}}
+      {{- if eq (index (index . 0) 1) "/" }}{{ $skip = sub $skip 1 }}{{ else }}{{ $skip = add $skip 1 }}{{ end -}}
+    {{- end -}}
+    {{- $out = $out | append . -}}
+  {{- else if gt $skip 0 -}}
+    {{- $out = $out | append . -}}
+  {{- else -}}
+    {{- $t := . -}}
+    {{- if eq $lang "ru" -}}
+      {{- range seq 2 -}}
+        {{- $t = replaceRE `(^|[\s(«„“"])([вксуоиаяВКСУОИАЯ])\s` "${1}${2} " $t -}}
+      {{- end -}}
+      {{- $t = replaceRE `\s+—` " —" $t -}}
+      {{- $t = replaceRE `т\.\s(д|е|п|к)\.` "т. ${1}." $t -}}
+      {{- $t = replaceRE `(\d)\s(МБ|ГБ|КБ|ТБ|МиБ|ГиБ|КиБ|ТиБ|мс|мкс|мин|секунд|минут|час|дн|сут|байт|раз|шт\.|%)` "${1} ${2}" $t -}}
+    {{- else -}}
+      {{- $t = replaceRE `(\d)\s(MB|GB|KB|TB|MiB|GiB|KiB|TiB|ms|min)\b` "${1} ${2}" $t -}}
+    {{- end -}}
+    {{- $out = $out | append $t -}}
+  {{- end -}}
+{{- end -}}
+{{- return (delimit $out "" | safeHTML) -}}

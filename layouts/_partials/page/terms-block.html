@@ -1,0 +1,18 @@
+{{- /* «Термины на странице»: свёрнутый details сразу после шапки. Не выводится при пустом terms. Вход: страница. */ -}}
+{{- $p := . -}}
+{{- $lang := $p.Language.Lang -}}
+{{- with $p.Params.terms -}}
+{{- $gl := site.GetPage "glossary" -}}
+<details class="terms-block" data-pagefind-weight="0.4">
+  <summary>{{ i18n "terms" }} · {{ len . }}</summary>
+  <dl>
+    {{- range . }}
+    {{- $e := index site.Data.glossary . -}}
+    {{- if not $e }}{{ errorf "terms: неизвестный id %q в %s (нет в data/glossary.yaml)" . $p.Path }}{{ end -}}
+    {{- $t := index $e $lang }}
+    <dt><a href="{{ with $gl }}{{ .RelPermalink }}{{ else }}{{ relLangURL "glossary/" }}{{ end }}#{{ . }}">{{ $t.term }}</a></dt>
+    <dd>{{ $t.def }}</dd>
+    {{- end }}
+  </dl>
+</details>
+{{- end -}}

@@ -1,0 +1,14 @@
+{{- /* Список дочерних страниц раздела с описанием и бейджами. Вход: раздел. */ -}}
+{{- with .Pages.ByWeight -}}
+<section aria-labelledby="children-h" data-pagefind-ignore>
+  <h2 class="sr" id="children-h">{{ i18n "list.children" }}</h2>
+  <ul class="children">
+    {{- range . }}
+    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      {{- with .Params.description }}<p>{{ . }}</p>{{ end }}
+      <div class="chips">{{ partial "ui/badges.html" . }}</div>
+    </li>
+    {{- end }}
+  </ul>
+</section>
+{{- end -}}

@@ -1,0 +1,47 @@
+/* Слой semantic, часть сайта. Имена и значения консоли лежат в console.css; здесь только новые токены. */
+@layer semantic {
+  :root {
+    --font-sans: var(--p-font-sans);
+    --font-mono: var(--p-font-mono);
+
+    --link: var(--brand);
+    --link-hover: light-dark(var(--primary-hover), var(--p-link-hover-dark));
+    --limits-bg: light-dark(var(--p-limits-bg-light), var(--p-limits-bg-dark));
+    --limits-stripe: var(--muted-foreground);
+
+    --z-sticky: 10;
+    --header-height: 56px;
+    --measure: 68ch;
+    --container: 80rem;
+    --gutter: clamp(16px, 4vw, 32px);
+
+    --space-1: var(--p-space-1);
+    --space-2: var(--p-space-2);
+    --space-3: var(--p-space-3);
+    --space-4: var(--p-space-4);
+    --space-6: var(--p-space-6);
+    --space-8: var(--p-space-8);
+    --space-12: var(--p-space-12);
+    --space-16: var(--p-space-16);
+    --space-24: var(--p-space-24);
+    --space-section: clamp(4rem, 2.5rem + 5vw, 7.5rem);
+
+    --type-display: clamp(2.25rem, 1.6rem + 3vw, 4rem);
+    --type-h1: clamp(1.875rem, 1.6rem + 1.2vw, 2.5rem);
+    --type-h2: clamp(1.375rem, 1.25rem + 0.6vw, 1.75rem);
+    --type-h3: 1.1875rem;
+    --type-h4: 1rem;
+    --type-lead: clamp(1.125rem, 1.05rem + 0.3vw, 1.25rem);
+    --type-body: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem);
+    --type-small: 0.875rem;
+    --type-caption: 0.8125rem;
+    --type-code: 0.875rem;
+    --lh-body: 1.6;
+
+    --radius-sm: 4px;
+  }
+
+  :root:lang(ru) {
+    --lh-body: 1.65;
+  }
+}

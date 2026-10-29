@@ -1,0 +1,16 @@
+{{- $p := . -}}
+{{- $hero := index site.Data.home.hero $p.Language.Lang | default dict -}}
+# {{ site.Title }}
+{{ with $hero.lead }}
+> {{ . }}
+{{ end }}
+## {{ i18n "docs" }}
+
+{{ range partial "nav/flat.html" site.Home.Sections -}}
+- [{{ .Title }}]({{ with .OutputFormats.Get "markdown" }}{{ .Permalink }}{{ else }}{{ .Permalink }}{{ end }}){{ with .Params.description }}: {{ . }}{{ end }}
+{{ end }}
+## Optional
+
+{{ range site.Languages }}{{ if ne .Lang $p.Language.Lang }}- [{{ .LanguageName }}]({{ printf "https://getcrane.dev/%s/llms.txt" .Lang }})
+{{ end }}{{ end -}}
+- [llms-full]({{ printf "https://getcrane.dev/%s/llms-full.txt" $p.Language.Lang }})

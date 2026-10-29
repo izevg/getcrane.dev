@@ -1,0 +1,6 @@
+{{- /* Ссылки. Внешние — noopener; голый внешний URL (текст равен адресу) запрещён контрактом. */ -}}
+{{- $dest := .Destination -}}
+{{- $ext := or (hasPrefix $dest "http://") (hasPrefix $dest "https://") -}}
+{{- if and $ext (eq (plainify .Text) $dest) }}{{ errorf "ссылка: голый внешний URL %q в %s; оформите как [текст](url) или источник cite" $dest .Page.Path }}{{ end -}}
+<a href="{{ $dest | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if $ext }} rel="noopener noreferrer"{{ end }}>{{ .Text }}</a>
+{{- /* Без хвостового перевода строки. */ -}}

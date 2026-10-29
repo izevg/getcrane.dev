@@ -1,0 +1,30 @@
+{{- /* Глоссарий из data/glossary.yaml: id → ru/en {term, def}, see. Якорь записи — id. JSON-LD DefinedTermSet строит head/jsonld.html. */ -}}
+{{ define "main" }}
+{{- $lang := .Language.Lang -}}
+{{- $items := slice -}}
+{{- range $id, $e := site.Data.glossary }}{{ with index $e $lang }}{{ $items = $items | append (dict "id" $id "term" .term "key" (lower .term) "def" .def "see" $e.see) }}{{ end }}{{ end -}}
+<div class="container doc">
+  <div class="tree-col" id="site-nav"><nav aria-label="{{ i18n "nav.sections" }}" data-pagefind-ignore>{{ partial "nav/tree.html" (dict "cur" . "pages" site.Home.Sections "root" true) }}</nav></div>
+  <main id="content" class="doc-main">
+    {{ partial "page/header.html" . }}
+    <article class="prose" data-pagefind-body>
+      {{ partial "page/pagefind-meta.html" . }}
+      {{ .Content }}
+      <dl class="glossary">
+        {{- range sort $items "key" }}
+        <div class="gl-entry" id="{{ .id }}">
+          <dt>{{ .term }}</dt>
+          <dd>{{ .def }}
+            {{- with .see }}
+            <p class="gl-see">{{ i18n "glossary.see" }}:
+              {{- range $i, $s := . }}{{ with index site.Data.glossary $s }}{{ if $i }},{{ end }} <a href="#{{ $s }}">{{ (index . $lang).term }}</a>{{ end }}{{ end }}</p>
+            {{- end }}
+          </dd>
+        </div>
+        {{- end }}
+      </dl>
+    </article>
+    {{ partial "page/tips.html" . }}
+  </main>
+</div>
+{{ end }}

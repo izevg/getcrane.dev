@@ -4,3 +4,5 @@
 Desktop1440: { width: 1440, height: 900 }
 Tablet768: { width: 768, height: 1024 }
 Mobile390: { width: 390, height: 844 }
+DesktopLight: { width: 1440, height: 900 }
+Forbidden: { width: 1440, height: 900 }

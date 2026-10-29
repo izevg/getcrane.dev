@@ -17,7 +17,7 @@ This section describes how work with packages is organized: how a version enters
 
 A repository belongs to one package format and to one of two kinds.
 
-```mermaid {caption="Figure 1. The client talks only to CRANE. CRANE itself contacts the {{< term “upstream“ >}}, and only from a proxy repository."}
+```mermaid {caption="Figure 1. The client talks only to CRANE. CRANE itself contacts the upstream, and only from a proxy repository."}
 flowchart LR
   client["Package manager client"]
   crane["CRANE"]
@@ -33,7 +33,7 @@ flowchart LR
 - **Hosted** is the place for your own packages. CRANE is their source of truth. Details: {{< xref "features/registry/hosted" >}}.
 - **Proxy** is a cache of a public registry. CRANE fetches packages from the upstream itself, checks them and serves them to the client. Details: {{< xref "features/registry/proxy-cache" >}}.
 
-The same {{< term "namespace" >}} protects internal names in both kinds: a name covered by a namespace is never served from an upstream ({{< xref "features/security/namespace-reservation" >}}).
+The same namespace protects internal names in both kinds: a name covered by a namespace is never served from an upstream ({{< xref "features/security/namespace-reservation" >}}).
 
 ## What registry management covers {#contents}
 
@@ -65,7 +65,7 @@ Formats, storage backends and integrations are built into the binary as implemen
 
 - **There are no group repositories.** CRANE does not merge hosted and proxy under one address. The protection comes from the name invariant, not from the order of sources ({{< xref "features/security/namespace-reservation#no-groups" >}}).
 - **There is no Cargo git index.** CRANE implements only the sparse protocol ({{< xref "features/registry/formats#cargo" >}}).
-- **There is no direct connection to LDAP, Active Directory or SAML.** CRANE accepts people only through an {{< term "oidc" >}} provider, and directories connect through it ({{< xref "features/registry/teams-and-ownership#idp" >}}).
+- **There is no direct connection to LDAP, Active Directory or SAML.** CRANE accepts people only through an oidc provider, and directories connect through it ({{< xref "features/registry/teams-and-ownership#idp" >}}).
 
 ## Where to start {#start}
 

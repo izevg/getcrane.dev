@@ -17,7 +17,7 @@ CRANE хранит собственные пакеты команд в {{< term 
 
 Репозиторий относится к одному формату пакетов и к одному из двух видов.
 
-```mermaid {caption="Рисунок 1. Клиент обращается только к CRANE. В {{< term “upstream“ >}} ходит сам CRANE, и только из proxy-репозитория."}
+```mermaid {caption="Рисунок 1. Клиент обращается только к CRANE. В upstream ходит сам CRANE, и только из proxy-репозитория."}
 flowchart LR
   client["Клиент пакетного менеджера"]
   crane["CRANE"]
@@ -33,7 +33,7 @@ flowchart LR
 - **Hosted** — место для собственных пакетов. CRANE для них источник истины. Подробнее: {{< xref "features/registry/hosted" >}}.
 - **Proxy** — кэш публичного реестра. CRANE сам получает пакеты из upstream, проверяет и отдаёт клиенту. Подробнее: {{< xref "features/registry/proxy-cache" >}}.
 
-Одно и то же {{< term "namespace" >}} защищает внутренние имена в обоих видах: имя, покрытое namespace, никогда не приходит из upstream ({{< xref "features/security/namespace-reservation" >}}).
+Одно и то же namespace защищает внутренние имена в обоих видах: имя, покрытое namespace, никогда не приходит из upstream ({{< xref "features/security/namespace-reservation" >}}).
 
 ## Что входит в управление реестром {#contents}
 
@@ -65,7 +65,7 @@ CRANE реализует протоколы экосистем по их спе�
 
 - **Групповых репозиториев нет.** CRANE не сливает hosted и proxy под одним адресом. Защиту даёт инвариант имён, а не порядок источников ({{< xref "features/security/namespace-reservation#no-groups" >}}).
 - **Git-индекса Cargo нет.** CRANE реализует только sparse-протокол ({{< xref "features/registry/formats#cargo" >}}).
-- **Прямого подключения к LDAP, Active Directory и SAML нет.** Людей CRANE принимает только через провайдера {{< term "oidc" >}}, а каталоги подключаются через него ({{< xref "features/registry/teams-and-ownership#idp" >}}).
+- **Прямого подключения к LDAP, Active Directory и SAML нет.** Людей CRANE принимает только через провайдера oidc, а каталоги подключаются через него ({{< xref "features/registry/teams-and-ownership#idp" >}}).
 
 ## С чего начать {#start}
 

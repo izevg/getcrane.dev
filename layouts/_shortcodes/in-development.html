@@ -1,6 +1,6 @@
 {{- /*
   {{< in-development >}}Что именно отсутствует.{{< /in-development >}}
-  Фиксированная фраза + строка из шорткода. Допустим только при state: current и status: in-development; target + in-development ломает сборку.
+  Фиксированная фраза + строка из шорткода; при planned в front matter страницы — чип «Планируется в X.Y» и ссылка на дорожную карту (якорь версии). Допустим только при state: current и status: in-development; target + in-development ломает сборку.
 */ -}}
 {{- $p := .Page -}}
 {{- if ne $p.Params.state "current" }}{{ errorf "in-development: допустим только при state: current (%s)" .Position }}{{ end -}}
@@ -10,5 +10,11 @@
   <div>
     <p>{{ i18n "in-development" }}</p>
     <p>{{ partial "ui/inner.html" (dict "page" $p "inner" .Inner "display" "inline") }}</p>
+    {{- with $p.Params.planned }}
+    {{- $R := partialCached "util/roadmap.html" "roadmap" -}}
+    {{- if not (isset $R.rank (printf "%v" .)) }}{{ errorf "in-development: planned %q не найден в data/roadmap.yaml (%s)" . $.Position }}{{ end }}
+    {{- $link := partial "tips/xref.html" (dict "page" $p "arg" (printf "project/roadmap#%s" (index $R.anchor (printf "%v" .))) "pos" $.Position) }}
+    <p class="dev-planned"><span class="badge badge-planned" data-ver>{{ partial "ui/icon.html" "hourglass" }}{{ partial "ui/t.html" (dict "k" "chip.planned" "v" (dict "id" .)) }}</span> {{ partial "ui/t.html" (dict "k" "in-development.planned" "v" (dict "id" . "link" $link)) | safeHTML }}</p>
+    {{- end }}
   </div>
 </div>

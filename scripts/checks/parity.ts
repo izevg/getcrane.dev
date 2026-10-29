@@ -1,3 +1,4 @@
+import { roadmapAnchors } from "../../tools/check-roadmap.ts";
 import type { Page } from "../lib/content.ts";
 import { lineOf, stripCode, type Report } from "../lib/content.ts";
 
@@ -79,7 +80,8 @@ export function checkParity(pages: Page[], report: Report): void {
 
 export function checkXrefs(pages: Page[], report: Report): void {
   const index = new Map(pages.map((p) => [`${p.lang}:${p.rel}`, p]));
-  const anchorsOf = new Map(pages.map((p) => [`${p.lang}:${p.rel}`, new Set(anchors(p))]));
+  // У страницы дорожной карты якоря версий строит шаблон из data/roadmap.yaml, в тексте заголовков нет.
+  const anchorsOf = new Map(pages.map((p) => [`${p.lang}:${p.rel}`, new Set(p.front.layout === "roadmap" ? roadmapAnchors() : anchors(p))]));
   for (const p of pages) {
     const body = stripCode(p.body);
     for (const m of body.matchAll(/\{\{<\s*xref\s+"([^"#]+)(?:#([^"]+))?"/g)) {

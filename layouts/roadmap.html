@@ -1,0 +1,63 @@
+{{- /*
+  Дорожная карта (layout: roadmap): вводный текст страницы, фильтр по теме и версии из data/roadmap.yaml, затем «Направления» без версий.
+  Выпущенные версии свёрнуты (details), текущая и ближайшие запланированные раскрыты. Фильтр работает на CSS (:has) без JS, без :has виден весь список.
+  Схема данных — комментарий в начале data/roadmap.yaml; проверка сборки — partial util/roadmap.html и roadmap/feature.html, проверка исходников — tools/check-roadmap.ts.
+  Номера версий выводятся без префикса v и помечены data-ver. Front matter: layout: roadmap, genre: explanation, state: target, terms: [].
+*/ -}}
+{{ define "main" }}
+{{- $lang := .Language.Lang -}}
+{{- $R := partial "util/roadmap.html" -}}
+{{- /* Сколько ближайших запланированных версий раскрыто вместе с текущей. */ -}}
+{{- $openAhead := 2 -}}
+{{- $ahead := 0 -}}
+{{- $docs := site.GetPage "versions" -}}
+{{- if not $docs }}{{ errorf "roadmap: нет страницы versions («Версии документации»)" }}{{ end -}}
+<div class="container doc">
+  <div class="tree-col" id="site-nav">{{ partial "nav/side.html" . }}</div>
+  <main id="content" class="doc-main">
+    {{ partial "page/header.html" . }}
+    <article class="prose" data-pagefind-body>
+      {{ partial "page/pagefind-meta.html" . }}
+      {{ partial "util/typo.html" (dict "html" .Content "lang" $lang) }}
+      <div class="rm" id="roadmap">
+        <div class="rm-filter" role="radiogroup" aria-labelledby="rm-filter-label">
+          <span class="rm-filter-label" id="rm-filter-label">{{ i18n "roadmap.filter" }}</span>
+          <input class="rm-radio" type="radio" name="rm-topic" id="rm-f-all" checked><label class="rm-pick" for="rm-f-all">{{ i18n "roadmap.filter.all" }}</label>
+          {{- range $R.topics }}
+          <input class="rm-radio" type="radio" name="rm-topic" id="rm-f-{{ . }}"><label class="rm-pick" for="rm-f-{{ . }}">{{ partial "ui/icon.html" (partial "roadmap/icon.html" .) }}{{ i18n (printf "roadmap.topic.%s" .) }}</label>
+          {{- end }}
+        </div>
+        {{- range $R.versions }}
+        {{- $v := . -}}
+        {{- $id := printf "%v" $v.id -}}
+        {{- $open := eq $v.status "current" -}}
+        {{- if eq $v.status "planned" }}{{ if lt $ahead $openAhead }}{{ $open = true }}{{ end }}{{ $ahead = add $ahead 1 }}{{ end -}}
+        {{- if not (index $v.title $lang) }}{{ errorf "data/roadmap.yaml: у версии %q нет title.%s" $id $lang }}{{ end }}
+        <details class="rm-ver" id="{{ index $R.anchor $id }}" data-status="{{ $v.status }}"{{ if $open }} open{{ end }}>
+          <summary>
+            <h2 class="rm-ver-title"><span class="rm-ver-id" data-ver>{{ $id }}</span><span class="rm-ver-name">{{ index $v.title $lang }}</span></h2>
+            {{ partial "roadmap/chip.html" (dict "status" $v.status "id" $id) }}
+          </summary>
+          <div class="rm-ver-body">
+            {{- if eq $v.status "shipped" }}
+            <p class="rm-docs">{{ partial "ui/t.html" (dict "k" "roadmap.shipped.docs" "v" (dict "link" (printf `<a href="%s">%s</a>` $docs.RelPermalink ($docs.Title | htmlEscape)))) | safeHTML }}</p>
+            {{- end }}
+            {{ partial "roadmap/groups.html" (dict "items" $v.features "topics" $R.topics "lang" $lang "status" $v.status "id" $id) }}
+            <p class="rm-none">{{ i18n "roadmap.none" }}</p>
+          </div>
+        </details>
+        {{- end }}
+        {{- with $R.directions }}
+        <section class="rm-directions" aria-labelledby="directions">
+          <h2 id="directions" class="rm-dir-title">{{ i18n "roadmap.directions" }}<span class="badge badge-version">{{ partial "ui/icon.html" "target" }}{{ i18n "roadmap.directions.note" }}</span></h2>
+          <p class="rm-dir-lead">{{ i18n "roadmap.directions.lead" }}</p>
+          {{ partial "roadmap/groups.html" (dict "items" . "topics" $R.topics "lang" $lang "status" "" "id" "") }}
+          <p class="rm-none">{{ i18n "roadmap.none" }}</p>
+        </section>
+        {{- end }}
+      </div>
+    </article>
+    {{ partial "page/tips.html" . }}
+  </main>
+</div>
+{{ end }}

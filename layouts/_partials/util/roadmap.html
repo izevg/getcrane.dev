@@ -1,0 +1,34 @@
+{{- /*
+  Дорожная карта из data/roadmap.yaml с проверкой схемы. Вход: нет. Выход: dict
+  versions (записи по порядку показа), directions (функции без версии), topics (допустимые темы в порядке показа),
+  rank (id версии → позиция), anchor (id версии → якорь на странице дорожной карты, например v0-5).
+  Нарушение схемы ломает сборку; существование страниц и тексты проверяет шаблон roadmap.html (они зависят от языка).
+*/ -}}
+{{- $topics := slice "security" "formats" "console" "operations" "access" "integrations" -}}
+{{- $d := site.Data.roadmap | default dict -}}
+{{- $versions := $d.versions | default slice -}}
+{{- if not $versions }}{{ errorf "data/roadmap.yaml: нет ни одной версии" }}{{ end -}}
+{{- $rank := dict -}}
+{{- $anchor := dict -}}
+{{- $featureIDs := dict -}}
+{{- range $i, $v := $versions -}}
+  {{- $id := printf "%v" $v.id -}}
+  {{- if not (and $v.id $v.title $v.status) }}{{ errorf "data/roadmap.yaml: версия %d без id, title или status" $i }}{{ end -}}
+  {{- if not (reflect.IsSlice $v.features) }}{{ errorf "data/roadmap.yaml: у версии %q нет списка features" $id }}{{ end -}}
+  {{- if not (in (slice "shipped" "current" "planned") $v.status) }}{{ errorf "data/roadmap.yaml: неизвестный status %q у версии %q" $v.status $id }}{{ end -}}
+  {{- if isset $rank $id }}{{ errorf "data/roadmap.yaml: повторяется id версии %q" $id }}{{ end -}}
+  {{- $rank = merge $rank (dict $id $i) -}}
+  {{- $anchor = merge $anchor (dict $id (printf "v%s" (replace $id "." "-"))) -}}
+  {{- range $v.features -}}
+    {{- if isset $featureIDs .id }}{{ errorf "data/roadmap.yaml: повторяется id функции %q" .id }}{{ end -}}
+    {{- $featureIDs = merge $featureIDs (dict .id true) -}}
+    {{- if not (in $topics .topic) }}{{ errorf "data/roadmap.yaml: неизвестный topic %q у функции %q" .topic .id }}{{ end -}}
+    {{- if and .status (not (in (slice "shipped" "current" "planned") .status)) }}{{ errorf "data/roadmap.yaml: неизвестный status %q у функции %q" .status .id }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+{{- range ($d.directions | default slice) -}}
+  {{- if isset $featureIDs .id }}{{ errorf "data/roadmap.yaml: повторяется id направления %q" .id }}{{ end -}}
+  {{- $featureIDs = merge $featureIDs (dict .id true) -}}
+  {{- if not (in $topics .topic) }}{{ errorf "data/roadmap.yaml: неизвестный topic %q у направления %q" .topic .id }}{{ end -}}
+{{- end -}}
+{{- return (dict "versions" $versions "directions" ($d.directions | default slice) "topics" $topics "rank" $rank "anchor" $anchor) -}}

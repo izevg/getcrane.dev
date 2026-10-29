@@ -1,0 +1,17 @@
+{{- /*
+  Функции версии (или направления), сгруппированные по теме в порядке data topics. Вход: dict "items" "topics" "lang" "status" (версии; пусто у направлений) "id".
+  Тема без функций не выводится. Группа несёт data-topic: по нему работает CSS-фильтр.
+*/ -}}
+{{- $c := . -}}
+{{- $key := replace (.id | default "dir") "." "-" -}}
+{{- range $topic := .topics }}
+  {{- $items := where $c.items "topic" $topic -}}
+  {{- if $items }}
+  <section class="rm-group" data-topic="{{ $topic }}" aria-labelledby="rm-g-{{ $key }}-{{ $topic }}">
+    <h3 class="rm-group-title" id="rm-g-{{ $key }}-{{ $topic }}">{{ partial "ui/icon.html" (dict "name" (partial "roadmap/icon.html" $topic) "class" "i i-16") }}{{ i18n (printf "roadmap.topic.%s" $topic) }}</h3>
+    <ul class="rm-list">
+      {{- range $items }}{{ partial "roadmap/feature.html" (dict "f" . "lang" $c.lang "status" $c.status "id" $c.id) }}{{ end }}
+    </ul>
+  </section>
+  {{- end }}
+{{- end }}

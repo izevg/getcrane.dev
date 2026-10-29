@@ -1,0 +1,26 @@
+{{- /*
+  Чип «Планируется в X.Y» для страницы со status: in-development и planned: "X.Y" (id версии из data/roadmap.yaml).
+  Вход: страница или dict "page" "static" (true — без ссылки и подсказки: внутри панели, где рядом стоит ссылка на дорожную карту).
+  Нет planned — пусто. Ошибки сборки: planned не строка, planned без status: in-development, версии нет в дорожной карте.
+  Ссылка ведёт на якорь версии страницы «Дорожная карта»; подсказка — слой popover, как у чипов версий.
+*/ -}}
+{{- $p := . -}}{{- $static := false -}}
+{{- if reflect.IsMap . }}{{ $p = .page }}{{ $static = .static | default false }}{{ end -}}
+{{- $raw := $p.Params.planned -}}
+{{- if $raw -}}
+  {{- if not (eq (printf "%T" $raw) "string") }}{{ errorf "front matter: planned должен быть строкой в кавычках, например \"0.5\" (%s)" $p.Path }}{{ end -}}
+  {{- if ne $p.Params.status "in-development" }}{{ errorf "front matter: planned допустим только при status: in-development (%s)" $p.Path }}{{ end -}}
+  {{- $R := partialCached "util/roadmap.html" "roadmap" -}}
+  {{- if not (isset $R.rank $raw) }}{{ errorf "front matter: planned %q не найден в data/roadmap.yaml (%s)" $raw $p.Path }}{{ end -}}
+  {{- $anchor := index $R.anchor $raw -}}
+  {{- $label := partial "ui/t.html" (dict "k" "chip.planned" "v" (dict "id" $raw)) -}}
+  {{- if $static -}}
+    <span class="badge badge-planned" data-ver>{{ partial "ui/icon.html" "hourglass" }}{{ $label }}</span>
+  {{- else -}}
+    {{- $road := site.GetPage "project/roadmap" -}}
+    {{- if not $road }}{{ errorf "planned: нет страницы project/roadmap (%s)" $p.Path }}{{ end -}}
+    {{- $href := printf "%s#%s" $road.RelPermalink $anchor -}}
+    {{- $tid := partial "tips/chip.html" (dict "page" $p "id" (printf "planned-%s" $anchor) "text" (partial "ui/t.html" (dict "k" "tip.planned" "v" (dict "id" $raw))) "href" $href) -}}
+    <a class="badge badge-planned" href="{{ $href }}" data-ver data-tip="{{ $tid }}" aria-describedby="{{ $tid }}-d">{{ partial "ui/icon.html" "hourglass" }}{{ $label }}</a>
+  {{- end -}}
+{{- end -}}

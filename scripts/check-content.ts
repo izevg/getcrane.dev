@@ -1,5 +1,6 @@
-// Проверки контента для CI: паритет RU/EN, мета, запрещённые слова, xref, каталог i18n, версии, отступы только из токенов.
+// Проверки контента для CI: паритет RU/EN, мета, запрещённые слова, xref, каталог i18n, версии, дорожная карта, отступы только из токенов.
 import { resolve } from "node:path";
+import { checkRoadmap } from "../tools/check-roadmap.ts";
 import { Report, SITE, loadPages } from "./lib/content.ts";
 import { checkI18n } from "./checks/i18n.ts";
 import { checkIcons } from "./checks/icons.ts";
@@ -16,6 +17,7 @@ checkXrefs(pages, report);
 checkMeta(pages, report);
 checkWords(pages, report);
 checkVersions(pages, report);
+checkRoadmap(pages, report);
 checkSpacing(report);
 checkI18n(report);
 checkIcons(report);

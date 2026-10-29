@@ -1,0 +1,14 @@
+{{- /*
+  Слой-подсказка для чипа (версии страницы, «Планируется в…»). Вход: dict "page" "id" (уникальный в странице) "text" "href" (куда ведёт кнопка на касаниях).
+  Кладёт слой в Scratch страницы (выводится в конце main, page/tips.html), включает остров tips и отдаёт id слоя.
+  Триггер — ссылка с data-tip и aria-describedby="<id>-d", как у xref; вместо атрибута title.
+*/ -}}
+{{- $p := .page -}}
+{{- $tid := printf "tip-%s" .id -}}
+{{- $tips := $p.Scratch.Get "tips" | default dict -}}
+{{- if not (index $tips $tid) -}}
+  {{- $html := printf `<div id="%s" class="tip" popover="manual" role="tooltip"><p class="tip-desc" id="%s-d">%s</p><a class="tip-more btn btn-secondary btn-sm" href="%s">%s</a></div>` $tid $tid (.text | htmlEscape) .href (i18n "xref.more") -}}
+  {{- $p.Scratch.SetInMap "tips" $tid ($html | safeHTML) -}}
+{{- end -}}
+{{- $p.Scratch.Set "f-tips" true -}}
+{{- return $tid -}}

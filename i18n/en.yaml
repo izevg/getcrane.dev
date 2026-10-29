@@ -192,3 +192,24 @@ zoom.out: Zoom out
 zoom.fit: Fit to view
 zoom.close: Close
 zoom.small: "The text in the diagram is small: select it to enlarge."
+
+# Roadmap and the "Planned for…" chip
+chip.planned: "Planned for {id}"
+tip.planned: "This feature is not released yet: it is planned for version {id}. The plan may change and is not a commitment. The content of the version is on the Roadmap page."
+in-development.planned: "The content of versions is on the {link} page."
+roadmap.filter: Topic
+roadmap.filter.all: All topics
+roadmap.topic.security: Security
+roadmap.topic.formats: Formats
+roadmap.topic.console: Console
+roadmap.topic.operations: Operations
+roadmap.topic.access: Access
+roadmap.topic.integrations: Integrations
+roadmap.status.shipped: Released
+roadmap.status.current: In development
+roadmap.status.planned: Planned
+roadmap.shipped.docs: "Documentation of released versions is on the {link} page."
+roadmap.none: No entries on the selected topic.
+roadmap.directions: Directions
+roadmap.directions.note: Not tied to a version
+roadmap.directions.lead: These directions are being considered, are not tied to any version and may change.

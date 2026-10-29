@@ -192,3 +192,24 @@ zoom.out: Отдалить
 zoom.fit: По размеру
 zoom.close: Закрыть
 zoom.small: "Текст на схеме мелкий: нажмите на неё, чтобы увеличить."
+
+# Дорожная карта и чип «Планируется в…»
+chip.planned: "Планируется в {id}"
+tip.planned: "Функция ещё не выпущена: она запланирована в версии {id}. План может меняться и не является обязательством. Состав версии — на странице «Дорожная карта»."
+in-development.planned: "Состав версий — на странице {link}."
+roadmap.filter: Тема
+roadmap.filter.all: Все темы
+roadmap.topic.security: Безопасность
+roadmap.topic.formats: Форматы
+roadmap.topic.console: Консоль
+roadmap.topic.operations: Эксплуатация
+roadmap.topic.access: Доступ
+roadmap.topic.integrations: Интеграции
+roadmap.status.shipped: Выпущено
+roadmap.status.current: В разработке
+roadmap.status.planned: Планируется
+roadmap.shipped.docs: "Документация выпущенных версий — на странице {link}."
+roadmap.none: Нет записей по выбранной теме.
+roadmap.directions: Направления
+roadmap.directions.note: Не привязано к версии
+roadmap.directions.lead: Эти направления рассматриваются, но не привязаны ни к одной версии и могут измениться.

@@ -63,9 +63,9 @@ export function checkVersions(pages: Page[], report: Report): void {
   }
 }
 
-/** Страницы без номеров версий по правилу владельца; белый список — страница versions (layout: versions). */
+/** Страницы без номеров версий по правилу владельца; белый список — страницы versions и roadmap (layout: versions, layout: roadmap). */
 export function isVersionsPage(p: Page): boolean {
-  return p.front.layout === "versions";
+  return p.front.layout === "versions" || p.front.layout === "roadmap";
 }
 
 /** Собранный сайт: номера версий и устаревшая подпись бейджа только там, где разрешено. Каталог — аргумент --public. */

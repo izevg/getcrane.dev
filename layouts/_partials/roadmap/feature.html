@@ -1,0 +1,16 @@
+{{- /*
+  Карточка функции. Вход: dict "f" "lang" "status" (статус версии; пусто у направления) "id" (id версии).
+  Статус функции по умолчанию равен статусу версии. href — страница сайта от корня языка; нет страницы или текста — ошибка сборки.
+*/ -}}
+{{- $f := .f -}}
+{{- $t := index $f .lang -}}
+{{- if not (and $t $t.title $t.benefit) }}{{ errorf "data/roadmap.yaml: у %q нет title и benefit для языка %s" $f.id .lang }}{{ end -}}
+{{- $page := site.GetPage (strings.TrimPrefix "/" $f.href) -}}
+{{- if not (and $f.href $page) }}{{ errorf "data/roadmap.yaml: у %q страница %q не найдена (язык %s)" $f.id $f.href .lang }}{{ end -}}
+{{- $status := $f.status | default .status -}}
+<li class="card-link rm-feat" data-topic="{{ $f.topic }}">
+  <p class="card-link-head"><a class="card-link-title" href="{{ $page.RelPermalink }}" aria-describedby="rm-d-{{ $f.id }}">{{ $t.title }}</a>
+    {{- with $status }}{{ partial "roadmap/chip.html" (dict "status" . "id" $.id) }}{{ end -}}
+    {{ partial "ui/icon.html" (dict "name" "arrow-right" "class" "i i-16 card-link-go") }}</p>
+  <p class="card-link-desc" id="rm-d-{{ $f.id }}">{{ $t.benefit }}</p>
+</li>

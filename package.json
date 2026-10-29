@@ -21,6 +21,7 @@
     "build:full": "npm run mermaid && npm run build",
     "build:local": "HUGO_ENV=development node scripts/hugo.ts --gc && npm run pagefind && npm run postbuild",
     "check:content": "node scripts/check-content.ts",
+    "check:roadmap": "node tools/check-roadmap.ts",
     "check:links": "node scripts/check-links.ts",
     "check:external": "node scripts/check-external.ts",
     "check:spell": "node scripts/spell.ts",

@@ -1,11 +1,12 @@
 {{- /*
   Острова JS (TypeScript → esbuild внутри Hugo). Грузятся как module, то есть отложенно; страница читается без них.
-  chrome — на каждой странице; article — на текстовых; zoom — на страницах с диаграммами и снимками; tips и tabs — только если на странице есть их разметка (флаги ставят шорткоды и render-хуки).
+  chrome — на каждой странице; article — на текстовых; zoom — на страницах с диаграммами и снимками; roadmap — на странице дорожной карты (layout: roadmap); tips и tabs — только если на странице есть их разметка (флаги ставят шорткоды и render-хуки).
 */ -}}
 {{- $p := . -}}
 {{- $names := slice "chrome" -}}
 {{- if not $p.IsHome }}{{ $names = $names | append "article" }}{{ else }}{{ $names = $names | append "home" "article" }}{{ end -}}
 {{- if $p.Scratch.Get "f-tips" }}{{ $names = $names | append "tips" }}{{ end -}}
+{{- if eq $p.Params.layout "roadmap" }}{{ $names = $names | append "roadmap" }}{{ end -}}
 {{- if $p.Scratch.Get "f-tabs" }}{{ $names = $names | append "tabs" }}{{ end -}}
 {{- if or ($p.Scratch.Get "f-zoom") $p.IsHome }}{{ $names = $names | append "zoom" }}{{ end -}}
 {{- range $names -}}

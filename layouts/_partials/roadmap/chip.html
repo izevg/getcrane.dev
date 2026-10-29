@@ -1,0 +1,8 @@
+{{- /*
+  Чип статуса версии или функции. Вход: dict "status" (shipped | current | planned) "id" (версия, для «Планируется в X.Y»).
+  shipped — «Выпущено», current — «В разработке», planned — «Планируется в {id}». Форма и иконка различают статусы, не только цвет.
+*/ -}}
+{{- $icon := index (dict "shipped" "check" "current" "clock" "planned" "hourglass") .status -}}
+{{- $cls := index (dict "shipped" "badge-shipped" "current" "badge-dev" "planned" "badge-planned") .status -}}
+{{- $text := cond (eq .status "planned") (partial "ui/t.html" (dict "k" "chip.planned" "v" (dict "id" .id))) (i18n (printf "roadmap.status.%s" .status)) -}}
+<span class="badge {{ $cls }}" data-ver>{{ partial "ui/icon.html" $icon }}{{ $text }}</span>

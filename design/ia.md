@@ -37,6 +37,7 @@
 | Справочники | `reference/` | reference | current | platform, developer |
 | Эксплуатация | `operations/` | how-to | current | platform |
 | Глоссарий | `glossary/` | reference | — | все |
+| О проекте | `project/` | explanation | target | все |
 
 ## Страницы
 
@@ -177,3 +178,12 @@
 - Токены темы: в репозитории сайта лежит снимок токенов консоли с версией источника; сверку снимка с консолью выполняет CI основного репозитория CRANE.
 - Бейджи состояния: `target` — «Целевое состояние» / «Design», `current` — «Текущая версия» / «Current».
 - CI: проверка ссылок (внутренних и внешних), орфографии RU и EN, паритета RU/EN (пути, якоря, шорткоды, поля front matter), запрещённых слов («мы», «наш», «оператор», имена агентов), длины `description`.
+
+### О проекте `project/`
+
+| Путь | Заголовок RU | Жанр | Источники | Исп. |
+| --- | --- | --- | --- | --- |
+| `project/_index` | О проекте | explanation | `README.md`, `LICENSE`, `.github/SECURITY.md` | писатель |
+| `project/roadmap` | Дорожная карта | explanation (шаблон из `data/roadmap.yaml`) | `ROADMAP.md` (только состав версий и функции, без сроков и внутреннего), `docs/product` | писатель + fe-coder |
+
+Версии документации — `versions/` (страница из `data/versions.yaml`).

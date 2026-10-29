@@ -1,0 +1,615 @@
+# Публичная дорожная карта CRANE: версии и функции, без сроков и внутренних деталей.
+# Источник состава версий — ROADMAP.md основного репозитория; описания функций — docs/product и страницы Features.
+# Страница: content/{ru,en}/project/roadmap.md (layout: roadmap). Шаблон группирует функции версии по теме.
+#
+# Порядок записей — порядок показа: сверху самая ранняя версия.
+#
+# Поля версии:
+#   id       — номер версии в кавычках ("0.3", "1.0"); его же шаблон показывает в чипе «Планируется в vX.Y».
+#   title    — смысловое имя вехи: ru и en.
+#   status   — shipped (выпущена), current (текущая веха), planned (запланирована).
+#   features — список функций версии.
+#
+# Поля функции:
+#   id       — kebab-case, уникален во всём файле.
+#   topic    — security | formats | console | operations | access | integrations.
+#   status   — shipped | current | planned; необязательно, по умолчанию как у версии.
+#   href     — путь страницы сайта от корня языка, как в xref (без начальной косой черты); страница обязана существовать в content/ru и content/en.
+#   ru / en  — { title: короткое имя функции, benefit: 1–2 предложения, что это даёт пользователю }.
+#
+# В текстах нет дат, сроков, номеров будущих версий, внутренних имён и оценок. План может меняться и не является обязательством.
+
+versions:
+  - id: "0.1"
+    title:
+      ru: "Каркас и hosted Cargo"
+      en: "Foundation and hosted Cargo"
+    status: shipped
+    features:
+      - id: cargo-hosted
+        topic: formats
+        href: formats/cargo
+        ru:
+          title: "Hosted-репозиторий Cargo"
+          benefit: "Настоящий cargo публикует, находит, скачивает и отзывает (yank) крейты в собственном репозитории CRANE по sparse-протоколу."
+        en:
+          title: "Hosted Cargo repository"
+          benefit: "The real cargo publishes, finds, downloads and yanks crates in a CRANE repository over the sparse protocol."
+      - id: immutable-versions
+        topic: security
+        href: features/security/immutable-versions
+        ru:
+          title: "Неизменяемые версии"
+          benefit: "Опубликованную версию нельзя перезаписать, а номер удалённой версии не выдаётся повторно: файл по номеру версии всегда один и тот же."
+        en:
+          title: "Immutable versions"
+          benefit: "A published version cannot be overwritten, and the number of a deleted version is never reused: the file for a version number is always the same."
+      - id: digest-addressed-storage
+        topic: security
+        href: features/security/digest-verification
+        ru:
+          title: "Хранение по дайджесту SHA-256"
+          benefit: "CRANE проверяет SHA-256 каждого файла перед сохранением и хранит файлы по дайджесту, поэтому повреждённый или подменённый файл не попадает в реестр."
+        en:
+          title: "Storage addressed by SHA-256 digest"
+          benefit: "CRANE checks the SHA-256 of every file before committing it and stores files by digest, so a corrupted or substituted file does not enter the registry."
+      - id: compose-single-node
+        topic: operations
+        href: deploy/docker-compose
+        ru:
+          title: "Развёртывание на одном узле в Docker Compose"
+          benefit: "CRANE, PostgreSQL и локальный диск запускаются одной командой Compose; этого достаточно, чтобы попробовать продукт и развернуть малую установку."
+        en:
+          title: "Single-node deployment with Docker Compose"
+          benefit: "CRANE, PostgreSQL and a local disk start with one Compose command, which is enough to try the product and run a small installation."
+
+  - id: "0.2"
+    title:
+      ru: "Proxy-кэш, crates.io и npm"
+      en: "Proxy cache, crates.io and npm"
+    status: shipped
+    features:
+      - id: proxy-cache-engine
+        topic: operations
+        href: features/registry/proxy-cache
+        ru:
+          title: "Proxy и кэш upstream"
+          benefit: "Повторные запросы к upstream схлопываются в один, а при недоступном upstream CRANE отдаёт устаревшую копию из кэша, и сборка продолжается."
+        en:
+          title: "Proxy and upstream cache"
+          benefit: "Repeated requests to an upstream collapse into one, and when the upstream is unavailable CRANE serves a stale copy from the cache so builds keep running."
+      - id: valkey-l2-cache
+        topic: operations
+        href: deploy/valkey-cache
+        ru:
+          title: "Кэш Valkey"
+          benefit: "Valkey служит вторым уровнем кэша метаданных и координирует запросы между экземплярами CRANE."
+        en:
+          title: "Valkey cache"
+          benefit: "Valkey acts as the second cache level for metadata and coordinates requests between CRANE instances."
+      - id: egress-guard
+        topic: security
+        href: features/security/egress-guard
+        ru:
+          title: "Контроль исходящих запросов"
+          benefit: "Все запросы к upstream идут через один HTTP-клиент, который проверяет хост, схему, адреса после DNS и redirect, поэтому upstream не заставит CRANE обратиться во внутреннюю сеть."
+        en:
+          title: "Egress guard"
+          benefit: "All upstream requests go through one HTTP client that checks the host, scheme, post-DNS addresses and redirects, so an upstream cannot make CRANE reach into the internal network."
+      - id: crates-io-proxy
+        topic: formats
+        href: formats/cargo
+        ru:
+          title: "Proxy crates.io"
+          benefit: "Внешние зависимости Cargo скачиваются через CRANE, а собственные крейты лежат рядом в hosted-репозитории."
+        en:
+          title: "crates.io proxy"
+          benefit: "External Cargo dependencies are downloaded through CRANE, and your own crates sit next to them in a hosted repository."
+      - id: npm
+        topic: formats
+        href: formats/npm
+        ru:
+          title: "npm: hosted и proxy"
+          benefit: "npm публикует и устанавливает пакеты через CRANE: dist-tags, deprecate и unpublish работают по политике реестра."
+        en:
+          title: "npm: hosted and proxy"
+          benefit: "npm publishes and installs packages through CRANE; dist-tags, deprecate and unpublish follow the registry policy."
+      - id: namespace-reservation
+        topic: security
+        href: features/security/namespace-reservation
+        ru:
+          title: "Резервирование namespace"
+          benefit: "Hosted-репозиторий всегда приоритетнее proxy, поэтому публичный пакет не может подменить внутренний с тем же именем (dependency confusion)."
+        en:
+          title: "Namespace reservation"
+          benefit: "A hosted repository always takes priority over a proxy, so a public package cannot replace an internal one with the same name (dependency confusion)."
+
+  - id: "0.3"
+    title:
+      ru: "PyPI, Maven, NuGet, сканирование и первый запуск"
+      en: "PyPI, Maven, NuGet, scanning and first run"
+    status: current
+    features:
+      - id: pypi
+        topic: formats
+        href: formats/pypi
+        ru:
+          title: "PyPI: hosted и proxy"
+          benefit: "pip, uv и poetry работают с CRANE через Simple API: установка, загрузка пакетов и yank, с нормализацией имён."
+        en:
+          title: "PyPI: hosted and proxy"
+          benefit: "pip, uv and poetry work with CRANE through the Simple API: install, upload and yank, with name normalization."
+      - id: maven
+        topic: formats
+        href: formats/maven
+        ru:
+          title: "Maven: hosted и proxy"
+          benefit: "Maven и Gradle берут и публикуют артефакты через CRANE; контрольные суммы и SNAPSHOT-сборки поддерживаются."
+        en:
+          title: "Maven: hosted and proxy"
+          benefit: "Maven and Gradle fetch and publish artifacts through CRANE, with checksums and SNAPSHOT builds supported."
+      - id: nuget
+        topic: formats
+        href: formats/nuget
+        ru:
+          title: "NuGet: hosted и proxy"
+          benefit: "dotnet и nuget.exe работают с фидами NuGet V3 в CRANE: установка, публикация и unlist."
+        en:
+          title: "NuGet: hosted and proxy"
+          benefit: "dotnet and nuget.exe work with NuGet V3 feeds in CRANE: install, push and unlist."
+      - id: evidence-sbom-scanning
+        topic: security
+        href: features/security/evidence-and-scanning
+        ru:
+          title: "Evidence, SBOM и сканирование Trivy"
+          benefit: "CRANE привязывает SBOM и результат скана к дайджесту содержимого, разбирает недоверенные архивы в песочнице и использует результат при решении о выдаче версии."
+        en:
+          title: "Evidence, SBOM and Trivy scanning"
+          benefit: "CRANE binds the SBOM and scan result to the content digest, unpacks untrusted archives in a sandbox and uses the result when deciding whether to serve a version."
+      - id: vulnerability-feeds
+        topic: security
+        href: features/security/vulnerability-flow
+        ru:
+          title: "Фиды уязвимостей и приоритеты"
+          benefit: "CRANE сопоставляет открытые фиды уязвимостей с инвентарём по PURL без пересканирования и назначает приоритет от P0 до P4."
+        en:
+          title: "Vulnerability feeds and priorities"
+          benefit: "CRANE matches open vulnerability feeds against the inventory by PURL without rescanning and assigns a priority from P0 to P4."
+      - id: upstream-visibility
+        topic: security
+        href: features/security/upstream-quarantine
+        ru:
+          title: "Карантин и правила deny для proxy-версий"
+          benefit: "Новая версия из upstream выдерживается в карантине, а правила deny и фильтр документов скрывают заблокированные версии от клиентов."
+        en:
+          title: "Quarantine and deny rules for proxy versions"
+          benefit: "A new upstream version waits in quarantine, and deny rules and document filtering hide blocked versions from clients."
+      - id: license-policy
+        topic: security
+        href: features/security/licenses
+        ru:
+          title: "Политика лицензий"
+          benefit: "CRANE разбирает SPDX-выражения и применяет политику лицензий организации; неизвестная лицензия уходит на разбор."
+        en:
+          title: "License policy"
+          benefit: "CRANE parses SPDX expressions and applies the organization's license policy; an unknown license goes to review."
+      - id: console-api-wiring
+        topic: console
+        href: features/registry/console
+        ru:
+          title: "Экраны консоли работают на API"
+          benefit: "Каталог, карточка пакета, администрирование, команды и участники в веб-консоли получают данные из API CRANE."
+        en:
+          title: "Console screens backed by the API"
+          benefit: "The catalog, package card, administration, teams and members in the web console read their data from the CRANE API."
+      - id: first-run-wizard
+        topic: console
+        href: start/first-run
+        ru:
+          title: "Мастер первого запуска"
+          benefit: "Администратор развёртывания настраивает хранилище, upstream и namespace в браузере; вход открывает одноразовый bootstrap-токен, а после завершения мастер закрывается навсегда."
+        en:
+          title: "First-run wizard"
+          benefit: "A deployment administrator configures storage, upstreams and namespaces in the browser; a one-time bootstrap token opens the wizard, and it closes for good when finished."
+      - id: layered-settings
+        topic: operations
+        href: configure/settings-encryption
+        ru:
+          title: "Настройки в базе и в окружении"
+          benefit: "Значение настройки берётся из переменной окружения или из PostgreSQL; консоль показывает источник значения, а поле из окружения доступно только для чтения. Секреты хранятся зашифрованными."
+        en:
+          title: "Settings in the database and the environment"
+          benefit: "A setting value comes from an environment variable or from PostgreSQL; the console shows the source, and a value from the environment is read-only. Secrets are stored encrypted."
+
+  - id: "0.4"
+    title:
+      ru: "Доступ, команды и наблюдаемость"
+      en: "Access, teams and observability"
+    status: planned
+    features:
+      - id: oidc-login
+        topic: access
+        href: configure/identity
+        ru:
+          title: "Вход через OIDC"
+          benefit: "Люди входят в консоль и в cctl через провайдер OIDC, например Keycloak; групповые маппинги задают роли."
+        en:
+          title: "OIDC sign-in"
+          benefit: "People sign in to the console and to cctl through an OIDC provider such as Keycloak, and group mappings assign roles."
+      - id: short-lived-tokens
+        topic: access
+        href: features/security/access-control
+        ru:
+          title: "Краткоживущие токены"
+          benefit: "Пакетные менеджеры работают на токенах с коротким сроком: токен CI выдаётся на время задачи, а выпуск токена может только сузить права."
+        en:
+          title: "Short-lived tokens"
+          benefit: "Package managers run on tokens with a short lifetime: a CI token is issued for the duration of a job, and issuing a token can only narrow permissions."
+      - id: cedar-decisions
+        topic: access
+        href: features/security/access-control
+        ru:
+          title: "Решения доступа с объяснением"
+          benefit: "Каждый запрос проходит проверку политики Cedar, а отказ объясняет причину; роли разделены так, что никто не контролирует сам себя."
+        en:
+          title: "Explained access decisions"
+          benefit: "Every request passes a Cedar policy check and a denial states its reason; roles are separated so nobody controls themselves."
+      - id: security-journal-chain
+        topic: security
+        href: features/security/security-journal
+        ru:
+          title: "Журнал ИБ с цепочкой хэшей"
+          benefit: "Записи журнала связаны цепочкой хэшей, поэтому подмену или удаление записи можно обнаружить; журнал фиксирует и скачивания пакетов."
+        en:
+          title: "Security journal with a hash chain"
+          benefit: "Journal entries are linked by a hash chain, so tampering with or deleting an entry can be detected; the journal also records package downloads."
+      - id: untrusted-content
+        topic: security
+        href: features/security/untrusted-content
+        ru:
+          title: "Отдача недоверенного содержимого"
+          benefit: "Файл пакета или README не может выполнить код в консоли: пакеты отдаются с отдельного origin, а консоль защищена строгой CSP."
+        en:
+          title: "Serving untrusted content"
+          benefit: "A package file or README cannot run code in the console: packages are served from a separate origin and the console is protected by a strict CSP."
+      - id: teams-workspaces
+        topic: access
+        href: features/registry/teams-and-ownership
+        ru:
+          title: "Команды и владение пакетами"
+          benefit: "Команда — это workspace: единица владения пакетами и членства людей, с ролями из групп IdP и атрибуцией скачиваний по команде."
+        en:
+          title: "Teams and package ownership"
+          benefit: "A team is a workspace: the unit of package ownership and membership, with roles taken from IdP groups and downloads attributed per team."
+      - id: cargo-owners
+        topic: access
+        href: formats/cargo
+        ru:
+          title: "Владельцы крейтов Cargo"
+          benefit: "Команды cargo owners add и remove работают на реальных принципалах и проходят проверку политики доступа."
+        en:
+          title: "Cargo crate owners"
+          benefit: "The cargo owners add and remove commands work on real principals and pass the access policy check."
+      - id: observability
+        topic: operations
+        href: features/operations/observability
+        ru:
+          title: "Метрики, трассы и пробы"
+          benefit: "CRANE отдаёт метрики OpenMetrics, трассы OTLP и пробы живости и готовности, а в поставке есть алерты."
+        en:
+          title: "Metrics, traces and probes"
+          benefit: "CRANE exposes OpenMetrics metrics, OTLP traces and liveness and readiness probes, and ships with alerts."
+      - id: console-core
+        topic: console
+        href: features/registry/console
+        ru:
+          title: "Основа веб-консоли"
+          benefit: "Каталог, карточка пакета, администрирование, экраны команд, командная палитра и центр уведомлений собраны в одной консоли."
+        en:
+          title: "Web console foundation"
+          benefit: "The catalog, package card, administration, team screens, command palette and notification center are available in one console."
+      - id: cctl-login-setup
+        topic: integrations
+        href: features/registry/cli
+        ru:
+          title: "cctl: вход и настройка клиентов"
+          benefit: "cctl входит в CRANE через device flow и настраивает шесть пакетных менеджеров краткоживущим токеном; для NuGet и Cargo есть credential providers."
+        en:
+          title: "cctl: sign-in and client setup"
+          benefit: "cctl signs in to CRANE through the device flow and configures six package managers with a short-lived token; credential providers cover NuGet and Cargo."
+
+  - id: "0.5"
+    title:
+      ru: "Полное ядро"
+      en: "Complete core"
+    status: planned
+    features:
+      - id: client-matrix
+        topic: formats
+        href: features/registry/formats
+        ru:
+          title: "Матрица реальных клиентов"
+          benefit: "Совместимость с npm, pnpm, yarn, pip, uv, poetry, Maven, Gradle, dotnet, nuget.exe и cargo проверяется автоматически на реальных клиентах."
+        en:
+          title: "Real client matrix"
+          benefit: "Compatibility with npm, pnpm, yarn, pip, uv, poetry, Maven, Gradle, dotnet, nuget.exe and cargo is checked automatically on the real clients."
+      - id: reference-deployments
+        topic: operations
+        href: deploy/kubernetes-helm
+        ru:
+          title: "Эталонные развёртывания"
+          benefit: "Для Docker Compose на одном узле и для Kubernetes через Helm есть проверенные эталонные конфигурации с ориентирами по размерам S, M и L."
+        en:
+          title: "Reference deployments"
+          benefit: "Docker Compose on one node and Kubernetes with Helm have tested reference configurations with S, M and L sizing guidance."
+      - id: restore-verify
+        topic: operations
+        href: features/operations/backup-restore
+        ru:
+          title: "Проверка восстановления"
+          benefit: "Команда crane restore verify сверяет восстановленную базу с хранилищем: у каждого файла должен быть blob с верным SHA-256, включая кэш proxy."
+        en:
+          title: "Restore verification"
+          benefit: "The crane restore verify command checks a restored database against storage: every file must have a blob with a valid SHA-256, including the proxy cache."
+      - id: blob-gc-retention
+        topic: operations
+        href: features/registry/hosted
+        ru:
+          title: "Очистка и сроки хранения"
+          benefit: "CRANE удаляет неиспользуемые blob по правилам хранения и проверяет целостность хранилища."
+        en:
+          title: "Cleanup and retention"
+          benefit: "CRANE removes unused blobs according to retention rules and checks the integrity of the storage."
+      - id: secure-config-check
+        topic: security
+        href: deploy/production-checklist
+        ru:
+          title: "Проверка безопасной конфигурации при старте"
+          benefit: "CRANE отказывается стартовать с небезопасной конфигурацией, если включена проверка; параметры шифрования S3 и TLS PostgreSQL описаны в документации."
+        en:
+          title: "Secure configuration check at startup"
+          benefit: "CRANE refuses to start with an insecure configuration when the check is enabled; S3 encryption and PostgreSQL TLS settings are documented."
+      - id: release-provenance
+        topic: security
+        href: security/release-verification
+        ru:
+          title: "Проверяемые выпуски CRANE"
+          benefit: "Выпуски сопровождаются provenance SLSA, подписью cosign и SBOM, чтобы администратор развёртывания проверил подлинность образа до запуска."
+        en:
+          title: "Verifiable CRANE releases"
+          benefit: "Releases ship with SLSA provenance, a cosign signature and an SBOM, so a deployment administrator can verify an image before running it."
+
+  - id: "0.6"
+    title:
+      ru: "Удобство"
+      en: "Convenience"
+    status: planned
+    features:
+      - id: gitlab-workload-identity
+        topic: integrations
+        href: features/registry/integrations
+        ru:
+          title: "Вход задач GitLab CI без секретов"
+          benefit: "Задача GitLab CI меняет ID token платформы на краткоживущий токен по trust policy; происхождение сборки попадает в evidence и видно в карточке пакета. Запись разрешена только защищённым веткам и тегам."
+        en:
+          title: "Secretless sign-in for GitLab CI jobs"
+          benefit: "A GitLab CI job exchanges the platform ID token for a short-lived token under a trust policy; build provenance goes into evidence and appears on the package card. Writing is allowed only from protected branches and tags."
+      - id: ci-templates
+        topic: integrations
+        href: features/registry/integrations
+        ru:
+          title: "Шаблоны CI"
+          benefit: "Готовые шаблоны разделяют фазы установки и публикации, поэтому токен записи существует только там, где не исполняется чужой код."
+        en:
+          title: "CI templates"
+          benefit: "Ready-made templates separate the install and publish phases, so a write token exists only where no third-party code runs."
+      - id: failure-diagnostics
+        topic: integrations
+        href: features/registry/cli
+        ru:
+          title: "Диагностика отказов"
+          benefit: "Команда cctl diag объясняет, почему запрос отклонён, по идентификатору запроса."
+        en:
+          title: "Failure diagnostics"
+          benefit: "The cctl diag command explains why a request was rejected, given the request ID."
+      - id: storage-classes
+        topic: operations
+        href: configure/storage
+        ru:
+          title: "Классы хранения"
+          benefit: "Администратор развёртывания размещает blob по классам хранения и переносит их между классами онлайн."
+        en:
+          title: "Storage classes"
+          benefit: "A deployment administrator places blobs in storage classes and moves them between classes online."
+      - id: registry-import
+        topic: operations
+        href: features/registry/migration-from-nexus
+        ru:
+          title: "Импорт из других реестров"
+          benefit: "Hosted-пакеты переносятся из другого реестра с проверкой SHA-256 и идемпотентным повтором."
+        en:
+          title: "Import from other registries"
+          benefit: "Hosted packages move from another registry with SHA-256 verification and idempotent retry."
+      - id: cli-warm-export
+        topic: integrations
+        href: features/registry/cli
+        ru:
+          title: "cctl: прогрев, готовность и экспорт"
+          benefit: "Команды warm, readiness и export прогревают кэш proxy, проверяют готовность к офлайну и выгружают данные."
+        en:
+          title: "cctl: warm, readiness and export"
+          benefit: "The warm, readiness and export commands warm the proxy cache, check offline readiness and export data."
+      - id: role-desks
+        topic: console
+        href: features/registry/console
+        ru:
+          title: "Рабочие столы ролей"
+          benefit: "Каждая роль получает в консоли свой рабочий стол с тем, что нужно именно ей."
+        en:
+          title: "Role desks"
+          benefit: "Each role gets its own desk in the console with what that role needs."
+      - id: team-trail
+        topic: console
+        href: features/registry/teams-and-ownership
+        ru:
+          title: "След команды"
+          benefit: "Команда видит, кто и что скачивал, в экранах следа и в экспорте."
+        en:
+          title: "Team download trail"
+          benefit: "A team sees who downloaded what, in the trail screens and in the export."
+      - id: access-review
+        topic: access
+        href: features/security/compliance
+        ru:
+          title: "Отчёт о пересмотре доступа"
+          benefit: "Специалист по безопасности и аудитор получают отчёт о том, у кого какой доступ был в момент наблюдения."
+        en:
+          title: "Access review report"
+          benefit: "A security engineer and an auditor get a report of who had which access at the time of observation."
+      - id: ownership-transfer-cross-team
+        topic: access
+        href: features/registry/teams-and-ownership
+        ru:
+          title: "Передача владения и межкомандный доступ"
+          benefit: "Владение пакетом передаётся другой команде, а доступ между командами выдаётся явным разрешением."
+        en:
+          title: "Ownership transfer and cross-team access"
+          benefit: "Package ownership moves to another team, and access between teams is granted by an explicit grant."
+      - id: idp-sync-scim
+        topic: access
+        href: configure/identity
+        ru:
+          title: "Синхронизация с IdP и SCIM"
+          benefit: "CRANE опрашивает каталог Keycloak, принимает его admin events и поддерживает SCIM 2.0, поэтому отключение пользователя в IdP быстро доходит до CRANE."
+        en:
+          title: "IdP sync and SCIM"
+          benefit: "CRANE polls the Keycloak directory, accepts its admin events and supports SCIM 2.0, so disabling a user in the IdP reaches CRANE quickly."
+
+  - id: "1.0"
+    title:
+      ru: "Релиз 1.0"
+      en: "Release 1.0"
+    status: planned
+    features:
+      - id: stable-upgrades
+        topic: operations
+        href: features/operations/upgrades
+        ru:
+          title: "Проверенное обновление версий и миграций"
+          benefit: "Процедура обновления между версиями и миграции базы проверена на стенде, а возможности предыдущих версий стабилизированы."
+        en:
+          title: "Verified version upgrades and migrations"
+          benefit: "The upgrade procedure between versions and database migrations are verified on a test stand, and the features of earlier versions are stabilized."
+
+  - id: "1.1"
+    title:
+      ru: "Безопасность цепочки поставки"
+      en: "Supply chain security"
+    status: planned
+    features:
+      - id: upstream-attestations
+        topic: security
+        href: features/security/digest-verification
+        ru:
+          title: "Проверка attestations upstream"
+          benefit: "Proxy проверяет npm provenance, PyPI (PEP 740) и подписи Maven Central, а карточка пакета показывает «собрано в … из …»; правило регрессии блокирует версию, потерявшую attestation."
+        en:
+          title: "Upstream attestation checks"
+          benefit: "The proxy verifies npm provenance, PyPI (PEP 740) and Maven Central signatures, and the package card shows where and from what a package was built; a regression rule blocks a version that lost its attestation."
+      - id: own-ci-attestations
+        topic: security
+        href: features/security/evidence-and-scanning
+        ru:
+          title: "Attestations из собственного CI"
+          benefit: "CRANE принимает attestations in-toto и SLSA как evidence, а gate provenance пропускает только версии с валидной attestation; настройка задаётся по репозиторию и стадии."
+        en:
+          title: "Attestations from your own CI"
+          benefit: "CRANE accepts in-toto and SLSA attestations as evidence, and the provenance gate lets through only versions with a valid attestation; it is configured per repository and stage."
+      - id: vex-emergency
+        topic: security
+        href: features/security/vulnerability-flow
+        ru:
+          title: "VEX, исключения и экстренный режим"
+          benefit: "Специалист по безопасности фиксирует VEX, исключения и сроки устранения и включает экстренную блокировку; VEX не снимает блокировку по вредоносному коду."
+        en:
+          title: "VEX, exceptions and emergency mode"
+          benefit: "A security engineer records VEX statements, exceptions and remediation deadlines and enables an emergency block; VEX never lifts a malware block."
+      - id: license-virality
+        topic: security
+        href: features/security/licenses
+        ru:
+          title: "Вирусность лицензий"
+          benefit: "Политика лицензий учитывает распространение копилефт-условий по цепочке зависимостей."
+        en:
+          title: "License virality"
+          benefit: "The license policy accounts for copyleft terms propagating through the dependency chain."
+      - id: promotion-approvals
+        topic: security
+        href: features/registry/hosted
+        ru:
+          title: "Продвижение, согласования и исключения"
+          benefit: "Версия переходит между стадиями только после согласования, а исключения из политик оформляются явно."
+        en:
+          title: "Promotion, approvals and exceptions"
+          benefit: "A version moves between stages only after approval, and policy exceptions are recorded explicitly."
+      - id: siem-soar
+        topic: integrations
+        href: features/security/security-journal
+        ru:
+          title: "События для SIEM и SOAR"
+          benefit: "CRANE отдаёт события в формате OCSF и правила Sigma; робот SOAR работает только через OIDC или mTLS, а массовые действия ограничены порогами."
+        en:
+          title: "Events for SIEM and SOAR"
+          benefit: "CRANE emits events in OCSF format and Sigma rules; a SOAR robot works only through OIDC or mTLS, and bulk actions are limited by thresholds."
+      - id: auditor-export
+        topic: security
+        href: features/security/compliance
+        ru:
+          title: "Пакет для аудитора"
+          benefit: "Аудитор выгружает пакет доказательств и матрицу ответственности OSCAL без доступа к самим пакетам."
+        en:
+          title: "Auditor package"
+          benefit: "An auditor exports an evidence package and an OSCAL responsibility matrix without access to the packages themselves."
+      - id: auditor-trail
+        topic: access
+        href: features/security/compliance
+        ru:
+          title: "Доступ аудитора к следу скачиваний"
+          benefit: "Роль auditor читает след скачиваний и агрегаты с маскированием, а правила Sigma замечают необычные холодные загрузки и скачивания без команды-владельца."
+        en:
+          title: "Auditor access to the download trail"
+          benefit: "The auditor role reads the download trail and aggregates with masking, and Sigma rules flag unusual cold downloads and downloads with no owning team."
+
+  - id: "1.2"
+    title:
+      ru: "Развитие"
+      en: "Evolution"
+    status: planned
+    features:
+      - id: consumer-graph
+        topic: console
+        href: features/registry/console
+        ru:
+          title: "Граф потребителей и анализ влияния"
+          benefit: "Для пакета видно, какие команды и проекты его используют, поэтому влияние уязвимости или отзыва версии оценивается заранее."
+        en:
+          title: "Consumer graph and impact analysis"
+          benefit: "For a package, it is visible which teams and projects use it, so the impact of a vulnerability or a withdrawn version is assessed in advance."
+      - id: search-llm
+        topic: console
+        href: features/registry/search
+        ru:
+          title: "Поиск и ассистенты на LLM"
+          benefit: "Поиск сочетает полнотекстовую и семантическую ветви, а фильтр доступа применяется до ранжирования."
+        en:
+          title: "Search and LLM assistants"
+          benefit: "Search combines full-text and semantic branches, and the access filter applies before ranking."
+      - id: a2a-agent
+        topic: integrations
+        href: features/registry/integrations
+        ru:
+          title: "A2A-агент"
+          benefit: "Внешний агент работает с CRANE по протоколу A2A, а план изменений вступает в силу только после подтверждения человеком в консоли."
+        en:
+          title: "A2A agent"
+          benefit: "An external agent works with CRANE over the A2A protocol, and a change plan takes effect only after a person confirms it in the console."

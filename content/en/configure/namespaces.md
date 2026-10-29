@@ -37,7 +37,7 @@ The server applies the list at startup, idempotently. Entries are only added: re
 
 3. Set the variable.
 
-   ```ini
+   ```dotenv
    CRANE_NAMESPACES=cargo:acme-*,cargo:acme-payments-*=<uuid>,npm:@acme/*
    ```
 

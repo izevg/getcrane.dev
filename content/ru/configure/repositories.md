@@ -34,7 +34,7 @@ terms: [hosted-repository, proxy-repository, upstream]
    - {{< env "CRANE_NPM_REPOS" >}} — hosted-репозитории npm; по умолчанию пусто;
    - {{< env "CRANE_NPM_PROXY_REPOS" >}} — proxy-репозитории npm; по умолчанию пусто.
 
-   ```ini
+   ```dotenv
    CRANE_CARGO_REPOS=internal,tools
    CRANE_CARGO_PROXY_REPOS=crates-io
    CRANE_NPM_REPOS=web

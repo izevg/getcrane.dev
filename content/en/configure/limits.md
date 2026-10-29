@@ -21,13 +21,13 @@ The server has no other configurable size limits. The remaining limits of the pr
 
 1. Set the publish limit. The default is `10485760` (10 MiB). The limit applies to Cargo and npm. The publish body is buffered in memory as a whole, so a large limit raises memory use. For npm the tarball arrives as base64 inside JSON, that is about a third larger than the original file: the limit applies to the whole document, and with the default value a package of about 7.5 MiB is the most that fits.
 
-   ```ini
+   ```dotenv
    CRANE_MAX_PUBLISH_BYTES=20971520
    ```
 
 2. Set the proxied artifact limit. The default is `2147483648` (2 GiB).
 
-   ```ini
+   ```dotenv
    CRANE_PROXY_MAX_ARTIFACT_BYTES=1073741824
    ```
 

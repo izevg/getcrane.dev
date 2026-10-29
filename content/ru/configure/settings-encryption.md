@@ -29,7 +29,7 @@ terms: [fail-closed]
 
 2. Передайте серверу путь к файлу. Ключ задаётся ровно одним способом.
 
-   ```ini
+   ```dotenv
    CRANE_SETTINGS_KEY_FILE=/run/secrets/settings_key
    ```
 

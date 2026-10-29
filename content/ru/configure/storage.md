@@ -32,7 +32,7 @@ terms: [blob, cas]
 
 2. Задайте каталог. Адрес содержит пароль, поэтому передайте его файлом. Допустимы схемы `postgres://` и `postgresql://`. В пароле используйте только символы, безопасные в URL.
 
-   ```ini
+   ```dotenv
    CRANE_DATABASE_URL_FILE=/run/secrets/database_url
    ```
 
@@ -44,7 +44,7 @@ terms: [blob, cas]
 
 3. Задайте blob.
 
-   ```ini
+   ```dotenv
    CRANE_BLOBS=file:///data/blobs
    ```
 
@@ -53,7 +53,7 @@ terms: [blob, cas]
 
 4. Для S3 передайте статический ключ файлами, парой:
 
-   ```ini
+   ```dotenv
    AWS_ACCESS_KEY_ID_FILE=/run/secrets/s3_access_key_id
    AWS_SECRET_ACCESS_KEY_FILE=/run/secrets/s3_secret_access_key
    ```

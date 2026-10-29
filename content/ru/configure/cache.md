@@ -35,13 +35,13 @@ terms: [proxy-repository, upstream]
 
 3. Передайте серверу путь к файлу.
 
-   ```ini
+   ```dotenv
    CRANE_CACHE_FILE=/run/secrets/cache_url
    ```
 
    Допустим и явный выбор `memory`:
 
-   ```ini
+   ```dotenv
    CRANE_CACHE=memory
    ```
 

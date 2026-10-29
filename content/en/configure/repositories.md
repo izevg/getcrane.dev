@@ -34,7 +34,7 @@ Today the server serves the Cargo and npm formats. PyPI, Maven and NuGet have no
    - {{< env "CRANE_NPM_REPOS" >}} — npm hosted repositories; empty by default;
    - {{< env "CRANE_NPM_PROXY_REPOS" >}} — npm proxy repositories; empty by default.
 
-   ```ini
+   ```dotenv
    CRANE_CARGO_REPOS=internal,tools
    CRANE_CARGO_PROXY_REPOS=crates-io
    CRANE_NPM_REPOS=web

@@ -22,13 +22,13 @@ By default the server trusts nobody: the `X-Forwarded-For` and `X-Request-Id` he
 
 1. Set the public address. The {{< env "CRANE_PUBLIC_URL" >}} variable is required. The value starts with `http://` or `https://`, contains a host, and the server drops trailing `/`. Links in responses are built from it: for example the `api` and `dl` fields in the Cargo configuration.
 
-   ```ini
+   ```dotenv
    CRANE_PUBLIC_URL=https://crane.example.com
    ```
 
 2. If needed, change the ports. The server listens on both ports on all interfaces (`0.0.0.0`). A value is an integer from 0 to 65535.
 
-   ```ini
+   ```dotenv
    CRANE_HTTP_PORT=8080
    CRANE_ADMIN_PORT=9464
    ```
@@ -37,7 +37,7 @@ By default the server trusts nobody: the `X-Forwarded-For` and `X-Request-Id` he
 
 3. Name the trusted proxies: IP addresses and CIDR networks (IPv4 and IPv6), comma-separated. An address without a prefix means a single host.
 
-   ```ini
+   ```dotenv
    CRANE_TRUSTED_PROXIES=172.31.250.0/24,::1
    ```
 

@@ -58,13 +58,13 @@ List only proxy addresses in {{< env "CRANE_TRUSTED_PROXIES" >}}. Client network
 
 2. Set the public address: the `https://` scheme and the name clients use to reach the proxy. Links in protocol responses are built from it.
 
-   ```ini
+   ```dotenv
    CRANE_PUBLIC_URL=https://crane.example.com
    ```
 
 3. Set the proxy addresses: IP addresses and CIDR networks, comma-separated. An address without a prefix means a single host.
 
-   ```ini
+   ```dotenv
    CRANE_TRUSTED_PROXIES=<proxy address or CIDR>
    ```
 

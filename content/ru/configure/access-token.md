@@ -29,13 +29,13 @@ terms: [principal, security-journal]
 
 2. Передайте серверу путь к файлу. Токен задаётся ровно одним способом: {{< env "CRANE_TOKEN" >}} вместе с {{< env "CRANE_TOKEN_FILE" >}} дают ошибку запуска.
 
-   ```ini
+   ```dotenv
    CRANE_TOKEN_FILE=/run/secrets/crane_token
    ```
 
 3. При необходимости задайте имя {{< term "principal" "принципала" >}}, от имени которого сервер выполняет запросы с этим токеном. Значение по умолчанию — `crane`. Имя попадает в {{< term "security-journal" >}} (аудит и журнал доступа) и в ответ `owners` для Cargo. Оно не может быть пустым и не может содержать управляющие символы; пробелы по краям отбрасываются.
 
-   ```ini
+   ```dotenv
    CRANE_TOKEN_PRINCIPAL=ci-platform
    ```
 

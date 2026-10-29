@@ -37,7 +37,7 @@ terms: [namespace, dependency-confusion, proxy-repository, workspace]
 
 3. Задайте переменную.
 
-   ```ini
+   ```dotenv
    CRANE_NAMESPACES=cargo:acme-*,cargo:acme-payments-*=<uuid>,npm:@acme/*
    ```
 

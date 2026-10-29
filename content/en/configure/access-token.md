@@ -29,13 +29,13 @@ There is one token per instance: it opens all repositories of all formats, for r
 
 2. Give the server the path to the file. The token is set in exactly one way: {{< env "CRANE_TOKEN" >}} together with {{< env "CRANE_TOKEN_FILE" >}} is a startup error.
 
-   ```ini
+   ```dotenv
    CRANE_TOKEN_FILE=/run/secrets/crane_token
    ```
 
 3. If needed, set the name of the {{< term "principal" >}} on whose behalf the server performs requests that carry this token. The default is `crane`. The name goes to the {{< term "security-journal" >}} (the audit and the access log) and to the `owners` response for Cargo. It cannot be empty or contain control characters; surrounding whitespace is dropped.
 
-   ```ini
+   ```dotenv
    CRANE_TOKEN_PRINCIPAL=ci-platform
    ```
 

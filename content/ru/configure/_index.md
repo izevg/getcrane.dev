@@ -22,7 +22,7 @@ terms: []
 
 1. Задайте переменные, без которых сервер не стартует: {{< env "CRANE_DATABASE_URL" >}}, {{< env "CRANE_BLOBS" >}}, {{< env "CRANE_PUBLIC_URL" >}} и {{< env "CRANE_TOKEN" >}}. Остальные переменные имеют значения по умолчанию. Минимальный набор для стенда без постоянного хранения:
 
-   ```ini
+   ```dotenv
    CRANE_DATABASE_URL=memory
    CRANE_BLOBS=memory
    CRANE_PUBLIC_URL=https://crane.example.com
@@ -33,7 +33,7 @@ terms: []
 
 2. Передайте секреты файлами. Для переменной с формой `_FILE` задайте путь к файлу вместо значения:
 
-   ```ini
+   ```dotenv
    CRANE_TOKEN_FILE=/run/secrets/crane_token
    CRANE_DATABASE_URL_FILE=/run/secrets/database_url
    ```
@@ -47,7 +47,7 @@ terms: []
 
 3. При необходимости соберите остальные настройки в файле TOML и укажите путь к нему в окружении. Путь задаёт только окружение: ключа `config` в самом файле нет.
 
-   ```ini
+   ```dotenv
    CRANE_CONFIG=/etc/crane/crane.toml
    ```
 

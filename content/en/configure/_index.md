@@ -22,7 +22,7 @@ Pass secrets (the token, the catalog address with a password, the encryption key
 
 1. Set the variables the server cannot start without: {{< env "CRANE_DATABASE_URL" >}}, {{< env "CRANE_BLOBS" >}}, {{< env "CRANE_PUBLIC_URL" >}} and {{< env "CRANE_TOKEN" >}}. All other variables have defaults. The minimal set for a stand without persistent storage:
 
-   ```ini
+   ```dotenv
    CRANE_DATABASE_URL=memory
    CRANE_BLOBS=memory
    CRANE_PUBLIC_URL=https://crane.example.com
@@ -33,7 +33,7 @@ Pass secrets (the token, the catalog address with a password, the encryption key
 
 2. Pass secrets in files. For a variable that has a `_FILE` form, set the path to a file instead of the value:
 
-   ```ini
+   ```dotenv
    CRANE_TOKEN_FILE=/run/secrets/crane_token
    CRANE_DATABASE_URL_FILE=/run/secrets/database_url
    ```
@@ -47,7 +47,7 @@ Pass secrets (the token, the catalog address with a password, the encryption key
 
 3. If needed, collect the remaining settings in a TOML file and set its path in the environment. Only the environment sets the path: the file itself has no `config` key.
 
-   ```ini
+   ```dotenv
    CRANE_CONFIG=/etc/crane/crane.toml
    ```
 

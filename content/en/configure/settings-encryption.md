@@ -29,7 +29,7 @@ Today the server reads the PostgreSQL settings layer at startup but has no inter
 
 2. Give the server the path to the file. The key is set in exactly one way.
 
-   ```ini
+   ```dotenv
    CRANE_SETTINGS_KEY_FILE=/run/secrets/settings_key
    ```
 

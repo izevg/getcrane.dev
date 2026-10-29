@@ -32,7 +32,7 @@ The storages are chosen as a pair. A persistent catalog works only with persiste
 
 2. Set the catalog. The address contains a password, so pass it in a file. The `postgres://` and `postgresql://` schemes are accepted. Use only URL-safe characters in the password.
 
-   ```ini
+   ```dotenv
    CRANE_DATABASE_URL_FILE=/run/secrets/database_url
    ```
 
@@ -44,7 +44,7 @@ The storages are chosen as a pair. A persistent catalog works only with persiste
 
 3. Set the blobs.
 
-   ```ini
+   ```dotenv
    CRANE_BLOBS=file:///data/blobs
    ```
 
@@ -53,7 +53,7 @@ The storages are chosen as a pair. A persistent catalog works only with persiste
 
 4. For S3, pass the static key in files, as a pair:
 
-   ```ini
+   ```dotenv
    AWS_ACCESS_KEY_ID_FILE=/run/secrets/s3_access_key_id
    AWS_SECRET_ACCESS_KEY_FILE=/run/secrets/s3_secret_access_key
    ```

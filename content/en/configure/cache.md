@@ -35,13 +35,13 @@ The cache is not a source of truth, and losing it loses no data. Unlike the cata
 
 3. Give the server the path to the file.
 
-   ```ini
+   ```dotenv
    CRANE_CACHE_FILE=/run/secrets/cache_url
    ```
 
    An explicit `memory` choice is also valid:
 
-   ```ini
+   ```dotenv
    CRANE_CACHE=memory
    ```
 

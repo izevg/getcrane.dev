@@ -39,14 +39,14 @@ outputs:
   section: [HTML, Markdown]
   page: [HTML, Markdown]
 
-# Только главная EN дополнительно пишется в корень: «/» (лендинг) и «/llms.txt».
+# Только главная EN дополнительно пишется в корень: «/» (лендинг), «/llms.txt», «/versions.json» (список версий) и «/pages.json» (пути страниц этой сборки).
 cascade:
   - target:
       kind: home
       sites:
         matrix:
           languages: [en]
-    outputs: [HTML, RootHTML, LLMS, LLMSRoot, LLMSFull]
+    outputs: [HTML, RootHTML, LLMS, LLMSRoot, LLMSFull, VersionsJSON, PagesJSON]
 
 mediaTypes:
   text/markdown:
@@ -79,6 +79,21 @@ outputFormats:
     isPlainText: true
     notAlternative: true
     permalinkable: false
+  # Манифесты версий документации (design/versions-spec.md, A3): их читает селектор версий и страница 404.
+  VersionsJSON:
+    mediaType: application/json
+    baseName: versions
+    isPlainText: true
+    notAlternative: true
+    permalinkable: false
+    root: true
+  PagesJSON:
+    mediaType: application/json
+    baseName: pages
+    isPlainText: true
+    notAlternative: true
+    permalinkable: false
+    root: true
   RootHTML:
     mediaType: text/html
     baseName: index

@@ -15,7 +15,7 @@
     font-family: var(--font-sans);
     background: var(--background);
     color: var(--foreground);
-    scroll-padding-top: calc(var(--header-height) + 8px);
+    scroll-padding-top: calc(var(--header-height) + var(--space-2));
     scroll-behavior: auto;
   }
   body {
@@ -50,7 +50,7 @@
     font-size: 0.9em;
     background: var(--code-bg);
     border-radius: var(--radius-sm);
-    padding: 0.1em 0.3em;
+    padding: var(--pad-inline-code);
     overflow-wrap: anywhere;
   }
   kbd { border: 1px solid var(--border); }
@@ -64,7 +64,7 @@
   }
 
   .skip {
-    position: absolute; inset-block-start: 8px; inset-inline-start: 8px; z-index: var(--z-sticky);
+    position: absolute; inset-block-start: var(--space-2); inset-inline-start: var(--space-2); z-index: var(--z-sticky);
     padding: var(--space-2) var(--space-4); background: var(--card); color: var(--foreground);
     border: 1px solid var(--input); border-radius: var(--radius);
     transform: translateY(-200%);
@@ -74,7 +74,7 @@
   /* Заголовки со ссылкой-якорем и чипами. */
   .prose :is(h2, h3, h4) { position: relative; isolation: isolate; }
   .anchor {
-    margin-inline-start: 0.4em; font-weight: 400; text-decoration: none; color: var(--muted-foreground);
+    margin-inline-start: var(--gap-anchor); font-weight: 400; text-decoration: none; color: var(--muted-foreground);
     opacity: 0; inline-size: 1.5rem; display: inline-block; text-align: center;
   }
   :is(h2, h3):is(:hover, :focus-within) > .anchor { opacity: 1; }
@@ -83,13 +83,17 @@
 
   /* Подсветка цели якоря: мягкая вспышка псевдоэлемента, один раз. */
   .prose :is(h2, h3, h4):target::before, .sources li:target::before {
-    content: ""; position: absolute; inset: -4px -8px; border-radius: var(--radius-sm);
+    content: ""; position: absolute; inset: calc(var(--space-1) * -1) calc(var(--space-2) * -1); border-radius: var(--radius-sm);
     background: var(--brand-container); z-index: -1; opacity: 0;
     animation: flash 600ms var(--ease-out) 1;
   }
   .sources li { position: relative; isolation: isolate; }
   @keyframes flash { from { opacity: 1; } to { opacity: 0; } }
+  /* Место упоминания (чип источника, ссылка на переменную) при возврате по стрелке: та же вспышка 600 мс, без неё при reduced motion. */
+  .cite:target, .env:target, .env-inline:target { scroll-margin-block-start: calc(var(--header-height) + var(--space-6)); animation: flash-mark 600ms var(--ease-out) 1; border-radius: var(--radius-sm); }
+  @keyframes flash-mark { from { background-color: var(--brand-container); box-shadow: 0 0 0 4px var(--brand-container); } to { background-color: transparent; box-shadow: 0 0 0 4px transparent; } }
   @media (prefers-reduced-motion: reduce) {
     .prose :is(h2, h3, h4):target::before, .sources li:target::before { animation: none; }
+    .cite:target, .env:target, .env-inline:target { animation: none; }
   }
 }

@@ -613,3 +613,33 @@ versions:
         en:
           title: "A2A agent"
           benefit: "An external agent works with CRANE over the A2A protocol, and a change plan takes effect only after a person confirms it in the console."
+
+# Направления: не привязаны к версии. Формулировки — намерение, а не обязательство.
+directions:
+  - id: community-load-testing
+    topic: operations
+    href: features/operations/availability
+    ru:
+      title: "Проверка на реальной нагрузке"
+      benefit: "После публикации проекта CRANE предполагается проверить на реальной нагрузке вместе с сообществом и по результатам оптимизировать горячий путь скачивания."
+    en:
+      title: "Real-load verification"
+      benefit: "Once the project is public, CRANE is meant to be verified under real load together with the community, with the hot download path optimized based on the results."
+  - id: penetration-testing
+    topic: security
+    href: security/vulnerability-disclosure
+    ru:
+      title: "Тест на проникновение"
+      benefit: "Предполагается внешний тест на проникновение; найденные проблемы закрываются в патч-выпусках и публикуются по процессу сообщения об уязвимостях."
+    en:
+      title: "Penetration testing"
+      benefit: "An external penetration test is intended; issues it finds are fixed in patch releases and disclosed through the vulnerability reporting process."
+  - id: crane-signed-promotions
+    topic: security
+    href: features/security/digest-verification
+    ru:
+      title: "Подпись версий самим CRANE"
+      benefit: "Подпись продвинутых версий собственным частным Sigstore для закрытых сетей рассматривается, когда появятся клиенты, которые умеют проверять такую подпись."
+    en:
+      title: "Version signing by CRANE itself"
+      benefit: "Signing promoted versions with a private Sigstore for closed networks is considered for when clients that can verify such a signature appear."

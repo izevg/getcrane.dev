@@ -24,7 +24,8 @@
       {{- if $r -}}
         {{- $id := partial "env/register.html" (dict "page" $p "r" $r) -}}
         {{- $frag := printf "%s%s" $r.anchor (cond $r.isFile "-file" "") -}}
-        {{- $out = $out | append (printf `<a class="env" href="%s#%s" data-tip="%s" data-env="%s" draggable="false">%s</a>` $url $frag $id $w $w) -}}
+        {{- $mid := partial "env/first.html" (dict "page" $p "r" $r) -}}
+        {{- $out = $out | append (printf `<a class="env"%s href="%s#%s" data-tip="%s" data-env="%s" draggable="false">%s</a>` (cond (ne $mid "") (printf ` id="%s"` $mid) "") $url $frag $id $w $w) -}}
       {{- else -}}
         {{- if and site.Params.envStrict (findRE `^CRANE_[A-Z0-9_]+$` $w) }}{{ errorf "env: неизвестное имя %s в блоке кода %q (%s); опечатка или его нет в data/env.yaml" $w $lang $p.Path }}{{ end -}}
         {{- $out = $out | append $w -}}
@@ -35,8 +36,8 @@
   {{- end -}}
   {{- $inner = delimit $out "" -}}
 {{- end -}}
-{{- /* Метка — человеческая подпись из каталога i18n, не id лексера. Атрибут file="…" показывает имя файла моноширинным; output="true" помечает вывод. */ -}}
-{{- $keys := dict "bash" "shell" "sh" "shell" "shell" "shell" "zsh" "shell" "console" "terminal" "shell-session" "terminal" "dotenv" "dotenv" "env" "dotenv" "yaml" "yaml" "yml" "yaml" "toml" "toml" "json" "json" "ini" "ini" "sql" "sql" "http" "http" "dockerfile" "dockerfile" "mermaid" "mermaid" "text" "text" "plaintext" "text" "output" "output" -}}
+{{- /* Метка — человеческая подпись из каталога i18n, не id лексера. Атрибут file="…" показывает имя файла моноширинным; output="true" помечает вывод. Язык txt — содержимое файла («Файл», с копированием); text, plaintext и output — вывод («Вывод», без копирования). */ -}}
+{{- $keys := dict "bash" "shell" "sh" "shell" "shell" "shell" "zsh" "shell" "console" "terminal" "shell-session" "terminal" "dotenv" "dotenv" "env" "dotenv" "yaml" "yaml" "yml" "yaml" "toml" "toml" "json" "json" "ini" "ini" "sql" "sql" "http" "http" "dockerfile" "dockerfile" "mermaid" "mermaid" "text" "text" "plaintext" "text" "output" "output" "txt" "file" -}}
 {{- $isOutput := or (eq (.Attributes.output | default "" | string) "true") (in (slice "text" "plaintext" "output") $lang) -}}
 {{- $label := i18n (printf "code.lang.%s" (index $keys $lang | default "other")) -}}
 {{- if $isOutput }}{{ $label = i18n "code.lang.output" }}{{ end -}}

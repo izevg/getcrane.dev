@@ -12,6 +12,15 @@
 {{- $p := .Page -}}
 {{- $lang := $p.Language.Lang -}}
 {{- $env := site.Data.env | default dict -}}
+{{- /* Упоминания считаются по тому, что шаблон превращает в ссылки env с якорем (env/first.html): шорткод env и блоки кода известных языков. */ -}}
+{{- $hays := slice -}}
+{{- range site.RegularPages }}
+  {{- if and (eq .Language.Lang $lang) (ne .RelPermalink $p.RelPermalink) }}
+    {{- $hay := delimit (findRE `\{\{<\s*env\s+"[A-Z0-9_]+"` .RawContent) "\n" -}}
+    {{- $hay = printf "%s\n%s" $hay (delimit (findRE `(?s)\x60{3,}(?:bash|sh|shell|zsh|console|shell-session|ini|yaml|yml|toml|env|dotenv|dockerfile)[^\n]*\n.*?\n\s*\x60{3,}` .RawContent) "\n") -}}
+    {{- $hays = $hays | append (dict "page" . "hay" $hay) -}}
+  {{- end }}
+{{- end -}}
 <div class="table-wrap" role="region" tabindex="0" aria-label="{{ i18n "table.default" }}" data-table>
 <table class="env-table">
   <thead>
@@ -32,13 +41,13 @@
     {{- $d := $e.default -}}
     {{- $pat := printf `(?:^|[^A-Za-z0-9_])%s(?:_FILE)?(?:[^A-Za-z0-9_]|$)` $name -}}
     {{- $mentions := slice -}}
-    {{- range site.RegularPages }}{{ if and (ne .RelPermalink $p.RelPermalink) (findRE $pat .RawContent 1) }}{{ $mentions = $mentions | append . }}{{ end }}{{ end }}
+    {{- range $hays }}{{ if findRE $pat .hay 1 }}{{ $mentions = $mentions | append .page }}{{ end }}{{ end }}
     <tr id="{{ $anchor }}">
       <th scope="row">
         <span class="env-name"><a href="#{{ $anchor }}"><code>{{ $name }}</code></a><button type="button" class="btn btn-ghost btn-icon btn-sm js-only" data-copy-name="{{ $name }}" aria-label="{{ i18n "env.copy" }}">{{ partial "ui/icon.html" "copy" }}</button></span>
         {{- if $mentions }}
         <details class="env-mentions"><summary>{{ partial "ui/t.html" (dict "k" "env.mentions" "v" (dict "n" (len $mentions))) }}</summary>
-          <ul>{{ range $mentions }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}</ul>
+          <ul>{{ range $mentions }}<li><a href="{{ .RelPermalink }}{{ if or (hasPrefix $name "CRANE_") (hasPrefix $name "AWS_") }}#envm-{{ $anchor }}{{ end }}">{{ .Title }}</a></li>{{ end }}</ul>
         </details>
         {{- end }}
       </th>

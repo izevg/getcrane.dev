@@ -1,0 +1,23 @@
+{{- /*
+  Версии документации из data/versions.yaml с проверкой схемы. Вход: нет. Выход: dict
+  all (записи по порядку показа), rank (id → позиция, 0 — самая новая), multi (версий не меньше двух: селектор и чипы разрешены),
+  oldest (позиция самой старой), read (запись читаемой версии: params.docsVersion, по умолчанию запись со статусом current).
+  Нарушение схемы ломает сборку.
+*/ -}}
+{{- $all := site.Data.versions | default slice -}}
+{{- $rank := dict -}}
+{{- $current := 0 -}}
+{{- range $i, $v := $all -}}
+  {{- if not (and $v.id $v.status $v.path (or $v.label $v.labelKey)) }}{{ errorf "data/versions.yaml: запись %d без id, status, path или label/labelKey" $i }}{{ end -}}
+  {{- if not (in (slice "current" "next" "previous") $v.status) }}{{ errorf "data/versions.yaml: неизвестный status %q у %q" $v.status $v.id }}{{ end -}}
+  {{- if not (and (hasPrefix $v.path "/") (hasSuffix $v.path "/")) }}{{ errorf "data/versions.yaml: path %q у %q должен начинаться и заканчиваться косой чертой" $v.path $v.id }}{{ end -}}
+  {{- if isset $rank (string $v.id) }}{{ errorf "data/versions.yaml: повторяется id %q" $v.id }}{{ end -}}
+  {{- $rank = merge $rank (dict (string $v.id) $i) -}}
+  {{- if eq $v.status "current" }}{{ $current = add $current 1 }}{{ end -}}
+{{- end -}}
+{{- if ne $current 1 }}{{ errorf "data/versions.yaml: нужна ровно одна запись со статусом current, сейчас %d" $current }}{{ end -}}
+{{- $readID := site.Params.docsVersion | default "" -}}
+{{- $read := dict -}}
+{{- range $all }}{{ if or (eq .id $readID) (and (not $readID) (eq .status "current")) }}{{ $read = . }}{{ end }}{{ end -}}
+{{- if not $read }}{{ errorf "params.docsVersion %q не найден в data/versions.yaml" $readID }}{{ end -}}
+{{- return (dict "all" $all "rank" $rank "multi" (ge (len $all) 2) "oldest" (sub (len $all) 1) "read" $read) -}}

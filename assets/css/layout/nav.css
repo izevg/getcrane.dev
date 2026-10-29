@@ -9,13 +9,13 @@
   .tree a:hover { background: var(--accent); color: var(--foreground); }
   .tree a[aria-current="page"] { background: var(--nav-active-bg); color: var(--nav-active-fg); font-weight: 650; }
   .tree a[aria-current="page"]::before {
-    content: ""; position: absolute; inset-block: 4px; inset-inline-start: 0; inline-size: 3px;
+    content: ""; position: absolute; inset-block: var(--space-1); inset-inline-start: 0; inline-size: 3px;
     border-radius: 2px; background: var(--nav-active-bar);
   }
   .tree summary { display: flex; align-items: center; gap: var(--space-1); list-style: none; border-radius: var(--radius); }
   .tree summary::-webkit-details-marker { display: none; }
   .tree summary::before {
-    content: ""; flex: none; inline-size: 20px; block-size: 20px; margin-inline-start: -4px;
+    content: ""; flex: none; inline-size: 20px; block-size: 20px; margin-inline-start: calc(var(--space-1) * -1);
     background: var(--muted-foreground);
     mask: var(--icon-chevron-right) center / 16px no-repeat;
     transition: transform var(--dur-base) var(--ease-out);
@@ -29,14 +29,18 @@
 
   /* Оглавление. */
   .toc-title { font-size: var(--type-caption); font-weight: 650; color: var(--muted-foreground); text-transform: none; margin-block-end: var(--space-2); }
+  /* Одна направляющая слева у всего списка; вложенность — отступом текста, активный пункт отмечен полосой поверх направляющей. */
   .toc, .toc ol { list-style: none; margin: 0; padding: 0; }
-  .toc ol { padding-inline-start: var(--space-3); }
+  .toc { border-inline-start: 2px solid var(--border); }
   .toc a {
-    display: block; padding: 3px var(--space-3); color: var(--muted-foreground); text-decoration: none;
-    font-size: var(--type-small); line-height: 1.4; border-inline-start: 2px solid var(--border);
+    position: relative; display: block; padding: var(--space-1) var(--space-3); color: var(--muted-foreground); text-decoration: none;
+    font-size: var(--type-small); line-height: 1.4;
   }
+  .toc ol a { padding-inline-start: var(--space-6); }
+  .toc a::before { content: ""; position: absolute; inset-block: 0; inset-inline-start: calc(var(--space-0-5) * -1); inline-size: 2px; background: transparent; }
   .toc a:hover { color: var(--foreground); background: var(--accent); }
-  .toc a[aria-current="true"] { color: var(--foreground); border-inline-start-color: var(--toc-active); }
+  .toc a[aria-current="true"] { color: var(--foreground); font-weight: 600; }
+  .toc a[aria-current="true"]::before { background: var(--toc-active); }
   .toc-inline { border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); margin-block: var(--space-4); }
   .toc-inline > summary { padding: var(--space-3) var(--space-4); font-weight: 650; }
   .toc-inline > summary, .terms-block > summary, .env-mentions > summary, .diagram-src > summary {
@@ -70,11 +74,13 @@
   }
 
   /* Шапка страницы. */
-  .page-head > * + * { margin-block-start: var(--space-3); }
-  .page-head h1 { margin-block-start: var(--space-3); }
+  /* Ритм шапки: h1 → метки 12 → лид 16 → кнопки 20; каждый шаг — токен --rhythm-*. */
+  .page-head > * + * { margin-block-start: var(--rhythm-chips); }
+  .page-head > .lead { margin-block-start: var(--rhythm-lead); }
+  .page-head > .page-actions { margin-block-start: var(--rhythm-actions); }
   .chips { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; list-style: none; padding: 0; }
   .chip, .badge {
-    display: inline-flex; align-items: center; gap: 6px; min-block-size: 24px; padding: 0 8px;
+    display: inline-flex; align-items: center; gap: var(--space-1-5); min-block-size: 24px; padding: var(--pad-chip);
     border: 1px solid var(--chip-border); border-radius: 999px; font-size: var(--type-caption); line-height: 1.2; white-space: nowrap;
   }
   .chip { background: var(--chip-bg); color: var(--chip-fg); }
@@ -83,6 +89,9 @@
   .badge-genre { color: var(--badge-genre-fg); border-color: var(--badge-genre-border); }
   .badge-target { color: var(--badge-state-target-fg); border-color: var(--badge-state-target-border); }
   .badge-current { color: var(--badge-state-current-fg); border-color: var(--badge-state-current-border); }
+  .badge-version { color: var(--muted-foreground); border-color: var(--input); text-decoration: none; font-weight: 500; font-variant-numeric: tabular-nums; }
+  a.badge-version:hover { border-color: var(--muted-foreground); }
+  a.badge-version:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
   .badge-dev { background: var(--badge-status-dev-bg); color: var(--badge-status-dev-fg); border-color: transparent; }
   .chips-row { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-3); align-items: center; }
   .heading-chips { margin-block-start: var(--space-2); }

@@ -41,6 +41,8 @@ This way a stolen token or a compromised role cannot widen access, and every ref
 - Dangerous operations require fresh multi-factor authentication.
 - A platform administrator and the `secops` and `auditor` specialists are incompatible roles: in `strict` mode, signing in with both roles does not activate access to the journal and produces a `sod.violation` event.
 
+{{< screenshot story="S10States" variant="Forbidden" alt="An access denied page: the rule that fired, the request identifier and a hint on how to fix it" >}}
+
 ## How it works {#mechanism}
 
 ### People only through OIDC {#oidc}

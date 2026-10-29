@@ -15,7 +15,7 @@ This section describes which threats CRANE defends against and where each defens
 
 ## What “guarantee” means here {#meaning}
 
-On these pages a guarantee is a property of a CRANE mechanism that can be checked against its behaviour and code: what exactly CRANE does and under which conditions. It is not a legal commitment. CRANE is free software under the Apache License 2.0 and, as section 7 of that license states, is provided “as is”, without warranties. That is why every guarantee states its limits, and CRANE does not take on what it cannot enforce with a mechanism.
+On these pages a guarantee is a property of a CRANE mechanism that can be checked against its behavior and code: what exactly CRANE does and under which conditions. It is not a legal commitment. CRANE is free software under the Apache License 2.0 and, as section 7 of that license states, is provided “as is”, without warranties. That is why every guarantee states its limits, and CRANE does not take on what it cannot enforce with a mechanism.
 
 ## Why the registry is the control point {#control-point}
 

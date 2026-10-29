@@ -2,7 +2,7 @@
   /* Выноски NOTE / TIP / IMPORTANT / WARNING / CAUTION. */
   .callout {
     --edge: 3px;
-    position: relative; border-radius: var(--radius); padding: var(--space-4) 20px;
+    position: relative; border-radius: var(--radius); padding: var(--pad-box);
     background: var(--c-bg); border: 1px solid var(--c-border); border-inline-start: var(--edge) solid var(--c-edge);
   }
   .callout-note { --c-bg: var(--callout-note-bg); --c-edge: var(--callout-note-edge); --c-border: var(--callout-note-border); --c-title: var(--callout-note-title); }
@@ -15,7 +15,7 @@
   .callout-title .i { inline-size: 18px; block-size: 18px; }
   .callout-body { margin-block-start: var(--space-2); color: var(--foreground); }
   .callout-body > * + * { margin-block-start: var(--space-3); }
-  .callout-body ul, .callout-body ol { padding-inline-start: 1.3em; }
+  .callout-body ul, .callout-body ol { padding-inline-start: var(--indent-list-sm); }
   .callout-body li + li { margin-block-start: var(--space-2); }
   .callout-body a { color: var(--link); }
   details.callout > summary { list-style: none; }
@@ -31,7 +31,7 @@
   /* LIMITS: граница утверждения. Не сворачивается, штриховая кромка 8 px. */
   .callout-limits {
     --c-bg: var(--callout-limits-bg); --c-border: var(--callout-limits-border); --c-title: var(--callout-limits-title);
-    border-inline-start: 1px solid var(--c-border); padding-inline-start: calc(8px + 20px);
+    border-inline-start: 1px solid var(--c-border); padding-inline-start: calc(var(--space-2) + var(--space-5));
   }
   .callout-limits::before {
     content: ""; position: absolute; inset-block: 0; inset-inline-start: 0; inline-size: 8px;

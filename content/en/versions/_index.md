@@ -10,4 +10,4 @@ layout: versions
 terms: []
 ---
 
-Each CRANE release has its own documentation. Open the version you have installed: variable names, commands and behaviour on its pages match that release.
+Each CRANE release has its own documentation. Open the version you have installed: variable names, commands and behavior on its pages match that release.

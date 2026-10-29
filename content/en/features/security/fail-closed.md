@@ -66,7 +66,7 @@ While a read replica of the catalog is available, downloads are served from it: 
 
 > [!LIMITS]
 > - **The price is unavailable reads.** While the whole catalog is unavailable, builds that go through CRANE do not receive packages even from a warm cache. There is no narrow exception "serve from the cache".
-> - **The mode is not switched by a setting.** The behaviour with an unavailable catalog is the same in all deployment profiles. Catalog availability is the deployment's job: a replica, failover, backups.
+> - **The mode is not switched by a setting.** The behavior with an unavailable catalog is the same in all deployment profiles. Catalog availability is the deployment's job: a replica, failover, backups.
 > - **A Valkey failure does not close reads.** The cache is not the source of truth: any Valkey error is a miss for the proxy engine. Data is not lost, and the load shifts to the upstream, not to the catalog. A silent Valkey is detected in about 1.25 seconds. This is not a skipped security check, so fail closed does not apply to it.
 > - **An S3 failure closes reads partially.** Objects present in the process cache or on the CDN keep being served; everything else gets `503` with `Retry-After`, and publishing is unavailable. The failure reaches the client in about 5 seconds, not minutes.
 > - **An unavailable upstream does not close reads.** CRANE serves stored documents with the same visibility checks until their retention period expires.

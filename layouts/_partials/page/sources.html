@@ -15,8 +15,11 @@
         {{- with $s.date }}{{ (time.AsTime .).Format "2006-01-02" }} · {{ end -}}
         {{- partial "ui/t.html" (dict "k" "cite.accessed" "v" (dict "date" ((time.AsTime $s.accessed).Format "2006-01-02"))) -}}
       </span>
-      {{- range seq $count }}
-      <a class="backref" href="#cite-{{ $n }}-{{ . }}" aria-label="{{ partial "ui/t.html" (dict "k" "cite.back" "v" (dict "n" .)) }}">↑</a>
+      {{- if eq $count 1 }}
+      <a class="backref" href="#cite-{{ $n }}-1" aria-label="{{ partial "ui/t.html" (dict "k" "cite.back" "v" (dict "n" 1)) }}">↑</a>
+      {{- else if gt $count 1 }}
+      <span class="backrefs" role="group" aria-label="{{ i18n "cite.back.group" }}"><span aria-hidden="true">↑</span>
+        {{- range seq $count }} <a class="backref" href="#cite-{{ $n }}-{{ . }}" aria-label="{{ partial "ui/t.html" (dict "k" "cite.back" "v" (dict "n" .)) }}">{{ . }}</a>{{ end }}</span>
       {{- end }}
     </li>
     {{- end }}

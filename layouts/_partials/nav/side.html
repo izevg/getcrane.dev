@@ -1,0 +1,10 @@
+{{- /* Боковая навигация: блок версий (в панели «Меню» ниже 48rem; пока версий меньше двух не выводится) и дерево разделов. Вход: страница. */ -}}
+{{- $V := partial "util/versions.html" -}}
+{{- if $V.multi }}
+<nav class="ver-menu" aria-labelledby="ver-menu-h" data-pagefind-ignore>
+  <p class="ver-group" id="ver-menu-h">{{ i18n "version.nav" }}</p>
+  {{ partial "versions/list.html" (dict "page" . "V" $V) }}
+  <a class="ver-all" href="/{{ .Language.Lang }}/versions/">{{ i18n "version.all" }}{{ partial "ui/icon.html" (dict "name" "arrow-right" "class" "i i-16") }}</a>
+</nav>
+{{- end }}
+<nav aria-label="{{ i18n "nav.sections" }}" data-pagefind-ignore>{{ partial "nav/tree.html" (dict "cur" . "pages" site.Home.Sections "root" true) }}</nav>

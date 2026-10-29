@@ -29,6 +29,17 @@
     .btn { min-block-size: 44px; }
     .btn-icon, .btn-icon.btn-sm { inline-size: 44px; block-size: 44px; }
   }
+  .btn[data-state="copied"] { color: var(--success); }
+  .btn[data-state="error"] { color: var(--error); }
   @media (prefers-reduced-motion: reduce) { .btn:active { transform: none; } }
   @media (forced-colors: active) { .btn { border-color: ButtonText; } }
+
+  /* Кнопки шапки с подписью: кнопка поиска (иконка + подпись + Ctrl K) и версия не квадратные; без этих правил .btn-icon сжимал бы их до 40 px, и подсказка налезала на язык. */
+  @media (min-width: 48rem) {
+    .btn-icon.search-trigger { inline-size: auto; padding-inline: var(--space-2) var(--space-3); gap: var(--space-2); }
+  }
+  .ver-btn, .ver-fallback { gap: var(--space-1); min-block-size: 40px; padding-inline: var(--space-2) var(--space-3); font-variant-numeric: tabular-nums; }
+  @media (pointer: coarse) { .ver-btn, .ver-fallback { min-block-size: 44px; } }
+  .ver-fallback { display: none; }
+  @supports not selector(:popover-open) { .ver-btn { display: none; } .ver-fallback { display: inline-flex; } }
 }

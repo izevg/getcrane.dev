@@ -1,4 +1,4 @@
-import { $, $$, icon, ready } from "./lib/dom";
+import { $, $$, icon, ready, tick } from "./lib/dom";
 import { announce, copyFetched, feedback, writeText } from "./lib/clipboard";
 import { t } from "./lib/strings";
 
@@ -34,7 +34,7 @@ function initCodeCopy(): void {
     button.setAttribute("aria-label", t("copy.code"));
     const pair = document.createElement("span");
     pair.className = "copy-ico";
-    pair.append(icon("copy"), icon("check"));
+    pair.append(icon("copy"), tick("check"));
     button.append(pair);
     button.addEventListener("click", () => {
       void writeText(codeText(code)).then((ok) => feedback(button, ok, t("copied"), () => selectAll(code)));
@@ -106,10 +106,7 @@ function initRegions(): void {
   const observer = new ResizeObserver((entries) => {
     for (const { target } of entries) {
       const el = target as HTMLElement;
-      if (el.matches("[data-scroll]")) {
-        const caption = document.getElementById(el.dataset.scrollLabel ?? "")?.textContent?.trim();
-        check(el, () => caption ?? t("table.default"), true);
-      } else if (el.matches("[data-table]")) {
+      if (el.matches("[data-table]")) {
         check(el, () => el.querySelector("caption")?.textContent?.trim() ?? nearestHeading(el) ?? t("table.default"), true);
       } else {
         const lang = el.closest<HTMLElement>(".code")?.dataset.lang ?? "";
@@ -117,12 +114,20 @@ function initRegions(): void {
       }
     }
   });
-  for (const el of $$("[data-table], [data-scroll], .code pre")) {
+  for (const el of $$("[data-table], .code pre")) {
     observer.observe(el);
   }
 }
 
-/** Оглавление: подсветка текущего раздела без смены фокуса и без объявлений. */
+/** Доля высоты окна, на которой «пересекается» заголовок активного раздела (верхняя треть). */
+const SPY_LINE = 0.33;
+const TOP_GAP = 8;
+
+/**
+ * Оглавление: активен раздел, заголовок которого пересёк линию в верхней трети окна; у конца страницы линия опускается к низу окна,
+ * поэтому короткие последние разделы не пропускаются, а на самом конце активен последний. Клик по ссылке делает пункт активным сразу и
+ * держит его, пока читатель сам не прокрутит (колесо, касание, клавиши). Активный пункт сам виден в прокручиваемом оглавлении.
+ */
 function initToc(): void {
   const links = $$<HTMLAnchorElement>(".toc a[href^='#']");
   if (!links.length) {
@@ -134,37 +139,111 @@ function initToc(): void {
     byId.set(id, [...(byId.get(id) ?? []), a]);
   }
   const heads = [...byId.keys()].map((id) => document.getElementById(id)).filter((n): n is HTMLElement => !!n);
-  const visible = new Set<HTMLElement>();
-  let current: HTMLElement | undefined;
-  const mark = (): void => {
-    const next = heads.find((h) => visible.has(h)) ?? current;
-    if (next === current && current) {
+  if (!heads.length) {
+    return;
+  }
+  const header = (): number => document.querySelector<HTMLElement>(".site-header")?.offsetHeight ?? 56;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  let current = "";
+  let locked = false;
+  let frame = 0;
+
+  const keepVisible = (a: HTMLElement): void => {
+    const box = a.closest<HTMLElement>(".toc-col > nav");
+    if (!box || box.scrollHeight <= box.clientHeight) {
       return;
     }
-    current = next;
+    // block: nearest без прокрутки страницы: двигаем только контейнер оглавления.
+    const top = a.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop;
+    const bottom = top + a.offsetHeight;
+    const pad = 8;
+    let next = box.scrollTop;
+    if (top - pad < box.scrollTop) {
+      next = top - pad;
+    } else if (bottom + pad > box.scrollTop + box.clientHeight) {
+      next = bottom + pad - box.clientHeight;
+    }
+    if (next !== box.scrollTop) {
+      box.scrollTo({ top: Math.max(0, next), behavior: reduced.matches ? "auto" : "smooth" });
+    }
+  };
+  const activate = (id: string): void => {
+    if (id === current) {
+      return;
+    }
+    current = id;
     for (const a of links) {
       a.removeAttribute("aria-current");
     }
-    for (const a of byId.get(current?.id ?? "") ?? []) {
+    for (const a of byId.get(id) ?? []) {
       a.setAttribute("aria-current", "true");
     }
+    const col = byId.get(id)?.find((a) => a.closest(".toc-col"));
+    if (col) {
+      keepVisible(col);
+    }
   };
-  const header = document.querySelector<HTMLElement>(".site-header")?.offsetHeight ?? 56;
-  const observer = new IntersectionObserver(
-    (entries) => {
-      for (const e of entries) {
-        if (e.isIntersecting) {
-          visible.add(e.target as HTMLElement);
-        } else {
-          visible.delete(e.target as HTMLElement);
-        }
+  const pick = (): string => {
+    const vh = window.innerHeight;
+    const remaining = document.documentElement.scrollHeight - (window.scrollY + vh);
+    const reach = vh * (1 - SPY_LINE);
+    const base = Math.max(header() + TOP_GAP, vh * SPY_LINE);
+    const line = remaining >= reach ? base : base + (vh - base) * (1 - Math.max(0, remaining) / reach);
+    let id = "";
+    for (const h of heads) {
+      if (h.getBoundingClientRect().top <= line + 1) {
+        id = h.id;
+      } else {
+        break;
       }
-      mark();
-    },
-    { rootMargin: `-${header + 8}px 0px -70% 0px` },
-  );
-  for (const h of heads) {
-    observer.observe(h);
+    }
+    return id;
+  };
+  const update = (): void => {
+    frame = 0;
+    if (!locked) {
+      activate(pick());
+    }
+  };
+  const schedule = (): void => {
+    if (!frame) {
+      frame = requestAnimationFrame(update);
+    }
+  };
+  const unlock = (): void => {
+    locked = false;
+    schedule();
+  };
+  for (const a of links) {
+    a.addEventListener("click", () => {
+      locked = true;
+      activate(decodeURIComponent(a.hash.slice(1)));
+    });
+  }
+  for (const type of ["wheel", "touchmove", "keydown", "pointerdown"] as const) {
+    window.addEventListener(type, (e) => {
+      if (type === "pointerdown" && (e.target as Element).closest?.(".toc")) {
+        return;
+      }
+      if (locked) {
+        unlock();
+      }
+    }, { passive: true });
+  }
+  window.addEventListener("scroll", schedule, { passive: true });
+  window.addEventListener("resize", schedule);
+  window.addEventListener("hashchange", () => {
+    const id = decodeURIComponent(location.hash.slice(1));
+    if (byId.has(id)) {
+      locked = true;
+      activate(id);
+    }
+  });
+  if (location.hash && byId.has(decodeURIComponent(location.hash.slice(1)))) {
+    locked = true;
+    activate(decodeURIComponent(location.hash.slice(1)));
+  } else {
+    update();
   }
 }
 

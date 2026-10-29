@@ -3,10 +3,11 @@
 {{- $lang := $p.Language.Lang -}}
 <header class="page-head">
   {{ partial "nav/breadcrumbs.html" $p }}
-  <h1>{{ partial "util/typo.html" (dict "html" ($p.Title | htmlEscape) "lang" $lang) }}</h1>
+  <h1>{{ if and (eq $p.Section "formats") (not $p.IsSection) }}{{ partial "ui/eco-tile.html" (dict "id" $p.File.ContentBaseName "class" "eco-tile-lg") }}{{ end }}{{ partial "util/typo.html" (dict "html" ($p.Title | htmlEscape) "lang" $lang) }}</h1>
   <div class="chips-row">
     {{- with $p.Params.audience }}{{ partial "ui/audience-chips.html" (dict "keys" . "ctx" $p.Path) }}{{ end }}
     {{ partial "ui/badges.html" $p }}
+    {{ partial "ui/version-chips.html" $p }}
   </div>
   {{- with $p.Params.description }}<p class="lead">{{ partial "util/typo.html" (dict "html" (. | htmlEscape) "lang" $lang) }}</p>{{ end }}
   {{- with $p.OutputFormats.Get "markdown" }}

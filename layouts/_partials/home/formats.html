@@ -1,4 +1,4 @@
-{{- /* Пять экосистем: текстовые плитки с иконкой package, без логотипов и цветов экосистем. Строка — description страницы формата. */ -}}
+{{- /* Пять экосистем: текстовые плитки-монограммы (ui/eco-tile.html), без логотипов и цветов экосистем: политики знаков логотип для совместимости не разрешают. Строка — description страницы формата. */ -}}
 {{- $names := dict "cargo" "Cargo" "npm" "npm" "pypi" "PyPI" "maven" "Maven" "nuget" "NuGet" -}}
 <section class="section container" aria-labelledby="f-h">
   <h2 id="f-h">{{ i18n "home.formats" }}</h2>
@@ -6,7 +6,7 @@
     {{- range .d.formats }}
     {{- $id := . -}}
     {{- with partial "home/page.html" (printf "formats/%s" $id) }}
-    <li class="card card-tile"><h3><span class="tile tile-sm">{{ partial "ui/icon.html" (dict "name" "package" "class" "i i-16") }}</span><a href="{{ .RelPermalink }}">{{ index $names $id | default $id }}</a></h3>{{ with .Params.description }}<p>{{ . }}</p>{{ end }}</li>
+    <li class="card card-tile"><h3>{{ partial "ui/eco-tile.html" $id }}<a href="{{ .RelPermalink }}">{{ index $names $id | default $id }}</a></h3>{{ with .Params.description }}<p>{{ . }}</p>{{ end }}</li>
     {{- end }}
     {{- end }}
   </ul>

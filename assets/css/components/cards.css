@@ -31,4 +31,13 @@
     .card-link-go, .card-link:hover .card-link-go { transform: none; }
   }
   @media (forced-colors: active) { .card-link { border: 1px solid CanvasText; } }
+
+  /* Плитка экосистемы: монограмма без логотипа и цвета знака. */
+  .eco-tile {
+    display: inline-grid; place-items: center; flex: none; min-inline-size: 28px; block-size: 28px; padding-inline: var(--space-1);
+    border-radius: var(--radius-sm); background: var(--muted); color: var(--foreground); border: 1px solid var(--border);
+    font-family: var(--font-mono); font-size: var(--type-caption); font-weight: 700; line-height: 1; letter-spacing: 0;
+  }
+  .eco-tile-lg { min-inline-size: 40px; block-size: 40px; font-size: var(--type-small); margin-inline-end: var(--space-3); vertical-align: middle; }
+  .children .eco-tile { margin-inline-end: var(--space-2); }
 }

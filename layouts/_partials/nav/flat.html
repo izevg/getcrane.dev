@@ -1,4 +1,4 @@
-{{- /* Плоский список страниц в порядке навигации (weight, разделы раскрыты). Вход: Pages уровня. */ -}}
+{{- /* Плоский список страниц в порядке навигации (weight, разделы раскрыты). Вход: Pages уровня. Раздел без страниц (versions) не раскрывается: append пустого списка добавил бы его одним элементом. */ -}}
 {{- $out := slice -}}
-{{- range .ByWeight }}{{ $out = $out | append . }}{{ if .IsSection }}{{ $out = $out | append (partial "nav/flat.html" .Pages) }}{{ end }}{{ end -}}
+{{- range .ByWeight }}{{ $out = $out | append . }}{{ if and .IsSection .Pages }}{{ $out = $out | append (partial "nav/flat.html" .Pages) }}{{ end }}{{ end -}}
 {{- return $out -}}

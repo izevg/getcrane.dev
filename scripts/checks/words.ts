@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Page, Report } from "../lib/content.ts";
 import { LANGS, ROOT, lineOf, stripCode, walk } from "../lib/content.ts";
+import { isVersionsPage } from "./versions.ts";
 
 const L = String.raw`(?<![\p{L}\p{N}_])`;
 const R = String.raw`(?![\p{L}\p{N}_])`;
@@ -16,12 +17,14 @@ const AGENTS = new RegExp(
 const TODO = /<!--\s*TODO-WRITER/;
 const BARE_URL = /(?<![\](<"'=])https?:\/\/[^\s)>"']+/g;
 
-function scan(where: string, text: string, lang: string, report: Report, line0 = 1, withUrls = false): void {
+function scan(where: string, text: string, lang: string, report: Report, line0 = 1, withUrls = false, allowVersions = false): void {
   const rules: [RegExp, string][] = [
     [lang === "ru" ? RU : EN, "запрещённое слово"],
-    [VERSION, "номер версии вида v0.x"],
     [AGENTS, "имя агента или инструмента"],
   ];
+  if (!allowVersions) {
+    rules.splice(1, 0, [VERSION, "номер версии вида v0.x"]);
+  }
   for (const [re, what] of rules) {
     for (const m of text.matchAll(re)) {
       report.error(`${where}:${line0 + lineOf(text, m.index ?? 0) - 1}`, `${what} «${m[0]}»`);
@@ -41,9 +44,9 @@ function scan(where: string, text: string, lang: string, report: Report, line0 =
 export function checkWords(pages: Page[], report: Report): void {
   for (const p of pages) {
     const text = stripCode(p.body);
-    scan(p.file, text, p.lang, report, p.bodyLine, true);
+    scan(p.file, text, p.lang, report, p.bodyLine, true, isVersionsPage(p));
     for (const key of ["title", "description"]) {
-      scan(`${p.file}#${key}`, String(p.front[key] ?? ""), p.lang, report);
+      scan(`${p.file}#${key}`, String(p.front[key] ?? ""), p.lang, report, 1, false, isVersionsPage(p));
     }
   }
   for (const lang of LANGS) {

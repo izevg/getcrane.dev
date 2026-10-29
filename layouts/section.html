@@ -2,7 +2,7 @@
 {{ define "main" }}
 {{- $lang := .Language.Lang -}}
 <div class="container doc">
-  <div class="tree-col" id="site-nav"><nav aria-label="{{ i18n "nav.sections" }}" data-pagefind-ignore>{{ partial "nav/tree.html" (dict "cur" . "pages" site.Home.Sections "root" true) }}</nav></div>
+  <div class="tree-col" id="site-nav">{{ partial "nav/side.html" . }}</div>
   <main id="content" class="doc-main">
     {{ partial "page/header.html" . }}
     {{ partial "page/terms-block.html" . }}

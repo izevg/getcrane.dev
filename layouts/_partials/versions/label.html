@@ -1,0 +1,4 @@
+{{- /* Подпись версии в языке страницы: labelKey через i18n, иначе label. Вход: запись versions.yaml. Выход: строка. */ -}}
+{{- $s := string .label -}}
+{{- with .labelKey }}{{ $s = i18n . }}{{ end -}}
+{{- return $s -}}

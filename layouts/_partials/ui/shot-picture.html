@@ -1,15 +1,13 @@
 {{- /*
   <picture> снимка Storybook: static/screens/<история>/<вариант>.{avif,webp,png}. Вход: dict "story" "variant" "alt" "class" "eager" (bool) "lazy" (bool).
-  Размеры — data/screenshot-variants.yaml (самое длинное совпадение по началу имени варианта). Источники в порядке AVIF, WebP; запасной img — png, иначе webp, иначе avif.
+  Размеры — ui/screen-dims.html (data/screenshot-variants.yaml). Источники в порядке AVIF, WebP; запасной img — png, иначе webp, иначе avif.
   Нет ни одного файла: пустая строка. Выход: HTML.
 */ -}}
 {{- $base := printf "static/screens/%s/%s" .story .variant -}}
 {{- $have := slice -}}
 {{- range slice "avif" "webp" "png" }}{{ if os.FileExists (printf "%s.%s" $base .) }}{{ $have = $have | append . }}{{ end }}{{ end -}}
 {{- if $have -}}
-  {{- $dims := dict -}}
-  {{- range $k, $v := (index site.Data "screenshot-variants") }}{{ if hasPrefix $.variant $k }}{{ if gt (len $k) (len ($dims.key | default "")) }}{{ $dims = merge $v (dict "key" $k) }}{{ end }}{{ end }}{{ end -}}
-  {{- if not $dims.width }}{{ errorf "screens: вариант %q не описан в data/screenshot-variants.yaml" .variant }}{{ end -}}
+  {{- $dims := partial "ui/screen-dims.html" (dict "story" .story "variant" .variant) -}}
   {{- $url := printf "/screens/%s/%s" .story .variant -}}
   {{- $fallback := "" -}}
   {{- range slice "png" "webp" "avif" }}{{ if and (not $fallback) (in $have .) }}{{ $fallback = . }}{{ end }}{{ end -}}

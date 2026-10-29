@@ -38,14 +38,45 @@
    * Диаграмма: inline-SVG в figure. Ширина svg — min(100%, естественная); меньше 0.85 естественной не сжимается (текст ≥ 12 px):
    * вместо этого прокрутка внутри региона (role и tabindex ставит остров только при переполнении).
    */
-  .diagram-frame { border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); overflow: hidden; }
-  .diagram-scroll { overflow-x: auto; padding: var(--space-4); scrollbar-width: thin; }
+  .diagram-frame { position: relative; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); overflow: hidden; }
+  /* Диаграмма вписывается в ширину колонки (viewBox, max-width: естественная ширина), без прокрутки; крупнее — лайтбокс (assets/ts/zoom.ts). */
+  .diagram-fit { padding: var(--space-4); }
   .diagram-svg svg {
     display: block; margin-inline: auto; block-size: auto; font-family: var(--font-sans);
-    inline-size: 100%; max-inline-size: var(--dg-w, none); min-inline-size: calc(var(--dg-w, 0px) * 0.85);
+    inline-size: 100%; max-inline-size: var(--dg-w, none);
   }
   .diagram figcaption { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2); }
   .diagram figcaption .badge { flex: none; }
+  /* Лайтбокс: рамка-кнопка, подсказка «Увеличить», заметка о мелком тексте, сам диалог. */
+  [data-zoom] { position: relative; cursor: zoom-in; }
+  [data-zoom]:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+  .zoom-hint {
+    position: absolute; inset-block-start: var(--space-2); inset-inline-end: var(--space-2); display: inline-flex; align-items: center; gap: var(--space-1);
+    padding: var(--pad-tag); border-radius: 999px; background: var(--card); color: var(--muted-foreground); border: 1px solid var(--border);
+    font-size: var(--type-caption); font-weight: 600; opacity: 0; transition: opacity var(--dur-fast) var(--ease-out); pointer-events: none;
+  }
+  [data-zoom]:is(:hover, :focus-visible) .zoom-hint, [data-zoom][data-small] .zoom-hint, [data-zoom]:focus-within .zoom-hint { opacity: 1; }
+  @media (hover: none) { .zoom-hint { opacity: 1; } }
+  .zoom-note { display: none; margin-block-start: var(--space-2); font-size: var(--type-small); color: var(--muted-foreground); }
+  [data-small] + .zoom-note { display: block; }
+  .zoom-dialog {
+    inline-size: min(96vw, 100rem); block-size: min(92dvh, 70rem); max-inline-size: none; max-block-size: none; padding: 0; margin: auto;
+    border: 1px solid var(--border); border-radius: var(--radius-card); background: var(--card); color: var(--foreground); box-shadow: var(--shadow-card); overflow: hidden;
+  }
+  .zoom-dialog[open] { display: flex; flex-direction: column; }
+  .zoom-dialog::backdrop { background: var(--scrim); }
+  .zoom-bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-2) var(--space-3); border-block-end: 1px solid var(--border); }
+  .zoom-title { margin: 0; min-inline-size: 0; font-size: var(--type-small); font-weight: 600; overflow-wrap: anywhere; }
+  .zoom-tools { display: flex; gap: var(--space-1); flex: none; }
+  .zoom-stage { position: relative; flex: 1; min-block-size: 0; overflow: hidden; touch-action: none; cursor: grab; background: var(--background); }
+  .zoom-stage.is-drag { cursor: grabbing; }
+  .zoom-stage:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
+  .zoom-canvas { position: absolute; inset-block-start: 0; inset-inline-start: 0; transform-origin: 0 0; will-change: transform; user-select: none; }
+  .zoom-canvas.is-anim { transition: transform var(--dur-base) var(--ease-out); }
+  .zoom-canvas > * { display: block; }
+  @media (prefers-reduced-motion: reduce) { .zoom-canvas.is-anim, .zoom-hint { transition: none; } }
+  @media (forced-colors: active) { .zoom-dialog, .zoom-hint { border-color: CanvasText; } }
+  @media print { .zoom-hint, .zoom-note, .zoom-dialog { display: none !important; } .diagram-light, .shot-light { display: block !important; } .diagram-dark, .shot-dark { display: none !important; } }
   .diagram-src { margin-block-start: var(--space-2); }
   .diagram-src > summary { color: var(--muted-foreground); font-size: var(--type-small); }
   .diagram-src .code { margin-block-start: var(--space-2); }
@@ -53,10 +84,10 @@
 
   /* Панель «Функциональность в разработке». */
   .dev-panel {
-    display: flex; gap: var(--space-3); padding: var(--space-4) 20px; border-radius: var(--radius);
+    display: flex; gap: var(--space-3); padding: var(--pad-box); border-radius: var(--radius);
     background: var(--warning-bg); border: 1px solid color-mix(in srgb, var(--warning-strong) 35%, transparent);
     border-inline-start: 4px solid var(--warning-strong); color: var(--foreground); max-inline-size: var(--measure);
   }
-  .dev-panel .i { color: var(--warning); inline-size: 20px; block-size: 20px; margin-block-start: 2px; }
+  .dev-panel .i { color: var(--warning); inline-size: 20px; block-size: 20px; margin-block-start: var(--space-0-5); }
   .dev-panel p:first-child { font-weight: 650; }
 }

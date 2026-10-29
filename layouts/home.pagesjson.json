@@ -1,0 +1,15 @@
+{{- /*
+  /pages.json: пути страниц этой сборки по языкам, от корня языка (design/versions-spec.md, A3). По нему селектор и 404
+  находят ближайший существующий раздел. Печатается как <path>pages.json у каждой версии.
+*/ -}}
+{{- $out := dict -}}
+{{- range site.Sites -}}
+  {{- $lang := .Language.Lang -}}
+  {{- $prefix := printf "/%s/" $lang -}}
+  {{- $paths := slice -}}
+  {{- range .Pages -}}
+    {{- if in (slice "home" "section" "page") .Kind }}{{ $paths = $paths | append (strings.TrimPrefix $prefix .RelPermalink) }}{{ end -}}
+  {{- end -}}
+  {{- $out = merge $out (dict $lang (sort $paths)) -}}
+{{- end -}}
+{{- $out | jsonify -}}

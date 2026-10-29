@@ -13,6 +13,8 @@ CRANE search finds packages by task, not only by name. It combines lexical searc
 
 Models in search are responsible only for auxiliary scores: a vector of the text and, if configured, the reordering of candidates. A model makes no access or security decisions, and without models search stays functional and works lexically. The limits of AI use in CRANE are described in {{< xref "features/security/ai-boundaries" >}}.
 
+{{< screenshot story="S1Search" variant="DesktopLight" alt="Package search in the web console: the query field, format segments, filters and cards of the packages found" >}}
+
 ## What the user sees {#user-view}
 
 Search covers {{< term "hosted-repository" "hosted" >}} and {{< term "proxy-repository" "proxy repositories" >}}. A result can be narrowed by format, repository and team, and deprecated packages can be included. The search field accepts plain text, a {{< term "purl" >}} and filters such as `format:npm`.

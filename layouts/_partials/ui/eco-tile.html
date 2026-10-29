@@ -1,0 +1,9 @@
+{{- /*
+  Текстовая плитка экосистемы (Cargo, npm, PyPI, Maven, NuGet): монограмма вместо логотипа. Логотипы не используются:
+  политики владельцев знаков не разрешают показ логотипа для обозначения совместимости (design/provenance, отчёт по знакам).
+  Вход: id формата (cargo | npm | pypi | maven | nuget), необязательно dict "id" "class". Выход: HTML; неизвестный id — пусто.
+*/ -}}
+{{- $id := . -}}{{- $class := "" -}}
+{{- if reflect.IsMap . }}{{ $id = .id }}{{ $class = .class | default "" }}{{ end -}}
+{{- $mono := dict "cargo" "Cg" "npm" "npm" "pypi" "Py" "maven" "Mvn" "nuget" "Ng" -}}
+{{- with index $mono $id }}<span class="eco-tile{{ with $class }} {{ . }}{{ end }}" aria-hidden="true">{{ . }}</span>{{ end -}}

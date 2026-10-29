@@ -1,0 +1,10 @@
+# Пары вариантов снимка для шорткода screenshot: по светлому варианту (он указан в статье) находятся тёмный и английский.
+# Ключ — История/СветлыйВариант. Нет записи — снимок один для обеих тем; нет en — на EN-страницах берётся светлый вариант.
+# У английских историй нет тёмного варианта (OPEN 3 в design/ui-spec-delta.md): на EN-страницах один снимок в обеих темах.
+S1Search/DesktopLight: { dark: DesktopDark, en: English }
+S2Package/DesktopLight: { dark: DesktopDark, en: English }
+S3Versions/Desktop1440Sheet: { dark: Desktop1440Dark, en: English }
+S5Tokens/DesktopLight: { dark: DesktopDark, en: English }
+S6Platform/Desktop1440: { dark: DesktopDark, en: English }
+S9Journal/Desktop1440: { dark: DesktopDark, en: English }
+S10States/Forbidden: { en: Forbidden }

@@ -1,8 +1,10 @@
 import { readdirSync, readFileSync } from "node:fs";
-import { join, relative } from "node:path";
+import { join, relative, resolve } from "node:path";
 import { parse } from "yaml";
 
 export const ROOT = join(import.meta.dirname, "..", "..");
+/** Каталог собранного сайта: public по умолчанию; SITE_DIR=<путь> собирает и проверяет рядом, не трогая public (например при работающем hugo server). */
+export const SITE = process.env.SITE_DIR ? resolve(process.env.SITE_DIR) : join(ROOT, "public");
 export const LANGS = ["en", "ru"] as const;
 export type Lang = (typeof LANGS)[number];
 

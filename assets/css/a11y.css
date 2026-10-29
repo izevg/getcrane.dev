@@ -22,7 +22,7 @@
     .tab[aria-selected="true"] { background: Highlight; color: HighlightText; forced-color-adjust: none; }
     .tree a[aria-current="page"] { background: Highlight; color: HighlightText; forced-color-adjust: none; }
     .tree a[aria-current="page"]::before { content: none; }
-    .toc a[aria-current="true"] { border-inline-start: 4px solid Highlight; }
+    .toc a[aria-current="true"]::before { background: Highlight; inline-size: 4px; }
     .env-table tbody tr:target > * { outline: 2px solid Highlight; outline-offset: -2px; }
     .gl-entry:target { outline: 2px solid Highlight; }
     .prose :is(h2, h3, h4):target::before, .sources li:target::before { content: none; }

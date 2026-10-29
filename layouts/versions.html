@@ -1,0 +1,55 @@
+{{- /*
+  Страница «Версии документации» (layout: versions): шапка и вводный абзац из контента, таблица версий из data/versions.yaml,
+  раздел «Как читать метки версий» (якорь labels, туда ведут чипы) строится из метки, когда версий больше одной.
+  Номера версий здесь разрешены (data-ver). Front matter: layout: versions, genre: reference, state: current, weight, terms: [].
+*/ -}}
+{{ define "main" }}
+{{- $lang := .Language.Lang -}}
+{{- $V := partial "util/versions.html" -}}
+<div class="container doc">
+  <div class="tree-col" id="site-nav">{{ partial "nav/side.html" . }}</div>
+  <main id="content" class="doc-main">
+    {{ partial "page/header.html" . }}
+    <article class="prose" data-pagefind-body>
+      {{ partial "page/pagefind-meta.html" . }}
+      {{ partial "util/typo.html" (dict "html" .Content "lang" $lang) }}
+      <div class="table-wrap" role="region" tabindex="0" aria-label="{{ i18n "versions.caption" }}" data-table>
+        <table class="versions" data-ver>
+          <caption>{{ i18n "versions.caption" }}</caption>
+          <thead><tr>
+            <th scope="col">{{ i18n "versions.col.version" }}</th>
+            <th scope="col">{{ i18n "versions.col.status" }}</th>
+            <th scope="col">{{ i18n "versions.col.date" }}</th>
+            <th scope="col">{{ i18n "versions.col.upgrade" }}</th>
+          </tr></thead>
+          <tbody>
+          {{- range $V.all }}
+            {{- $here := eq (string .id) (string $V.read.id) }}
+            <tr>
+              <th scope="row"><a href="{{ .path }}{{ $lang }}/"{{ if $here }} aria-current="page"{{ end }}>{{ partial "versions/label.html" . }}</a>{{ if $here }} <span class="sr">{{ i18n "versions.here" }}</span>{{ end }}</th>
+              <td><span class="badge badge-version">{{ i18n (printf "version.status.%s" .status) }}</span></td>
+              <td>{{ with .date }}<time datetime="{{ . }}">{{ time.Format ":date_long" . }}</time>{{ else }}{{ i18n "versions.empty.date" }}{{ end }}</td>
+              <td>{{ with .upgrade }}{{ with $.GetPage (printf "/%s" .) }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ else }}{{ i18n "versions.empty.date" }}{{ end }}{{ else }}{{ i18n "versions.empty.date" }}{{ end }}</td>
+            </tr>
+          {{- end }}
+          </tbody>
+        </table>
+      </div>
+      {{- if $V.multi }}
+      {{- $a := index $V.all 0 }}{{ $b := index $V.all $V.oldest }}
+      {{- $la := partial "versions/label.html" $a }}{{ $lb := partial "versions/label.html" $b }}
+      <h2 id="labels">{{ i18n "versions.labels" }}</h2>
+      <dl class="ver-labels" data-ver>
+        <dt><span class="badge badge-version">{{ partial "ui/icon.html" "tag" }}{{ partial "ui/t.html" (dict "k" "chip.since" "v" (dict "v" $la)) }}</span></dt>
+        <dd>{{ partial "ui/t.html" (dict "k" "tip.since" "v" (dict "v" $la)) }}</dd>
+        <dt><span class="badge badge-version">{{ partial "ui/icon.html" "tag" }}{{ partial "ui/t.html" (dict "k" "chip.range" "v" (dict "from" $lb "to" $la)) }}</span></dt>
+        <dd>{{ partial "ui/t.html" (dict "k" "tip.range" "v" (dict "from" $lb "to" $la)) }}</dd>
+        <dt><span class="badge badge-version">{{ partial "ui/icon.html" "file-clock" }}{{ partial "ui/t.html" (dict "k" "chip.changed" "v" (dict "v" $la)) }}</span></dt>
+        <dd>{{ partial "ui/t.html" (dict "k" "tip.changed" "v" (dict "list" $la)) }}</dd>
+      </dl>
+      {{- end }}
+    </article>
+    {{ partial "page/tips.html" . }}
+  </main>
+</div>
+{{ end }}

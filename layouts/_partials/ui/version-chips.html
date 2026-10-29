@@ -1,0 +1,36 @@
+{{- /*
+  Чипы версий страницы (versions-spec, раздел 3): «С версии», «Версии X–Y», «Изменено в». Выводятся только при двух и более версиях.
+  Вариант A («Ещё не в выпуске») не используется: корень — последний выпуск. Вход: страница. Выход: HTML.
+*/ -}}
+{{- $p := . -}}
+{{- $V := partial "util/versions.html" -}}
+{{- partial "versions/validate.html" $p -}}
+{{- if $V.multi -}}
+  {{- $since := printf "%v" ($p.Params.since | default "") -}}
+  {{- $until := printf "%v" ($p.Params.until | default "") -}}
+  {{- $oldest := index $V.all $V.oldest -}}
+  {{- $sinceRank := cond (ne $since "") (index $V.rank $since) $V.oldest -}}
+  {{- $sinceEntry := index $V.all $sinceRank -}}
+  {{- $href := printf "/%s/versions/#labels" $p.Language.Lang -}}
+  {{- if ne $until "" -}}
+    {{- $untilEntry := index $V.all (index $V.rank $until) -}}
+    {{- $v := dict "from" (partial "versions/label.html" $sinceEntry) "to" (partial "versions/label.html" $untilEntry) -}}
+    <a class="badge badge-version" href="{{ $href }}" data-ver title="{{ partial "ui/t.html" (dict "k" "tip.range" "v" $v) }}">{{ partial "ui/icon.html" "tag" }}{{ partial "ui/t.html" (dict "k" "chip.range" "v" $v) }}</a>
+  {{- else if lt $sinceRank $V.oldest -}}
+    {{- $v := dict "v" (partial "versions/label.html" $sinceEntry) -}}
+    <a class="badge badge-version" href="{{ $href }}" data-ver title="{{ partial "ui/t.html" (dict "k" "tip.since" "v" $v) }}">{{ partial "ui/icon.html" "tag" }}{{ partial "ui/t.html" (dict "k" "chip.since" "v" $v) }}</a>
+  {{- end -}}
+  {{- $readRank := index $V.rank (string $V.read.id) -}}
+  {{- $newest := $V.oldest -}}
+  {{- $list := slice -}}
+  {{- range $c := ($p.Params.changed | default slice) -}}
+    {{- $r := index $V.rank (printf "%v" $c) -}}
+    {{- if ge $r $readRank }}{{ if lt $r $newest }}{{ $newest = $r }}{{ end }}{{ $list = $list | append (partial "versions/label.html" (index $V.all $r)) }}{{ end -}}
+  {{- end -}}
+  {{- if and $list (lt $newest $sinceRank) -}}
+    {{- $v := dict "v" (partial "versions/label.html" (index $V.all $newest)) "list" (delimit $list ", ") -}}
+    <a class="badge badge-version" href="{{ $href }}" data-ver title="{{ partial "ui/t.html" (dict "k" "tip.changed" "v" $v) }}">{{ partial "ui/icon.html" "file-clock" }}{{ partial "ui/t.html" (dict "k" "chip.changed" "v" $v) }}</a>
+  {{- end -}}
+{{- else -}}
+  {{- /* Версия одна: чипов нет, но front matter проверен выше. */ -}}
+{{- end -}}

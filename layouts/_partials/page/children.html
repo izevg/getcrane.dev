@@ -4,7 +4,7 @@
   <h2 class="sr" id="children-h">{{ i18n "list.children" }}</h2>
   <ul class="children">
     {{- range . }}
-    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a>
+    <li>{{ if eq .Parent.Section "formats" }}{{ partial "ui/eco-tile.html" .File.ContentBaseName }}{{ end }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>
       {{- with .Params.description }}<p>{{ . }}</p>{{ end }}
       <div class="chips">{{ partial "ui/badges.html" . }}</div>
     </li>

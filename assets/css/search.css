@@ -21,7 +21,7 @@ pagefind-modal, pagefind-modal-trigger, pagefind-input, pagefind-results, pagefi
   --pf-input-height: 48px;
   --pf-modal-backdrop: var(--scrim);
   --pf-modal-max-width: min(40rem, calc(100vw - 32px));
-  --pf-modal-top: 12vh;
+  --pf-modal-top: var(--offset-palette);
   --pf-error-bg: var(--error-bg);
   --pf-error-text: var(--error);
   --pf-error-text-secondary: var(--error);
@@ -44,3 +44,14 @@ pagefind-modal:not([data-q]) pagefind-filter-dropdown { display: none; }
 /* Ошибка загрузки индекса: popover у кнопки поиска. */
 .search-error { position: fixed; inset: auto; max-inline-size: min(22rem, calc(100vw - 32px)); font-size: var(--type-small); }
 .search-error p + a { display: inline-block; margin-block-start: var(--space-2); }
+
+/*
+ * Плашки «выбрано N» у фильтров: по умолчанию заливка --pf-text с текстом --pf-background, то есть в тёмной теме светлая плашка с тёмным текстом.
+ * Красим токенами сайта (фирменный контейнер и цвет бренда) в обеих темах. Селектор усилен тем же приёмом :is(*, #\#), что у Pagefind (три «id»), плюс одна ступень.
+ */
+:is(*, #\#):is(*, #\#):is(*, #\#):is(*, #\#) .pf-dropdown-selected-badge,
+:is(*, #\#):is(*, #\#):is(*, #\#):is(*, #\#) .pf-filter-group-count {
+  background: var(--brand-container);
+  color: var(--brand);
+  border: 1px solid var(--brand);
+}

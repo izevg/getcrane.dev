@@ -75,7 +75,7 @@ genre.reference: Reference
 genre.explanation: Explanation
 
 state.target: Design
-state.current: Current
+state.current: Current state
 status.available: Available
 status.in-development: In development
 in-development: This functionality is in development.
@@ -155,9 +155,40 @@ code.lang.dockerfile: Dockerfile
 code.lang.mermaid: Mermaid
 code.lang.output: Output
 code.lang.text: Output
+code.lang.file: File
 code.lang.other: Code
 footer.icons: Lucide icons, ISC
 search.error.docs: Open the documentation
 home.console: Web console
 home.oss: "Open source · {license}"
 screenshot.demo: Demo data
+version.group: Documentation version
+version.trigger.name: "Documentation version: {label}, {status}"
+version.status.current: current
+version.status.previous: previous
+version.status.next: next
+version.current.label: Current
+version.next.label: Next
+version.all: All versions
+version.nav: Documentation versions
+chip.since: "Since {v}"
+chip.range: "Versions {from}–{to}"
+chip.changed: "Changed in {v}"
+tip.since: "This page was added in version {v}. Earlier versions do not have it."
+tip.range: "This page applies to versions {from}–{to}."
+tip.changed: "The content changed in versions {list}. The earlier text is in the documentation for those versions."
+versions.caption: CRANE documentation versions
+versions.col.version: Version
+versions.col.status: Status
+versions.col.date: Release date
+versions.col.upgrade: Upgrading
+versions.here: You are reading this version
+versions.labels: How to read version labels
+versions.empty.date: "—"
+cite.back.group: Back to the mentions of the source
+zoom.open: Enlarge
+zoom.in: Zoom in
+zoom.out: Zoom out
+zoom.fit: Fit to view
+zoom.close: Close
+zoom.small: "The text in the diagram is small: select it to enlarge."

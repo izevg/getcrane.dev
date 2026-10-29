@@ -10,13 +10,13 @@
   /* Справочник переменных окружения. */
   .env-table tbody tr:target > * { background: var(--ref-target-bg); }
   .env-table tbody tr:target > th { box-shadow: inset 3px 0 0 var(--ref-target-bar); }
-  .env-table tbody tr { scroll-margin-top: calc(var(--header-height) + 8px); }
+  .env-table tbody tr { scroll-margin-top: calc(var(--header-height) + var(--space-2)); }
   .env-table th[scope="row"] { min-inline-size: 14rem; }
   .env-name { display: inline-flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
   .env-name a { text-decoration: none; }
   .env-name a:hover { text-decoration: underline; }
   .env-table .req-yes { font-weight: 650; }
   .env-mentions { margin-block-start: var(--space-2); font-size: var(--type-caption); font-weight: 400; }
-  .env-mentions ul { padding-inline-start: 1.2em; margin-block-start: var(--space-1); }
+  .env-mentions ul { padding-inline-start: var(--indent-list-sm); margin-block-start: var(--space-1); }
   .env-back { margin-block-end: var(--space-4); font-size: var(--type-small); }
 }

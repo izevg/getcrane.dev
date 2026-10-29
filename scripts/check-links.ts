@@ -1,9 +1,9 @@
 // Внутренние ссылки собранного сайта (без сети): файл существует, якорь есть на целевой странице.
 import { existsSync, readFileSync } from "node:fs";
 import { join, posix } from "node:path";
-import { ROOT, Report, walk } from "./lib/content.ts";
+import { ROOT, Report, SITE, walk } from "./lib/content.ts";
 
-const PUBLIC = join(ROOT, "public");
+const PUBLIC = SITE;
 const report = new Report();
 const idCache = new Map<string, Set<string>>();
 

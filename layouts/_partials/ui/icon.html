@@ -1,9 +1,12 @@
 {{- /*
-  Иконка Lucide из спрайта. Вход: имя (строка) или dict "name" "class". Имя может быть смысловым (data/icons.yaml, alias) или именем Lucide.
+  Единый компонент иконки Lucide из спрайта. Вход: имя (строка) или dict "name" "class" "tick".
+  Имя может быть смысловым (data/icons.yaml, alias) или именем Lucide. Размер задаёт класс i-16 / i-18 / i-20 (viewBox 24, stroke-width 2 — см. .i в layout/shell.css).
+  "tick" true — галочка-бейдж: check в круге (.tick), толще штрих и оптически сдвинутая к центру масса; для подтверждений (узлы схемы, отметка выбранного).
   Декор: aria-hidden. Неизвестное имя ломает сборку.
 */ -}}
-{{- $name := . -}}{{- $class := "i i-16" -}}
-{{- if reflect.IsMap . }}{{ $name = .name }}{{ with .class }}{{ $class = . }}{{ end }}{{ end -}}
+{{- $name := . -}}{{- $class := "i i-16" -}}{{- $tick := false -}}
+{{- if reflect.IsMap . }}{{ $name = .name }}{{ with .class }}{{ $class = . }}{{ end }}{{ $tick = .tick | default false }}{{ end -}}
 {{- $name = index site.Data.icons.alias $name | default $name -}}
 {{- if not (resources.Get (printf "icons/svg/%s.svg" $name)) }}{{ errorf "icon: нет иконки %q в assets/icons/svg (добавьте имя в assets/icons/manifest.json и выполните scripts/sync-icons.ts)" $name }}{{ end -}}
-<svg class="{{ $class }}" aria-hidden="true" focusable="false"><use href="{{ partialCached "ui/sprite-url.html" "sprite" }}#i-{{ $name }}"/></svg>
+{{- if $tick }}<span class="tick" aria-hidden="true"><svg class="i" focusable="false"><use href="{{ partialCached "ui/sprite-url.html" "sprite" }}#i-{{ $name }}"/></svg></span>
+{{- else }}<svg class="{{ $class }}" aria-hidden="true" focusable="false"><use href="{{ partialCached "ui/sprite-url.html" "sprite" }}#i-{{ $name }}"/></svg>{{ end -}}

@@ -36,6 +36,8 @@ An attacker obtains a publishing token and uploads a different file into an exis
 - Deletion leaves a {{< term "tombstone" >}}: the bytes are no longer served and the version number cannot be taken again.
 - Bytes in {{< term "cas" >}} never change: a file with different content gets a different address.
 
+{{< screenshot story="S3Versions" variant="Desktop1440Sheet" alt="The package version table in the web console: the state of each version and a side panel of the selected version with its files and history" >}}
+
 ## How it works {#mechanism}
 
 ### Bytes and visibility {#bytes-and-visibility}

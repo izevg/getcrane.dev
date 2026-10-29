@@ -1,7 +1,7 @@
 // Внешние ссылки: data/sources.yaml и ссылки в собранном сайте. Отдельная задача (по расписанию), а не гейт PR.
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { ROOT, Report, readYaml, walk } from "./lib/content.ts";
+import { ROOT, Report, SITE, readYaml, walk } from "./lib/content.ts";
 
 const urls = new Set<string>();
 for (const s of Object.values(readYaml<Record<string, { url?: string }>>(join(ROOT, "data", "sources.yaml")))) {
@@ -9,7 +9,7 @@ for (const s of Object.values(readYaml<Record<string, { url?: string }>>(join(RO
     urls.add(s.url);
   }
 }
-for (const file of walk(join(ROOT, "public"), ".html")) {
+for (const file of walk(SITE, ".html")) {
   for (const m of readFileSync(file, "utf8").matchAll(/\shref="(https?:\/\/(?!getcrane\.dev)[^"#]+)/g)) {
     urls.add(m[1] ?? "");
   }

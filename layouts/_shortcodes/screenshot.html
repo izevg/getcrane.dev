@@ -1,29 +1,33 @@
 {{- /*
   {{< screenshot story="S3Versions" variant="Desktop1440Sheet" alt="…" >}}
-  Файлы: assets/screenshots/<story>/<variant>.light.webp и .dark.webp. Размеры варианта — data/screenshot-variants.yaml.
-  Два <img> (светлый и тёмный), видимость по data-theme, без JS — по prefers-color-scheme (CSS). До съёмки — плейсхолдер с alt;
+  Файлы: static/screens/<story>/<variant>.{avif,webp}. Светлый вариант указывает статья; тёмный и английский берутся из data/screen-pairs.yaml.
+  Размеры — ui/screen-dims.html. Тема выбирается по data-theme, без JS — по prefers-color-scheme (CSS .window .shot-light/.shot-dark).
+  Подпись заканчивается пометкой «Демонстрационные данные» / «Demo data». Нет файлов — плейсхолдер с alt;
   при params.screenshotsRequired: true отсутствующий файл ломает сборку. eager="true" — для снимка, который является LCP.
 */ -}}
 {{- $story := .Get "story" -}}{{- $variant := .Get "variant" -}}{{- $alt := .Get "alt" -}}
 {{- if not (and $story $variant $alt) }}{{ errorf "screenshot: нужны story, variant и alt (%s)" .Position }}{{ end -}}
-{{- $dims := dict -}}
-{{- range $k, $v := (index site.Data "screenshot-variants") }}{{ if hasPrefix $variant $k }}{{ if gt (len $k) (len ($dims.key | default "")) }}{{ $dims = merge $v (dict "key" $k) }}{{ end }}{{ end }}{{ end -}}
-{{- if not $dims.width }}{{ errorf "screenshot: вариант %q не описан в data/screenshot-variants.yaml (%s)" $variant .Position }}{{ end -}}
-{{- $base := printf "screenshots/%s/%s" $story $variant -}}
-{{- $light := resources.Get (printf "%s.light.webp" $base) -}}
-{{- $dark := resources.Get (printf "%s.dark.webp" $base) -}}
+{{- $pair := index (index site.Data "screen-pairs") (printf "%s/%s" $story $variant) | default dict -}}
 {{- $eager := eq (.Get "eager") "true" -}}
+{{- .Page.Scratch.Set "f-zoom" true -}}
+{{- $pic := "" -}}
+{{- if eq .Page.Language.Lang "en" -}}
+  {{- $en := $pair.en | default $variant -}}
+  {{- $pic = partial "ui/shot-picture.html" (dict "story" $story "variant" $en "alt" $alt "class" "" "eager" $eager) -}}
+{{- else if $pair.dark -}}
+  {{- $l := partial "ui/shot-picture.html" (dict "story" $story "variant" $variant "alt" $alt "class" "shot-light" "eager" $eager) -}}
+  {{- $d := partial "ui/shot-picture.html" (dict "story" $story "variant" $pair.dark "alt" $alt "class" "shot-dark" "eager" false) -}}
+  {{- if and (trim (string $l) " \n") (trim (string $d) " \n") }}{{ $pic = (print $l $d) | safeHTML }}{{ end -}}
+{{- else -}}
+  {{- $pic = partial "ui/shot-picture.html" (dict "story" $story "variant" $variant "alt" $alt "class" "" "eager" $eager) -}}
+{{- end -}}
+{{- $has := ne (trim (string $pic) " \n") "" -}}
+{{- if and (not $has) site.Params.screenshotsRequired }}{{ errorf "screenshot: нет файлов static/screens/%s/%s.{avif,webp} (%s)" $story $variant .Position }}{{ end -}}
 <figure class="shot">
-  <div class="shot-frame">
-  {{- if and $light $dark }}
-    <img class="shot-light" src="{{ $light.RelPermalink }}" width="{{ $dims.width }}" height="{{ $dims.height }}" alt="{{ $alt }}" decoding="async" {{ if $eager }}loading="eager" fetchpriority="high"{{ else }}loading="lazy"{{ end }}>
-    <img class="shot-dark" src="{{ $dark.RelPermalink }}" width="{{ $dims.width }}" height="{{ $dims.height }}" alt="{{ $alt }}" decoding="async" {{ if $eager }}loading="eager"{{ else }}loading="lazy"{{ end }}>
-  {{- else if or $light $dark }}
-    {{- errorf "screenshot: для %s/%s есть только один из двух вариантов темы (%s)" $story $variant .Position }}
+  {{- if $has }}
+  <div class="window">{{ $pic }}</div>
   {{- else }}
-    {{- if site.Params.screenshotsRequired }}{{ errorf "screenshot: нет файлов %s.{light,dark}.webp (%s)" $base .Position }}{{ end }}
-    <div class="shot-ph" style="aspect-ratio: {{ $dims.width }} / {{ $dims.height }}">{{ partial "ui/icon.html" (dict "name" "target" "class" "i i-20") }}<span>{{ partial "ui/t.html" (dict "k" "screenshot.placeholder" "v" (dict "alt" $alt)) }}</span></div>
+  <div class="shot-ph" style="aspect-ratio: 1440 / 900">{{ partial "ui/icon.html" (dict "name" "target" "class" "i i-20") }}<span>{{ partial "ui/t.html" (dict "k" "screenshot.placeholder" "v" (dict "alt" $alt)) }}</span></div>
   {{- end }}
-  </div>
-  <figcaption>{{ $alt }}</figcaption>
+  <figcaption>{{ $alt }}{{ if $has }} <span class="demo">{{ i18n "screenshot.demo" }}</span>{{ end }}</figcaption>
 </figure>

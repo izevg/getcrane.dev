@@ -1,0 +1,9 @@
+{{- /*
+  Якорь первого упоминания переменной на странице: id="envm-<anchor>" ставится ровно на первое упоминание (дальше — пусто),
+  чтобы «Где упоминается» в справочнике вело на конкретное место. Вход: dict "page" "r" (env/lookup.html). Выход: id или пустая строка.
+*/ -}}
+{{- $id := printf "envm-%s" .r.anchor -}}
+{{- $seen := .page.Scratch.Get "envm" | default dict -}}
+{{- $out := $id -}}
+{{- if index $seen $id }}{{ $out = "" }}{{ else }}{{ .page.Scratch.SetInMap "envm" $id true }}{{ end -}}
+{{- return $out -}}

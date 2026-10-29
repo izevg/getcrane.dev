@@ -3,7 +3,7 @@
   в CI рендера нет, scripts/check-mermaid.ts проверяет наличие и актуальность файлов. У читателя JS для диаграмм нет.
   Хэш — первые 16 знаков SHA-256 от исходника без краевых пробелов (тот же расчёт в скрипте). Без SVG сборка в production падает.
   Подпись обязательна: ```mermaid {caption="…"}. Целевая топология: {caption="…" state="target"} — бейдж «Целевое состояние» в начале подписи.
-  Структура: figure → рамка → регион прокрутки (role и tabindex ставит остров при переполнении) → обёртка role=img → inline-SVG.
+  Структура: figure → рамка → вписанная в ширину обёртка (без прокрутки; viewBox и max-width) → обёртка role=img → inline-SVG. Остров zoom.ts делает рамку кнопкой лайтбокса.
 */ -}}
 {{- $src := trim .Inner " \n\r\t" -}}
 {{- $h := substr (crypto.SHA256 $src) 0 16 -}}
@@ -15,12 +15,13 @@
 {{- if not $cap }}{{ warnidf "mermaid-caption" "mermaid: у диаграммы нет подписи (caption) в %s" .Page.Path }}{{ end -}}
 {{- $capid := printf "dg-%s-cap" $h -}}
 {{- $width := 0 -}}
+{{- $p := .Page -}}{{- $p.Scratch.Set "f-zoom" true -}}
 {{- with $light }}{{ with findRESubmatch `viewBox="[-\d.]+ [-\d.]+ ([\d.]+) [\d.]+"` .Content 1 }}{{ $width = int (float (index (index . 0) 1)) }}{{ end }}{{ end -}}
 <figure class="diagram"{{ with $state }} data-state="{{ . }}"{{ end }}>
 {{- if and $light $dark }}
   <div class="diagram-frame" data-pagefind-ignore>
     {{- range slice (dict "t" "light" "r" $light) (dict "t" "dark" "r" $dark) }}
-    <div class="diagram-scroll diagram-{{ .t }}" data-scroll data-scroll-label="{{ $capid }}"{{ if $width }} style="--dg-w: {{ $width }}px"{{ end }}><div class="diagram-svg" role="img" aria-labelledby="{{ $capid }}">{{ .r.Content | safeHTML }}</div></div>
+    <div class="diagram-fit diagram-{{ .t }}"{{ if $width }} style="--dg-w: {{ $width }}px"{{ end }}><div class="diagram-svg" role="img" aria-labelledby="{{ $capid }}">{{ .r.Content | safeHTML }}</div></div>
     {{- end }}
   </div>
 {{- else }}

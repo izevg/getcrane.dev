@@ -38,6 +38,18 @@ export function icon(name: string, extra = ""): SVGSVGElement {
   return svg;
 }
 
+/** Галочка-бейдж (тот же компонент, что ui/icon.html с tick): круг с толстой галочкой; name попадает в data-icon для переключения состояний. */
+export function tick(name = "check"): HTMLSpanElement {
+  const wrap = document.createElement("span");
+  wrap.className = "tick";
+  wrap.setAttribute("aria-hidden", "true");
+  wrap.dataset.icon = name;
+  const svg = icon(name, "");
+  svg.setAttribute("class", "i");
+  wrap.append(svg);
+  return wrap;
+}
+
 /** Чтение и запись localStorage не должны ронять страницу (приватный режим, заблокированные данные). */
 export function readStore(key: string): string | null {
   try {

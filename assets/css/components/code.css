@@ -9,7 +9,7 @@
   .code-lang.is-file { font-family: var(--font-mono); font-weight: 400; }
   .code-actions { display: inline-flex; align-items: center; min-block-size: 32px; min-inline-size: 32px; }
   .code pre {
-    margin: 0; padding: var(--space-1) var(--space-4) 14px; overflow: auto;
+    margin: 0; padding: var(--space-1) var(--space-4) var(--pad-code-bottom); overflow: auto;
     font-size: var(--type-code); line-height: 1.6; tab-size: 2; color: var(--foreground);
   }
   .code pre code { font-size: inherit; white-space: pre; background: none; padding: 0; }
@@ -22,7 +22,15 @@
     position: absolute; inset: 0; inline-size: 16px; block-size: 16px;
     transition: opacity var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
   }
-  .copy-btn [data-icon="check"] { opacity: 0; transform: scale(0.8); color: var(--success); }
+  .copy-btn [data-icon="check"] { opacity: 0; transform: scale(0.8); }
+  .copy-btn .copy-ico .tick { position: absolute; inset: -1px; inline-size: 18px; block-size: 18px; }
+  /* Подпись состояния слева от кнопки: видна всем, а не только скринридеру (live-область объявляет то же сообщение). */
+  .copy-btn[data-state]::after {
+    content: attr(data-msg); position: absolute; inset-inline-end: calc(100% + var(--space-2)); inset-block-start: 50%; translate: 0 -50%;
+    padding: var(--pad-tag); border-radius: 999px; font-size: var(--type-caption); font-weight: 600; white-space: nowrap; pointer-events: none;
+    background: var(--success-bg); color: var(--success); border: 1px solid var(--success-strong);
+  }
+  .copy-btn[data-state="error"]::after { background: var(--error-bg); color: var(--error); border-color: var(--error-strong); }
   .copy-btn[data-state="copied"] [data-icon="copy"] { opacity: 0; transform: scale(0.8); }
   .copy-btn[data-state="copied"] [data-icon="check"] { opacity: 1; transform: none; }
   .copy-btn[data-state="error"] { color: var(--error); border-color: var(--error-strong); }

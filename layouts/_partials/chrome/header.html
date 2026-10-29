@@ -15,6 +15,7 @@
     {{ partial "ui/icon.html" (dict "name" "search" "class" "i i-20") }}<span class="search-trigger-label">{{ i18n "search.trigger" }}</span><kbd class="kbd-hint" data-kbd>Ctrl K</kbd>
   </button>
   {{ with $docs }}<a class="bar-link no-js-only" href="{{ .RelPermalink }}">{{ i18n "sitemap" }}</a>{{ end }}
+  {{ partial "chrome/version-select.html" $p }}
   {{ partial "chrome/lang-switch.html" (dict "page" $p "nav" true) }}
   <div class="theme js-only">
     <button class="btn btn-ghost btn-icon" id="theme-btn" type="button" popovertarget="theme-pop" aria-label="{{ partial "ui/t.html" (dict "k" "theme.current" "v" (dict "mode" (i18n "theme.system"))) }}" data-theme-btn>

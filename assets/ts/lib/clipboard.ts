@@ -1,8 +1,8 @@
 import { t } from "./strings";
 
-/** Текстовая кнопка держит «Скопировано» 2 с; иконка копирования возвращается через 1200 мс, как COPIED_MS консоли. */
-const FEEDBACK_MS = 2000;
-const ICON_FEEDBACK_MS = 1200;
+/** «Скопировано» держится 1,8 с и у текстовой кнопки, и у иконки: 1,2 с (COPIED_MS консоли) глаз не успевал заметить. */
+const FEEDBACK_MS = 1800;
+const ICON_FEEDBACK_MS = 1800;
 const timers = new WeakMap<HTMLElement, number>();
 
 /** Общая live-область страницы (одна на страницу, aria-live=polite). */
@@ -47,7 +47,7 @@ export function copyFetched(url: string): Promise<boolean> {
   return load.then(writeText, () => false);
 }
 
-/** Состояние кнопки после копирования: «Скопировано» на 2 с (иконка — 1,2 с), объявление в live-области, при ошибке — сообщение. */
+/** Состояние кнопки после копирования: «Скопировано» на 1,8 с (у иконки — галочка и подпись-пилюля из data-msg), объявление в live-области, при ошибке — сообщение. */
 export function feedback(button: HTMLElement, ok: boolean, okText: string, onError?: () => void): void {
   const iconOnly = button.classList.contains("copy-btn");
   const label = iconOnly ? null : button.querySelector<HTMLElement>(".copy-label, span");
@@ -60,6 +60,14 @@ export function feedback(button: HTMLElement, ok: boolean, okText: string, onErr
     label.textContent = ok ? okText : message;
   } else {
     button.setAttribute("aria-label", message);
+    button.dataset.msg = message;
+  }
+  // У текстовой кнопки иконка копирования на время состояния заменяется галочкой.
+  const use = iconOnly ? null : button.querySelector("svg use");
+  if (use) {
+    const base = use.getAttribute("href") ?? "";
+    button.dataset.icon ??= base;
+    use.setAttribute("href", ok ? base.replace(/#i-.*$/, "#i-check") : button.dataset.icon);
   }
   announce(message);
   if (!ok) {
@@ -69,6 +77,10 @@ export function feedback(button: HTMLElement, ok: boolean, okText: string, onErr
     button,
     window.setTimeout(() => {
       delete button.dataset.state;
+      delete button.dataset.msg;
+      if (use && button.dataset.icon) {
+        use.setAttribute("href", button.dataset.icon);
+      }
       if (label) {
         label.textContent = original;
       } else {

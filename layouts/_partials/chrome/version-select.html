@@ -1,0 +1,22 @@
+{{- /*
+  Селектор версий документации в шапке (versions-spec, APG Disclosure Navigation): button popovertarget + nav со ссылками.
+  Не выводится, пока версий меньше двух. Без поддержки popover вместо кнопки видна ссылка на страницу версий (CSS @supports).
+  Вход: страница. Ниже 48rem скрыт: те же ссылки лежат в панели «Меню» (nav/side.html).
+*/ -}}
+{{- $p := . -}}
+{{- $V := partial "util/versions.html" -}}
+{{- if $V.multi -}}
+{{- $label := partial "versions/label.html" $V.read -}}
+{{- $status := i18n (printf "version.status.%s" $V.read.status) -}}
+<div class="ver" data-version-select>
+  <button class="btn btn-ghost ver-btn" type="button" popovertarget="ver-pop" aria-label="{{ partial "ui/t.html" (dict "k" "version.trigger.name" "v" (dict "label" $label "status" $status)) }}"><span data-ver>{{ $label }}</span>{{ partial "ui/icon.html" (dict "name" "chevron-down" "class" "i i-16 ver-chevron") }}</button>
+  <a class="btn btn-ghost ver-fallback" href="/{{ $p.Language.Lang }}/versions/" data-ver>{{ $label }}{{ partial "ui/icon.html" (dict "name" "chevron-down" "class" "i i-16") }}</a>
+  <div id="ver-pop" class="pop ver-pop" popover>
+    <nav aria-labelledby="ver-pop-h" data-pagefind-ignore>
+      <p class="ver-group" id="ver-pop-h">{{ i18n "version.group" }}</p>
+      {{ partial "versions/list.html" (dict "page" $p "V" $V) }}
+      <a class="ver-all" href="/{{ $p.Language.Lang }}/versions/">{{ i18n "version.all" }}{{ partial "ui/icon.html" (dict "name" "arrow-right" "class" "i i-16") }}</a>
+    </nav>
+  </div>
+</div>
+{{- end -}}

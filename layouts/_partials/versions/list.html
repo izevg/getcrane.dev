@@ -1,0 +1,13 @@
+{{- /*
+  Список ссылок на версии для селектора и панели «Меню». Вход: dict "page" "V" (partial util/versions). Выход: <ul>.
+  Целевой адрес — путь версии + язык + путь страницы; href рабочий без JS (страницы в целевой версии может не быть: тогда ловит 404).
+*/ -}}
+{{- $p := .page -}}{{- $V := .V -}}
+{{- $lang := $p.Language.Lang -}}
+{{- $rest := strings.TrimPrefix (printf "/%s/" $lang) $p.RelPermalink -}}
+<ul>
+{{- range $V.all }}
+  {{- $here := eq (string .id) (string $V.read.id) }}
+  <li><a href="{{ printf "%s%s/%s" .path $lang $rest }}"{{ if $here }} aria-current="page"{{ end }} data-ver data-version="{{ .id }}"><span class="ver-label">{{ partial "versions/label.html" . }}</span> <span class="ver-status">{{ i18n (printf "version.status.%s" .status) }}</span>{{ if $here }}{{ partial "ui/icon.html" (dict "name" "check" "class" "i i-16 ver-check") }}{{ end }}</a></li>
+{{- end }}
+</ul>

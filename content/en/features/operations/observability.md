@@ -13,6 +13,8 @@ CRANE exposes telemetry only in open formats: Prometheus and OpenMetrics metrics
 
 This page describes where to collect data, which metrics exist, what goes into logs and traces and how SLOs and alerts are built. Setting values and ports of the current deployment are described in {{< xref "deploy" >}}.
 
+{{< screenshot story="S6Platform" variant="Desktop1440" alt="The platform overview in the web console: storage usage, cache hits, upstream availability, the job queue and component health" >}}
+
 ## Scrape points {#endpoints}
 
 | Point | Purpose | Who can reach it |

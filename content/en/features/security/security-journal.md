@@ -42,6 +42,8 @@ This way repudiation and quiet modification of the journal become detectable, an
 - Secrets, package content and prompt text do not enter the journal.
 - Every successful file download is written to a separate download stream.
 
+{{< screenshot story="S9Journal" variant="Desktop1440" alt="The action journal in the web console: chain state, filters, the event table and the panel of the selected event" >}}
+
 ## How it works {#mechanism}
 
 ### Three journal streams {#targets}

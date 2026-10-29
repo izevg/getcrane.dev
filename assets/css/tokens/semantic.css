@@ -15,19 +15,56 @@
     --container: 80rem;
     --gutter: clamp(16px, 4vw, 32px);
 
+    /* Шкала отступов: кратна 4 px (--space-N = N × 4 px; 0-5 и 1-5 — половинные шаги). Литералы px/rem в margin, padding, gap и inset запрещены: scripts/checks/spacing.ts. */
+    --space-0-5: var(--p-space-0-5);
     --space-1: var(--p-space-1);
+    --space-1-5: var(--p-space-1-5);
     --space-2: var(--p-space-2);
     --space-3: var(--p-space-3);
     --space-4: var(--p-space-4);
     --space-5: var(--p-space-5);
     --space-6: var(--p-space-6);
+    --space-7: var(--p-space-7);
     --space-8: var(--p-space-8);
+    --space-9: var(--p-space-9);
     --space-10: var(--p-space-10);
     --space-12: var(--p-space-12);
     --space-14: var(--p-space-14);
     --space-16: var(--p-space-16);
     --space-24: var(--p-space-24);
     --space-section: clamp(4rem, 2.5rem + 5vw, 7.5rem);
+
+    /* Внутренние отступы компонентов. */
+    --pad-box: var(--space-4) var(--space-5);
+    --pad-chip: 0 var(--space-2);
+    --pad-tag: var(--space-0-5) var(--space-2);
+    --pad-cell: var(--space-2) var(--space-3);
+    --pad-code-bottom: var(--space-4);
+    /* Отступы в единицах шрифта: привязаны к размеру текста элемента (инлайн-код, пилюли, отступы списков). */
+    --pad-inline-code: 0.1em 0.3em;
+    --pad-kbd: 0.05em 0.35em;
+    --pad-pill: 0.15em 0.6em;
+    --gap-inline: 0.3em;
+    --gap-anchor: 0.4em;
+    --indent-list: 1.4em;
+    --indent-list-sm: 1.25em;
+    --indent-list-wide: 1.6em;
+    --offset-palette: 12vh;
+    --pkg-tile: 2.25rem;
+
+    /* Вертикальный ритм статьи: h1 → метки → лид → кнопки → блоки → заголовки. Отступ — свойство пары соседей, больший побеждает. */
+    --rhythm-chips: var(--space-3);
+    --rhythm-lead: var(--space-4);
+    --rhythm-actions: var(--space-5);
+    --rhythm-paragraph: var(--space-5);
+    --rhythm-block: var(--space-6);
+    --rhythm-h2: var(--space-14);
+    --rhythm-h3: var(--space-9);
+    --rhythm-h4: var(--space-7);
+    --rhythm-after-h2: var(--space-4);
+    --rhythm-after-h3: var(--space-3);
+    --rhythm-after-h4: var(--space-2);
+    --rhythm-section: var(--space-14);
 
     --type-display: clamp(2.25rem, 1.6rem + 3vw, 4rem);
     --type-h1: clamp(1.875rem, 1.6rem + 1.2vw, 2.5rem);

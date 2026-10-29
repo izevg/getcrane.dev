@@ -1,0 +1,21 @@
+{{- /*
+  Проверки front matter since / until / changed (versions-spec, раздел 3). Нарушение ломает сборку:
+  id нет в data/versions.yaml; until раньше since; changed вне (since, читаемая]; у state: current после первого выпуска нет since.
+  Паритет RU/EN проверяет npm run check:content. Вход: страница. Выход: пусто.
+*/ -}}
+{{- $p := . -}}
+{{- $V := partial "util/versions.html" -}}
+{{- $since := printf "%v" ($p.Params.since | default "") -}}
+{{- $until := printf "%v" ($p.Params.until | default "") -}}
+{{- $changed := $p.Params.changed | default slice -}}
+{{- range slice $since $until }}{{ if and . (not (isset $V.rank .)) }}{{ errorf "front matter: версии %q нет в data/versions.yaml (%s)" . $p.Path }}{{ end }}{{ end -}}
+{{- $sinceRank := cond (ne $since "") (index $V.rank $since) $V.oldest -}}
+{{- if and $until (ne $until "") (gt (index $V.rank $until) $sinceRank) }}{{ errorf "front matter: until %q старше since (%s)" $until $p.Path }}{{ end -}}
+{{- $readRank := index $V.rank (string $V.read.id) -}}
+{{- range $changed -}}
+  {{- $c := printf "%v" . -}}
+  {{- if not (isset $V.rank $c) }}{{ errorf "front matter: версии %q из changed нет в data/versions.yaml (%s)" $c $p.Path }}{{ end -}}
+  {{- $r := index $V.rank $c -}}
+  {{- if or (ge $r $sinceRank) (lt $r $readRank) }}{{ errorf "front matter: changed %q вне (since, читаемая] (%s)" $c $p.Path }}{{ end -}}
+{{- end -}}
+{{- if and $V.multi (eq $p.Params.state "current") (eq $since "") (ne $p.Params.layout "versions") }}{{ errorf "front matter: у state: current после первого выпуска нужен since (%s)" $p.Path }}{{ end -}}

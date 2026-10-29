@@ -75,7 +75,7 @@ genre.reference: Справочник
 genre.explanation: Объяснение
 
 state.target: Целевое состояние
-state.current: Текущая версия
+state.current: Текущее состояние
 status.available: Доступно
 status.in-development: В разработке
 in-development: Функциональность в разработке.
@@ -155,9 +155,40 @@ code.lang.dockerfile: Dockerfile
 code.lang.mermaid: Mermaid
 code.lang.output: Вывод
 code.lang.text: Вывод
+code.lang.file: Файл
 code.lang.other: Код
 footer.icons: Иконки Lucide, ISC
 search.error.docs: Открыть документацию
 home.console: Веб-консоль
 home.oss: "Открытый исходный код · {license}"
 screenshot.demo: Демонстрационные данные
+version.group: Версия документации
+version.trigger.name: "Версия документации: {label}, {status}"
+version.status.current: текущая
+version.status.previous: прежняя
+version.status.next: следующая
+version.current.label: Текущая
+version.next.label: Следующая
+version.all: Все версии
+version.nav: Версии документации
+chip.since: "С версии {v}"
+chip.range: "Версии {from}–{to}"
+chip.changed: "Изменено в {v}"
+tip.since: "Страница появилась в версии {v}. В более ранних версиях её нет."
+tip.range: "Страница действует в версиях {from}–{to}."
+tip.changed: "Содержимое менялось в версиях {list}. Прежний вариант — в документации этих версий."
+versions.caption: Версии документации CRANE
+versions.col.version: Версия
+versions.col.status: Статус
+versions.col.date: Дата выпуска
+versions.col.upgrade: Обновление
+versions.here: Вы читаете эту версию
+versions.labels: Как читать метки версий
+versions.empty.date: "—"
+cite.back.group: Вернуться к упоминаниям источника
+zoom.open: Увеличить
+zoom.in: Приблизить
+zoom.out: Отдалить
+zoom.fit: По размеру
+zoom.close: Закрыть
+zoom.small: "Текст на схеме мелкий: нажмите на неё, чтобы увеличить."

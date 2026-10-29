@@ -76,6 +76,6 @@ CRANE объединяет ветви по рангам, а не по сырым
 
 ## Связанные страницы {#related}
 
-- {{< xref "features/registry/console" >}}
-- {{< xref "features/security/ai-boundaries" >}}
+{{< cards "features/registry/console" "features/security/ai-boundaries" >}}
+
 - {{< xref "features/registry/hosted#package-lifecycle" >}}

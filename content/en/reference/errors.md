@@ -103,7 +103,7 @@ The `detail` column shows a fixed text, and `<…>` marks a substituted value.
 
 ## What next {#next}
 
-- {{< xref "operations/troubleshooting" >}}
+{{< cards "operations/troubleshooting" "reference/protocol-endpoints" >}}
+
 - {{< xref "features/security/fail-closed#client-response" >}}
-- {{< xref "reference/protocol-endpoints" >}}
 - {{< xref "reference/ports-and-health#failure" >}}

@@ -125,7 +125,4 @@ CRANE предоставляет внешним агентам (ассистен
 
 ## Связанные страницы {#related}
 
-- {{< xref "features/registry/cli" >}}
-- {{< xref "features/security/access-control" >}}
-- {{< xref "features/security/security-journal" >}}
-- {{< xref "configure/identity" >}}
+{{< cards "features/registry/cli" "features/security/access-control" "features/security/security-journal" "configure/identity" >}}

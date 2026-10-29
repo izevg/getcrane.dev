@@ -112,7 +112,4 @@ AWS_ACCESS_KEY_ID_FILE и AWS_SECRET_ACCESS_KEY_FILE: ключ S3 не нуже�
 
 ## Что дальше {#next}
 
-- {{< xref "deploy/s3-storage" >}}
-- {{< xref "configure/settings-encryption" >}}
-- {{< xref "configure/cache" >}}
-- {{< xref "reference/server-cli" >}}
+{{< cards "deploy/s3-storage" "configure/settings-encryption" "configure/cache" "reference/server-cli" >}}

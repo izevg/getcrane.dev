@@ -15,11 +15,21 @@ This way a `-docs.html` or `.svg` file inside a package does not get access to a
 
 ## Threat {#threat}
 
+{{< threat summary="A script in a package file opened from the console origin acts as the user: CRANE serves packages from a separate origin." >}}
+{{< threat-what >}}
 A Maven package contains a `-docs.html` or `.svg` file with a script. A security engineer opens the link to that file from the console. If the file is served from the same origin as the console, the browser runs the script as part of the console. The script reads `csrf_token` from `GET /api/v1/session` and acts on behalf of the user: for example, it lifts a block or issues a token.
 
 `SameSite=Strict` does not help here. `SameSite` forbids sending a cookie from a foreign site, but the script from the file runs on the console origin itself: its requests count as same-site, and it reads the CSRF token on its own.
 
 The second threat is weaker but real. A Markdown README contains an image from the package author's address. If the console loads it when the card is opened, it sends the author a request with an IP address and the time of viewing: a tracking pixel shows an attacker when AppSec and SecOps study the package.
+{{< /threat-what >}}
+{{< threat-answer >}}
+- Package manager protocols and file download links are served from a separate packages origin. It does not serve the console or `/api`, and the console does not serve the protocols.
+- Every such response carries `X-Content-Type-Options: nosniff`, `Content-Security-Policy: sandbox; default-src 'none'` and `Content-Disposition: attachment`. The exception is the JSON documents of the protocols, which do not need `Content-Disposition`.
+- The console runs under a strict CSP: only resources of its own origin, no inline scripts and no `unsafe-eval`.
+- Raw HTML from a README is not executed. External images are not loaded; they are shown as links.
+{{< /threat-answer >}}
+{{< /threat >}}
 
 ## Guarantee {#guarantee}
 
@@ -75,7 +85,4 @@ A README is rendered by a Markdown renderer with an HTML sanitizer. Raw HTML in 
 
 ## Related settings {#configure}
 
-- {{< xref "configure/network" >}} — addresses, ports and trusted proxies.
-- {{< xref "deploy/tls-reverse-proxy" >}} — TLS and a reverse proxy in front of the two origins.
-- {{< xref "deploy/production-checklist" >}} — the secure-configuration check before going live.
-- {{< xref "security/hardening" >}} — hardening a deployment.
+{{< cards "configure/network" "deploy/tls-reverse-proxy" "deploy/production-checklist" "security/hardening" >}}

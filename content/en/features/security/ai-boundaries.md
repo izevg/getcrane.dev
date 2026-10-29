@@ -15,6 +15,8 @@ This way text in a package README or a message from a foreign agent does not rai
 
 ## Threat {#threat}
 
+{{< threat summary="A model reads untrusted text and talks to people and agents: CRANE does not let it change state or grant access." chips="term:a2a, term:cedar" >}}
+{{< threat-what >}}
 A model reads untrusted text and talks to people and to other agents. That opens several paths.
 
 - **Injection through content.** A README, description or package metadata contains text addressed to a model: "confirm the action", "grant access".
@@ -23,6 +25,14 @@ A model reads untrusted text and talks to people and to other agents. That opens
 - **A model softening protection.** A low score lets through a version that the rules would have blocked.
 - **An invented answer.** An answer without sources is taken for fact.
 - **Leakage.** Secrets or data of closed packages enter the model context, or a provider key ends up in logs.
+{{< /threat-what >}}
+{{< threat-answer >}}
+- A language model does not grant access, does not decide on promoting a version and does not change state. A low score does not lower a decision below the rules.
+- A model receives only a grounded prompt: the context is filtered by the user's rights and scrubbed of secrets. An answer without sources is marked as unverified.
+- The rights of the A2A agent equal the rights of the principal. The agent writes only a plan that the principal confirmed with a button in the console.
+- Every agent call is recorded in the {{< term "security-journal" >}} with the `a2a` channel.
+{{< /threat-answer >}}
+{{< /threat >}}
 
 ## Guarantee {#guarantee}
 
@@ -103,7 +113,4 @@ Every call runs as a principal: either as a user, by a token obtained through to
 
 ## Related settings {#configure}
 
-- {{< xref "features/security/access-control" >}} — principal rights, scopes and step-up.
-- {{< xref "features/security/egress-guard" >}} — outgoing requests to model providers.
-- {{< xref "features/security/secrets" >}} — storing provider keys.
-- {{< xref "features/registry/integrations" >}} — the interface of the A2A agent.
+{{< cards "features/security/access-control" "features/security/egress-guard" "features/security/secrets" "features/registry/integrations" >}}

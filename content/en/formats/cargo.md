@@ -161,7 +161,4 @@ An error body looks like `{"errors":[{"detail":"…"}]}`. The text ends with `(r
 
 ## What next {#next}
 
-- {{< xref "formats/npm" >}} — connect npm.
-- {{< xref "configure/repositories" >}} — how to create hosted and proxy repositories.
-- {{< xref "features/security/immutable-versions" >}} — the immutability guarantee and the deletion semantics.
-- {{< xref "features/registry/proxy-cache" >}} — how the proxy cache works.
+{{< cards "formats/npm" "configure/repositories" "features/security/immutable-versions" "features/registry/proxy-cache" >}}

@@ -93,7 +93,4 @@ A person who belongs to several teams chooses the team that downloads with the t
 
 ## Related pages {#related}
 
-- {{< xref "features/registry/formats" >}}
-- {{< xref "features/registry/integrations" >}}
-- {{< xref "features/registry/teams-and-ownership" >}}
-- {{< xref "reference/cctl" >}}
+{{< cards "features/registry/formats" "features/registry/integrations" "features/registry/teams-and-ownership" "reference/cctl" >}}

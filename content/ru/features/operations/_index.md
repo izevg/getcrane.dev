@@ -32,6 +32,4 @@ CRANE развёртывается одним бинарником и одним
 
 ## Как развернуть и настроить {#next}
 
-- {{< xref "deploy/docker-compose" >}} — один узел.
-- {{< xref "deploy/kubernetes-helm" >}} — кластер Kubernetes.
-- {{< xref "deploy/requirements" >}} — требования к окружению.
+{{< cards "deploy/docker-compose" "deploy/kubernetes-helm" "deploy/requirements" >}}

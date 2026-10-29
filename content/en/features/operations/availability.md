@@ -76,7 +76,4 @@ The row about the unavailable catalog describes a deliberate choice. Without the
 
 ## Related pages {#related}
 
-- {{< xref "features/operations/deployment-model" >}}
-- {{< xref "features/operations/observability" >}}
-- {{< xref "features/operations/backup-restore" >}}
-- {{< xref "deploy/requirements" >}}
+{{< cards "features/operations/deployment-model" "features/operations/observability" "features/operations/backup-restore" "deploy/requirements" >}}

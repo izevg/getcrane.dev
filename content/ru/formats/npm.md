@@ -177,7 +177,4 @@ npm unpublish @acme/lib@1.1.0-beta.0
 
 ## Что дальше {#next}
 
-- {{< xref "formats/cargo" >}} — подключение cargo.
-- {{< xref "features/security/namespace-reservation" >}} — почему hosted-репозиторий принимает только пакеты со scope.
-- {{< xref "configure/repositories" >}} — как создать hosted- и proxy-репозитории.
-- {{< xref "features/registry/proxy-cache" >}} — как работает кэш proxy.
+{{< cards "formats/cargo" "features/security/namespace-reservation" "configure/repositories" "features/registry/proxy-cache" >}}

@@ -267,7 +267,4 @@ The catalog and blob volumes are kept, and the next start continues with the sam
 
 ## What's next {#next}
 
-- {{< xref "start/concepts" >}} — the concepts behind repositories, versions and access.
-- {{< xref "deploy/docker-compose" >}} — a single-node deployment with a public name and an ACME certificate.
-- {{< xref "features/security/namespace-reservation" >}} — how name reservation protects internal packages from replacement.
-- {{< xref "start/first-run" >}} — the first-run wizard.
+{{< cards "start/concepts" "deploy/docker-compose" "features/security/namespace-reservation" "start/first-run" >}}

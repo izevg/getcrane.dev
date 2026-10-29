@@ -15,7 +15,17 @@ CRANE does not issue legal opinions. It shows what is declared, by which policy 
 
 ## Threat {#threat}
 
+{{< threat summary="A dependency brings unknown license obligations: CRANE determines each version's license and sends an unknown one to review." chips="term:spdx" >}}
+{{< threat-what >}}
 A dependency brings license obligations that nobody knew about. Strong copyleft in a library that was statically linked into a distributed product, or network copyleft (AGPL) in a SaaS service, obliges the owner to open the source code. It is usually discovered during a deal or an audit, not when the dependency is added.
+{{< /threat-what >}}
+{{< threat-answer >}}
+- The license of each version is determined from sources in a fixed order of priority, and a contradiction between sources is flagged and shown in full.
+- An SPDX expression is parsed completely: `AND`, `OR`, `WITH` and `LicenseRef-*`.
+- An unknown license, a non-standard text and `LicenseRef-*` always give `review`, never `allow`.
+- License categories and decisions per context are set by the organization. There is no built-in "GPL is forbidden" rule.
+{{< /threat-answer >}}
+{{< /threat >}}
 
 ## Guarantee {#guarantee}
 
@@ -77,6 +87,4 @@ A `deny` decision alone does not close downloads. An organization turns on block
 
 ## Related settings {#configure}
 
-- {{< xref "features/security/evidence-and-scanning" >}} — an SBOM and a scanner report as license sources.
-- {{< xref "configure" >}} — how CRANE reads settings.
-- {{< xref "security/security-events" >}} — license policy events in the journal.
+{{< cards "features/security/evidence-and-scanning" "configure" "security/security-events" >}}

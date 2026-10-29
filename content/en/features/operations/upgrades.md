@@ -43,7 +43,4 @@ The `migrate` role uses a PostgreSQL advisory lock. While the lock is held, a se
 
 ## Related pages {#related}
 
-- {{< xref "features/operations/deployment-model" >}}
-- {{< xref "features/operations/backup-restore" >}}
-- {{< xref "deploy/kubernetes-helm" >}}
-- {{< xref "deploy/docker-compose" >}}
+{{< cards "features/operations/deployment-model" "features/operations/backup-restore" "deploy/kubernetes-helm" "deploy/docker-compose" >}}

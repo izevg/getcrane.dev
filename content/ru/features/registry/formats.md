@@ -81,7 +81,4 @@ CRANE реализует ресурсы NuGet V3 ({{< cite "nuget-server-api" >}
 
 ## Связанные страницы {#related}
 
-- {{< xref "formats" >}}
-- {{< xref "features/registry/cli" >}}
-- {{< xref "features/security/immutable-versions" >}}
-- {{< xref "features/registry/proxy-cache" >}}
+{{< cards "formats" "features/registry/cli" "features/security/immutable-versions" "features/registry/proxy-cache" >}}

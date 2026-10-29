@@ -113,7 +113,4 @@ CRANE_BLOBS: ключ `<ключ>` не из списка несекретных
 
 ## Что дальше {#next}
 
-- {{< xref "configure/storage" >}}
-- {{< xref "deploy/valkey-cache" >}}
-- {{< xref "operations/health-checks" >}}
-- {{< xref "reference/environment-variables" >}}
+{{< cards "configure/storage" "deploy/valkey-cache" "operations/health-checks" "reference/environment-variables" >}}

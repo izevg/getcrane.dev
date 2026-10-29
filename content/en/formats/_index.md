@@ -35,7 +35,4 @@ An error body has the shape the format's client understands: `{"errors":[{"detai
 
 ## What next {#next}
 
-- {{< xref "formats/cargo" >}} — connect cargo, publish crates, yank, install through a proxy.
-- {{< xref "formats/npm" >}} — connect npm, publish scoped packages, dist-tags, deprecate, unpublish.
-- {{< xref "configure/repositories" >}} — how to create hosted and proxy repositories.
-- {{< xref "features/security/immutable-versions" >}} — why a version cannot be overwritten.
+{{< cards "formats/cargo" "formats/npm" "configure/repositories" "features/security/immutable-versions" >}}

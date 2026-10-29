@@ -107,7 +107,4 @@ What the server does with table rows at startup:
 
 ## What next {#next}
 
-- {{< xref "configure/repositories" >}}
-- {{< xref "configure/storage" >}}
-- {{< xref "configure/access-token" >}}
-- {{< xref "reference/environment-variables" >}}
+{{< cards "configure/repositories" "configure/storage" "configure/access-token" "reference/environment-variables" >}}

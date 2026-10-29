@@ -46,6 +46,4 @@ The targets for data loss and recovery time depend on the profile and are given 
 
 ## Related pages {#related}
 
-- {{< xref "features/operations/availability" >}}
-- {{< xref "features/operations/upgrades" >}}
-- {{< xref "features/registry/proxy-cache" >}}
+{{< cards "features/operations/availability" "features/operations/upgrades" "features/registry/proxy-cache" >}}

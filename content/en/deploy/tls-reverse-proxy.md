@@ -115,7 +115,6 @@ The reverse case is more dangerous: the proxy is in the list but does not meet t
 
 ## What next {#next}
 
-- {{< xref "configure/network" >}}
+{{< cards "configure/network" "security/hardening" "deploy/production-checklist" >}}
+
 - {{< xref "deploy/docker-compose#edge" >}}
-- {{< xref "security/hardening" >}}
-- {{< xref "deploy/production-checklist" >}}

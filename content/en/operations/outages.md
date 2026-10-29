@@ -133,7 +133,4 @@ After the component is restored:
 
 ## What next {#next}
 
-- {{< xref "features/operations/availability" >}}
-- {{< xref "features/security/fail-closed" >}}
-- {{< xref "operations/troubleshooting" >}}
-- {{< xref "reference/errors" >}}
+{{< cards "features/operations/availability" "features/security/fail-closed" "operations/troubleshooting" "reference/errors" >}}

@@ -116,7 +116,4 @@ The shipped files harden the CRANE containers, the networks and the storage of s
 
 ## What's next {#next}
 
-- {{< xref "security" >}} — trust boundaries of the deployment.
-- {{< xref "security/security-events" >}} — security journal events.
-- {{< xref "deploy/valkey-cache" >}} — isolating Valkey.
-- {{< xref "configure/network" >}} — trusted proxies.
+{{< cards "security" "security/security-events" "deploy/valkey-cache" "configure/network" >}}

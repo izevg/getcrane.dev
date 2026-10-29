@@ -91,7 +91,4 @@ flowchart TB
 
 ## Связанные страницы {#related}
 
-- {{< xref "features/security/immutable-versions" >}}
-- {{< xref "features/security/namespace-reservation" >}}
-- {{< xref "features/registry/proxy-cache" >}}
-- {{< xref "features/registry/teams-and-ownership" >}}
+{{< cards "features/security/immutable-versions" "features/security/namespace-reservation" "features/registry/proxy-cache" "features/registry/teams-and-ownership" >}}

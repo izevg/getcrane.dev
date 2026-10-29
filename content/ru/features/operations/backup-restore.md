@@ -46,6 +46,4 @@ Blob неизменяем, поэтому достаточно копирова�
 
 ## Связанные страницы {#related}
 
-- {{< xref "features/operations/availability" >}}
-- {{< xref "features/operations/upgrades" >}}
-- {{< xref "features/registry/proxy-cache" >}}
+{{< cards "features/operations/availability" "features/operations/upgrades" "features/registry/proxy-cache" >}}

@@ -107,7 +107,4 @@ terms: []
 
 ## Что дальше {#next}
 
-- {{< xref "configure/repositories" >}}
-- {{< xref "configure/storage" >}}
-- {{< xref "configure/access-token" >}}
-- {{< xref "reference/environment-variables" >}}
+{{< cards "configure/repositories" "configure/storage" "configure/access-token" "reference/environment-variables" >}}

@@ -126,7 +126,4 @@ CRANE требует `vector` (pgvector 0.8 и новее) и `pg_trgm`. Пов�
 
 ## Что дальше {#next}
 
-- {{< xref "features/operations/upgrades" >}}
-- {{< xref "operations/health-checks" >}}
-- {{< xref "operations/backup-restore" >}}
-- {{< xref "operations/troubleshooting" >}}
+{{< cards "features/operations/upgrades" "operations/health-checks" "operations/backup-restore" "operations/troubleshooting" >}}

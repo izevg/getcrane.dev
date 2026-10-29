@@ -207,7 +207,6 @@ Ordinary records are easiest to find by the `message` field. The table lists the
 
 ## What next {#next}
 
-- {{< xref "features/security/security-journal" >}}
-- {{< xref "operations/troubleshooting" >}}
-- {{< xref "reference/errors" >}}
+{{< cards "features/security/security-journal" "operations/troubleshooting" "reference/errors" >}}
+
 - {{< xref "reference/environment-variables#group-logging" >}}

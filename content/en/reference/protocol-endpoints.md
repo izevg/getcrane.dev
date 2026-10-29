@@ -111,7 +111,4 @@ The repository serves registry.npmjs.org through a cache with SHA-512 verificati
 
 ## What next {#next}
 
-- {{< xref "reference/errors" >}}
-- {{< xref "configure/repositories" >}}
-- {{< xref "configure/access-token" >}}
-- {{< xref "features/registry/formats" >}}
+{{< cards "reference/errors" "configure/repositories" "configure/access-token" "features/registry/formats" >}}

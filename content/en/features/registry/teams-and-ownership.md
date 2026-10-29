@@ -120,7 +120,6 @@ For reports CRANE builds a daily download aggregate by team, repository, package
 
 ## Related pages {#related}
 
-- {{< xref "features/security/access-control" >}}
-- {{< xref "features/security/namespace-reservation" >}}
+{{< cards "features/security/access-control" "features/security/namespace-reservation" "configure/identity" >}}
+
 - {{< xref "features/registry/integrations#oidc-exchange" >}}
-- {{< xref "configure/identity" >}}

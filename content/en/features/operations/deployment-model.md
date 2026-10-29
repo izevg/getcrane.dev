@@ -134,7 +134,4 @@ Schema migrations follow the expand, migrate, contract pattern: the new applicat
 
 ## Related pages {#related}
 
-- {{< xref "deploy/docker-compose" >}}
-- {{< xref "deploy/kubernetes-helm" >}}
-- {{< xref "features/operations/availability" >}}
-- {{< xref "features/operations/upgrades" >}}
+{{< cards "deploy/docker-compose" "deploy/kubernetes-helm" "features/operations/availability" "features/operations/upgrades" >}}

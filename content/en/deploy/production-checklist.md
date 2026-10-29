@@ -58,7 +58,4 @@ Backup and release authenticity verification: this functionality is in developme
 
 ## What next {#next}
 
-- {{< xref "security/hardening" >}}
-- {{< xref "deploy/tls-reverse-proxy" >}}
-- {{< xref "operations/health-checks" >}}
-- {{< xref "security" >}}
+{{< cards "security/hardening" "deploy/tls-reverse-proxy" "operations/health-checks" "security" >}}

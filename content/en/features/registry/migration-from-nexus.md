@@ -50,6 +50,4 @@ Migrated names become names of a hosted repository, and so internal: a proxy doe
 
 ## Related pages {#related}
 
-- {{< xref "features/registry/hosted" >}}
-- {{< xref "features/registry/proxy-cache" >}}
-- {{< xref "features/registry/cli" >}}
+{{< cards "features/registry/hosted" "features/registry/proxy-cache" "features/registry/cli" >}}

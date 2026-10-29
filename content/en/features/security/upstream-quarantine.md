@@ -15,7 +15,17 @@ It defends against maintainer account takeover: a malicious version of a popular
 
 ## Threat {#threat}
 
+{{< threat summary="A version from a hijacked account is picked up within minutes: CRANE does not serve a version published less than a window ago." chips="term:quarantine, term:upstream" flow="Attacker takes over the author account \| Auto-updates pick up the version \| CRANE withholds it until the window ends" >}}
+{{< threat-what >}}
 An attacker gains access to the account of a popular package's author and publishes a new version with malicious code. Automatic updates and builds with floating version ranges pick it up within the first minutes. The registry cannot yet know the version is malicious: there is no advisory, and the author has not noticed the breach.
+{{< /threat-what >}}
+{{< threat-answer >}}
+- A version from an upstream that was published less than a window ago is not served to proxy clients: neither in the version document nor through a direct link to the file.
+- The same filter is applied to the stale copy of a document that CRANE serves while the upstream is unavailable.
+- A blocked version is served from neither the fresh nor the stale cache, including through a direct URL from a lockfile.
+- A rule-based block takes effect on all replicas within 5 seconds.
+{{< /threat-answer >}}
+{{< /threat >}}
 
 ## Guarantee {#guarantee}
 
@@ -86,5 +96,4 @@ To a client, quarantine looks like the absence of a fresh version. The `latest` 
 
 ## Related settings {#configure}
 
-- {{< xref "configure/upstream-quarantine" >}} — the window size and the policy for versions without a publication time.
-- {{< xref "configure/repositories" >}} — proxy repositories and their upstreams.
+{{< cards "configure/upstream-quarantine" "configure/repositories" >}}

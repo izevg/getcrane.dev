@@ -15,11 +15,21 @@ This way repudiation and quiet modification of the journal become detectable, an
 
 ## Threat {#threat}
 
+{{< threat summary="Editing, forging or quietly disabling the journal cannot be hidden: CRANE chains events by hash and anchors the hash in WORM storage." chips="term:hash-chain, term:worm, term:siem" >}}
+{{< threat-what >}}
 - **Repudiation.** A dispute over who performed an action: without reliable attribution it cannot be settled.
 - **Journal tampering.** An attacker or an administrator edits or deletes records of their own actions.
 - **Quietly turning off export.** Events stop reaching the SIEM and nobody notices.
 - **An administrator reads and edits the journal.** Whoever runs the platform also controls the evidence.
 - **Leakage through the journal itself.** The journal holds logins, IP addresses and times of employees' actions; reading it exposes them.
+{{< /threat-what >}}
+{{< threat-answer >}}
+- The three journal streams (audit, access, egress) are written regardless of the log level: lowering noise through the {{< env "RUST_LOG" >}} variable does not turn them off.
+- Every audit event carries `hash = SHA-256(prev_hash ‖ canonical_json(event))`. A break in the chain is detected during verification.
+- Writes go through a database role without rights to modify or delete. Once an hour, the last hash is written to an S3 object with Object Lock (WORM) and sent to the SIEM.
+- Only `secops` and `auditor` read the journal. The `platform-admin` role does not see it.
+{{< /threat-answer >}}
+{{< /threat >}}
 
 ## Guarantee {#guarantee}
 
@@ -104,7 +114,4 @@ The package gives an auditor a verifiable set of materials without the right to 
 
 ## Related settings {#configure}
 
-- {{< xref "security/security-events" >}} — security journal events and their fields.
-- {{< xref "features/operations/observability" >}} — metrics, logs and tracing.
-- {{< xref "configure/network" >}} — trusted proxies for the client address.
-- {{< xref "security/hardening" >}} — hardening a deployment.
+{{< cards "security/security-events" "features/operations/observability" "configure/network" "security/hardening" >}}

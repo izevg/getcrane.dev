@@ -15,9 +15,19 @@ This way a malicious or vulnerable component inside an artifact that metadata do
 
 ## Threat {#threat}
 
+{{< threat summary="Package content can hide malware and an archive can harm the service: CRANE binds evidence to SHA-256 and unpacks archives in isolation." chips="term:evidence, term:blob" >}}
+{{< threat-what >}}
 - **Content that does not match its description.** Package metadata does not name a malicious or vulnerable component that sits inside the archive or is vendored in the sources.
 - **A hostile archive.** An archive is built to harm the service that unpacks it: a zip bomb exhausts disk and memory, a path like `../../etc/x` escapes the extraction root, a symlink points to a file outside the root.
 - **A scan not bound to content.** A result is recorded against a version while the file under the same number has changed, or the same file is scanned again in ten repositories.
+{{< /threat-what >}}
+{{< threat-answer >}}
+- Evidence belongs to a {{< term "blob" >}} by SHA-256 and is never rewritten; a new scanner database creates a new record.
+- A scanner failure produces "could not verify" evidence and an "analysis error", never "clean".
+- Archives are unpacked only in the `analyze` role, with no network except the scanner server, with limits and with protection from escaping the root.
+- A scan result affects serving only under an explicit policy. The scanner is off by default, and by default a scan result blocks nothing.
+{{< /threat-answer >}}
+{{< /threat >}}
 
 ## Guarantee {#guarantee}
 
@@ -78,6 +88,4 @@ A scan result does not change a file and does not delete a version. It can produ
 
 ## Related settings {#configure}
 
-- {{< xref "configure" >}} — how CRANE reads settings.
-- {{< xref "configure/vulnerability-feeds" >}} — vulnerability feeds.
-- {{< xref "security/hardening" >}} — hardening a deployment, including network isolation.
+{{< cards "configure" "configure/vulnerability-feeds" "security/hardening" >}}

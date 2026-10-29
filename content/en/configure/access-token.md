@@ -80,6 +80,4 @@ A foreign scheme is not accepted "as is": a header with another scheme counts as
 
 ## What next {#next}
 
-- {{< xref "configure/settings-encryption" >}}
-- {{< xref "configure/network" >}}
-- {{< xref "reference/environment-variables" >}}
+{{< cards "configure/settings-encryption" "configure/network" "reference/environment-variables" >}}

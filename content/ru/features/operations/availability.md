@@ -76,7 +76,4 @@ CRANE различает сохранность данных и доступно
 
 ## Связанные страницы {#related}
 
-- {{< xref "features/operations/deployment-model" >}}
-- {{< xref "features/operations/observability" >}}
-- {{< xref "features/operations/backup-restore" >}}
-- {{< xref "deploy/requirements" >}}
+{{< cards "features/operations/deployment-model" "features/operations/observability" "features/operations/backup-restore" "deploy/requirements" >}}

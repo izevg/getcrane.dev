@@ -70,6 +70,6 @@ The reason text of a busy port depends on the operating system.
 
 ## What next {#next}
 
+{{< cards "reference/ports-and-health" "reference/environment-variables" >}}
+
 - {{< xref "deploy/docker-compose#edge" >}}
-- {{< xref "reference/ports-and-health" >}}
-- {{< xref "reference/environment-variables" >}}

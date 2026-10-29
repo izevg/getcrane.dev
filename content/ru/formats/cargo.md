@@ -161,7 +161,4 @@ cargo yank --registry crane --undo --version <version> <crate>
 
 ## Что дальше {#next}
 
-- {{< xref "formats/npm" >}} — подключение npm.
-- {{< xref "configure/repositories" >}} — как создать hosted- и proxy-репозитории.
-- {{< xref "features/security/immutable-versions" >}} — гарантия неизменяемости и семантика удаления.
-- {{< xref "features/registry/proxy-cache" >}} — как работает кэш proxy.
+{{< cards "formats/npm" "configure/repositories" "features/security/immutable-versions" "features/registry/proxy-cache" >}}

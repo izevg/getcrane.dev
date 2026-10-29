@@ -42,7 +42,4 @@ The server is ready when `/healthz/ready` on the admin port (`9464` by default) 
 
 ## What's next {#next}
 
-- {{< xref "deploy/requirements" >}}
-- {{< xref "deploy/docker-compose" >}}
-- {{< xref "deploy/kubernetes-helm" >}}
-- {{< xref "reference/environment-variables" >}}
+{{< cards "deploy/requirements" "deploy/docker-compose" "deploy/kubernetes-helm" "reference/environment-variables" >}}

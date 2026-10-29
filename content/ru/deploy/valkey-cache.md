@@ -129,7 +129,4 @@ Valkey не влияет на готовность `crane`: сервер не ж
 
 ## Что дальше {#next}
 
-- {{< xref "configure/cache" >}}
-- {{< xref "deploy/s3-storage" >}}
-- {{< xref "security/hardening" >}}
-- {{< xref "operations/health-checks" >}}
+{{< cards "configure/cache" "deploy/s3-storage" "security/hardening" "operations/health-checks" >}}

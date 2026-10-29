@@ -126,7 +126,4 @@ Until `migrate` finishes successfully, Compose does not start the `crane` servic
 
 ## What next {#next}
 
-- {{< xref "features/operations/upgrades" >}}
-- {{< xref "operations/health-checks" >}}
-- {{< xref "operations/backup-restore" >}}
-- {{< xref "operations/troubleshooting" >}}
+{{< cards "features/operations/upgrades" "operations/health-checks" "operations/backup-restore" "operations/troubleshooting" >}}

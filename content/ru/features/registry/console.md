@@ -95,7 +95,4 @@ README, metadata и evidence пакетов недоверенны, поэтом
 
 ## Связанные страницы {#related}
 
-- {{< xref "features/registry/search" >}}
-- {{< xref "features/registry/cli" >}}
-- {{< xref "features/security/access-control" >}}
-- {{< xref "features/security/security-journal" >}}
+{{< cards "features/registry/search" "features/registry/cli" "features/security/access-control" "features/security/security-journal" >}}

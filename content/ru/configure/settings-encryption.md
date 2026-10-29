@@ -71,6 +71,4 @@ CRANE_SETTINGS_KEY: ключ шифрования не нужен при memory
 
 ## Что дальше {#next}
 
-- {{< xref "configure" >}}
-- {{< xref "configure/storage" >}}
-- {{< xref "reference/environment-variables" >}}
+{{< cards "configure" "configure/storage" "reference/environment-variables" >}}

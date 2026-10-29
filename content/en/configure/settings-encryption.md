@@ -71,6 +71,4 @@ The first message means no key is set, the second that another key is set (both 
 
 ## What next {#next}
 
-- {{< xref "configure" >}}
-- {{< xref "configure/storage" >}}
-- {{< xref "reference/environment-variables" >}}
+{{< cards "configure" "configure/storage" "reference/environment-variables" >}}

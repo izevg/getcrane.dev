@@ -109,7 +109,4 @@ Check that the fix worked:
 
 ## What next {#next}
 
-- {{< xref "operations/outages" >}}
-- {{< xref "operations/logs" >}}
-- {{< xref "reference/errors" >}}
-- {{< xref "reference/server-cli" >}}
+{{< cards "operations/outages" "operations/logs" "reference/errors" "reference/server-cli" >}}

@@ -15,11 +15,21 @@ This way {{< term "ssrf" >}} through an upstream, DNS or a redirect does not tur
 
 ## Threat {#threat}
 
+{{< threat summary="A registry that reaches external networks can be pointed at an internal address (SSRF): CRANE checks the host, scheme and every address." chips="term:ssrf, term:egress" >}}
+{{< threat-what >}}
 SSRF is an attack in which a server sends a request to an address chosen by the attacker ({{< cite "owasp-ssrf" >}}). A registry that reaches external networks based on data it does not control faces three variants:
 
 - **Redirect.** An allowed host answers with `302` to `http://169.254.169.254/`, the address of the cloud metadata service. A client that blindly follows redirects sends a request to an internal address.
 - **DNS.** A name from the allowlist resolves to an internal address because of DNS spoofing or split-horizon DNS inside the network. A check of the name does not see where it leads.
 - **A swapped destination.** The address of a webhook or a SIEM receiver points to an internal service.
+{{< /threat-what >}}
+{{< threat-answer >}}
+- Outbound requests to upstreams go only to hosts from an exact allowlist, with no wildcard hosts, and only over `https`; `http` is permitted by an explicit allowance in the policy.
+- Every address that DNS returns is checked before a connection is made. If even one address is not public, the whole answer is refused.
+- Every redirect passes the same host and scheme checks as the original request. A chain longer than 5 redirects is not followed.
+- For webhooks and SIEM receivers, non-public addresses are forbidden by default.
+{{< /threat-answer >}}
+{{< /threat >}}
 
 ## Guarantee {#guarantee}
 
@@ -86,6 +96,4 @@ There are no headers, bodies or `ETag` in a line. A request served from the cach
 
 ## Related settings {#configure}
 
-- {{< xref "configure/network" >}} — addresses, ports and trusted proxies.
-- {{< xref "configure/repositories" >}} — proxy repositories and their upstreams.
-- {{< xref "security/security-events" >}} — security journal events.
+{{< cards "configure/network" "configure/repositories" "security/security-events" >}}

@@ -58,7 +58,4 @@ terms: [digest, namespace, readiness-probe]
 
 ## Что дальше {#next}
 
-- {{< xref "security/hardening" >}}
-- {{< xref "deploy/tls-reverse-proxy" >}}
-- {{< xref "operations/health-checks" >}}
-- {{< xref "security" >}}
+{{< cards "security/hardening" "deploy/tls-reverse-proxy" "operations/health-checks" "security" >}}

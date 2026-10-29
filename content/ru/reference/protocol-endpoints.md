@@ -111,7 +111,4 @@ Cargo работает как {{< term "sparse-registry" >}} ({{< cite "rfc-2789
 
 ## Что дальше {#next}
 
-- {{< xref "reference/errors" >}}
-- {{< xref "configure/repositories" >}}
-- {{< xref "configure/access-token" >}}
-- {{< xref "features/registry/formats" >}}
+{{< cards "reference/errors" "configure/repositories" "configure/access-token" "features/registry/formats" >}}

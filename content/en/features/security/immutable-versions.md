@@ -15,7 +15,17 @@ The guarantee holds in all five formats. A version can be hidden or deleted, but
 
 ## Threat {#threat}
 
+{{< threat summary="Swapping the file of an existing version serves foreign code under a familiar number: CRANE does not let a released version be overwritten." chips="term:cas, term:tombstone" flow="Attacker obtains a publishing token \| Uploads another file into 1.4.2 \| CRANE answers that with 409" >}}
+{{< threat-what >}}
 An attacker obtains a publishing token and uploads a different file into an existing version. Clients that pinned `1.4.2` get someone else's code under a familiar number on their next install. Deleting a version and publishing it again under the same number gives the same result.
+{{< /threat-what >}}
+{{< threat-answer >}}
+- A released version cannot be overwritten. Publishing an existing version again gets a `409` response.
+- Two parallel publications of the same version produce exactly one success.
+- Deletion leaves a {{< term "tombstone" >}}: the bytes are no longer served and the version number cannot be taken again.
+- Bytes in {{< term "cas" >}} never change: a file with different content gets a different address.
+{{< /threat-answer >}}
+{{< /threat >}}
 
 ## Guarantee {#guarantee}
 
@@ -97,6 +107,4 @@ Files from an {{< term "upstream" >}} are cached indefinitely: the entry key inc
 
 ## Related settings {#configure}
 
-- {{< xref "configure/repositories" >}} — repositories and their settings.
-- {{< xref "configure/storage" >}} — blob storage.
-- {{< xref "formats/maven" >}}, {{< xref "formats/npm" >}} — deletion and hiding semantics in clients.
+{{< cards "configure/repositories" "configure/storage" "formats/maven" "formats/npm" >}}

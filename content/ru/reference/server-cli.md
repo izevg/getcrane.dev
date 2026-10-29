@@ -74,6 +74,4 @@ crane <serve|all|migrate|healthcheck>
 
 ## Что дальше {#next}
 
-- {{< xref "reference/ports-and-health" >}}
-- {{< xref "reference/environment-variables" >}}
-- {{< xref "deploy/docker-compose" >}}
+{{< cards "reference/ports-and-health" "reference/environment-variables" "deploy/docker-compose" >}}

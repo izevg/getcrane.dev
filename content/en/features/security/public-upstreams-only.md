@@ -15,12 +15,22 @@ A package from another registry enters CRANE by one path: a person, or their scr
 
 ## Threat {#threat}
 
+{{< threat summary="An arbitrary upstream is a channel for a supply chain attack: CRANE uses only the public registries of its formats." chips="term:upstream, term:proxy-repository, term:hosted-repository" >}}
+{{< threat-what >}}
 An arbitrary upstream is a ready-made channel for an attack on the supply chain.
 
 - **Content outside control.** CRANE does not know who runs a foreign registry or what is in it. Whatever the registry returned would reach builds automatically.
 - **Nobody answers for it.** When a package arrives by itself, through a setting, no specific person chose it. A program cannot answer for malicious code that leaked in from a foreign registry.
 - **A swapped address.** If the upstream address can be given in a request or in client configuration, an attacker points CRANE at their own server.
 - **Mixed names.** Several sources of one package open the way to {{< term "dependency-confusion" >}}: a public package replaces an internal one.
+{{< /threat-what >}}
+{{< threat-answer >}}
+- The upstreams in CRANE are only the public registries of their formats: crates.io for Cargo, registry.npmjs.org for npm, and PyPI, Maven Central and nuget.org for the other formats.
+- A client cannot point CRANE at another upstream: the address arrives neither in a request nor in client configuration.
+- Instance configuration sets the names of proxy repositories, not their addresses.
+- Packages from any other registry enter CRANE only as a publication to a hosted repository. The publication is written to the journal with its author.
+{{< /threat-answer >}}
+{{< /threat >}}
 
 ## Guarantee {#guarantee}
 
@@ -66,6 +76,4 @@ The publication passes the same checks as any publication to a hosted repository
 
 ## Related settings {#configure}
 
-- {{< xref "configure/repositories" >}} — hosted and proxy repositories.
-- {{< xref "configure/namespaces" >}} — reserving internal names.
-- {{< xref "features/registry/migration-from-nexus" >}} — transferring hosted packages from Nexus.
+{{< cards "configure/repositories" "configure/namespaces" "features/registry/migration-from-nexus" >}}

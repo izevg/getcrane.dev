@@ -120,7 +120,6 @@ CRANE не имеет вендорных адаптеров Entra, Google или
 
 ## Связанные страницы {#related}
 
-- {{< xref "features/security/access-control" >}}
-- {{< xref "features/security/namespace-reservation" >}}
+{{< cards "features/security/access-control" "features/security/namespace-reservation" "configure/identity" >}}
+
 - {{< xref "features/registry/integrations#oidc-exchange" >}}
-- {{< xref "configure/identity" >}}

@@ -57,7 +57,4 @@ CRANE is distributed under the Apache License 2.0. It grants an explicit patent 
 
 ## Where to go next {#next}
 
-- {{< xref "start/quickstart" >}} — run CRANE on a single node and publish a first crate.
-- {{< xref "start/concepts" >}} — repositories, versions, blobs, teams and tokens.
-- {{< xref "features/security" >}} — which threats are covered and where the guarantees end.
-- {{< xref "deploy" >}} — choose a deployment path.
+{{< cards "start/quickstart" "start/concepts" "features/security" "deploy" >}}

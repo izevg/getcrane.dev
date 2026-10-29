@@ -15,12 +15,22 @@ This way a leaked database dump, CI log or URL does not give an attacker working
 
 ## Threat {#threat}
 
+{{< threat summary="A secret leaks through a database dump, logs, URLs and long-lived tokens: CRANE encrypts secrets and keeps their values out of the journal." chips="term:security-journal" >}}
+{{< threat-what >}}
 A secret leaks where it is not expected:
 
 - **A database dump or backup.** The settings table holds secrets, for example a scanner token. Plain text in a dump is ready-made access.
 - **Logs and URLs.** A token in a query string ends up in proxy and browser logs. A token in a CI log is available to everyone who reads the log.
 - **A long-lived token on a developer machine.** A `postinstall` script of a foreign package takes the token from `~/.npmrc`. If the script can issue itself a new 90-day token, theft turns into permanent access.
 - **A secret in CI variables.** It lives for months and is visible to all jobs of the project, including a build of foreign code.
+{{< /threat-what >}}
+{{< threat-answer >}}
+- Settings secrets are stored in the database under AES-256-GCM. The ciphertext is bound to the setting name, the row version and the key fingerprint.
+- Secret values do not reach security journal events.
+- CRANE tokens are stored as HMAC-SHA256 with a pepper and shown once at issue time. Tokens are not passed in URLs.
+- A CI workload token lives no longer than the job and no longer than an hour.
+{{< /threat-answer >}}
+{{< /threat >}}
 
 ## Guarantee {#guarantee}
 
@@ -98,7 +108,4 @@ Revoking a token, blocking a user or changing their groups raises the principal'
 
 ## Related settings {#configure}
 
-- {{< xref "configure/settings-encryption" >}} — the settings encryption key.
-- {{< xref "configure/access-token" >}} — the access token for protocols.
-- {{< xref "configure/identity" >}} — sign-in through OIDC.
-- {{< xref "deploy/production-checklist" >}} — the checklist before going live.
+{{< cards "configure/settings-encryption" "configure/access-token" "configure/identity" "deploy/production-checklist" >}}

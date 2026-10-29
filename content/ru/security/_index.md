@@ -80,7 +80,4 @@ flowchart LR
 
 ## Что дальше {#next}
 
-- {{< xref "security/hardening" >}} — усиление Compose-развёртывания.
-- {{< xref "security/security-events" >}} — события журнала ИБ и их поля.
-- {{< xref "security/vulnerability-disclosure" >}} — как сообщить об уязвимости в CRANE.
-- {{< xref "security/release-verification" >}} — проверка подлинности выпусков.
+{{< cards "security/hardening" "security/security-events" "security/vulnerability-disclosure" "security/release-verification" >}}

@@ -177,7 +177,4 @@ An error body looks like `{"error":"…"}`. The text ends with `(request_id <id>
 
 ## What next {#next}
 
-- {{< xref "formats/cargo" >}} — connect cargo.
-- {{< xref "features/security/namespace-reservation" >}} — why a hosted repository accepts only scoped packages.
-- {{< xref "configure/repositories" >}} — how to create hosted and proxy repositories.
-- {{< xref "features/registry/proxy-cache" >}} — how the proxy cache works.
+{{< cards "formats/cargo" "features/security/namespace-reservation" "configure/repositories" "features/registry/proxy-cache" >}}

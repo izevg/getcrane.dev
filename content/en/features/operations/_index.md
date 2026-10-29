@@ -32,6 +32,4 @@ This section describes how CRANE is built from an operations point of view and w
 
 ## How to deploy and configure {#next}
 
-- {{< xref "deploy/docker-compose" >}}: a single node.
-- {{< xref "deploy/kubernetes-helm" >}}: a Kubernetes cluster.
-- {{< xref "deploy/requirements" >}}: environment requirements.
+{{< cards "deploy/docker-compose" "deploy/kubernetes-helm" "deploy/requirements" >}}

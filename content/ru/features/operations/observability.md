@@ -93,6 +93,4 @@ SLI вычисляются из метрик. Алерты строятся по
 
 ## Связанные страницы {#related}
 
-- {{< xref "features/operations/availability" >}}
-- {{< xref "features/security/security-journal" >}}
-- {{< xref "deploy/kubernetes-helm" >}}
+{{< cards "features/operations/availability" "features/security/security-journal" "deploy/kubernetes-helm" >}}

@@ -15,11 +15,21 @@ This way a stolen token or a compromised role cannot widen access, and every ref
 
 ## Threat {#threat}
 
+{{< threat summary="A stolen token, foreign code in a job and mixed roles widen access: CRANE issues tokens only to people and only narrows rights." chips="term:principal, term:separation-of-duties" >}}
+{{< threat-what >}}
 - **Escalation through a token.** A `postinstall` script takes `crp_` from `~/.npmrc` and issues itself a 90-day token, or a token with wider rights.
 - **Foreign code in the publishing job.** A build of a fork or a merge request gets a write token and publishes a package.
 - **Mixed duties.** A platform administrator who can read and edit the journal can hide their own actions.
 - **Quiet weakening of protection.** A team owner turns off a protective repository setting and the action goes unnoticed.
 - **Excess rights from a directory.** Rights inferred from an LDAP structure by guesswork diverge from what the organization intended.
+{{< /threat-what >}}
+{{< threat-answer >}}
+- Every request is authorized and access is denied by default.
+- A token is issued only by a person with their own interactive IdP session, and a new token is not wider than the person's rights.
+- A write token exists only in a publishing job without foreign code and is issued only for protected refs.
+- A platform administrator and the `secops` and `auditor` specialists are incompatible roles: in `strict` mode, signing in with both does not activate access to the journal.
+{{< /threat-answer >}}
+{{< /threat >}}
 
 ## Guarantee {#guarantee}
 
@@ -119,7 +129,4 @@ The unit of ownership and membership is a {{< term "workspace" "team" >}}. Roles
 
 ## Related settings {#configure}
 
-- {{< xref "configure/identity" >}} — sign-in through OIDC.
-- {{< xref "configure/access-token" >}} — the access token for protocols.
-- {{< xref "features/registry/teams-and-ownership" >}} — teams and ownership.
-- {{< xref "security/security-events" >}} — security journal events.
+{{< cards "configure/identity" "configure/access-token" "features/registry/teams-and-ownership" "security/security-events" >}}

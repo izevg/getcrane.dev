@@ -15,12 +15,22 @@ CRANE is non-commercial free software without an SLA and without manufacturer ob
 
 ## Threat {#threat}
 
+{{< threat summary="Mistaken compliance expectations create risk: CRANE names the mechanism behind each measure and claims no certification." >}}
+{{< threat-what >}}
 A compliance assessment goes wrong in three places, and each mistaken expectation creates a risk.
 
 - **Measures are taken for a certificate.** The mapping of mechanisms to measures is read as a conclusion that a system complies, while that conclusion stays with the organization.
 - **The journal is useless as evidence.** Records that can be quietly changed or partly erased do not prove who did what.
 - **Erasure conflicts with integrity.** A demand to erase records by subject breaks a tamper-protected journal and erases the attacker's traces together with an employee's data.
 - **Manufacturer obligations are expected from the project.** A free project without commercial activity has no SLA, no support period and no manufacturer liability.
+{{< /threat-what >}}
+{{< threat-answer >}}
+- Every measure in the table below is implemented by a CRANE mechanism; the table names that mechanism.
+- An audit event joins a {{< term "hash-chain" >}}, and once an hour the last hash is fixed in immutable storage ({{< term "worm" >}}). Editing or removing a record is detected on verification.
+- The auditor receives a machine-readable responsibility matrix in the OSCAL format: it shows which measures the product takes and which the organization takes.
+- The product does not claim certification or compliance on behalf of the organization.
+{{< /threat-answer >}}
+{{< /threat >}}
 
 ## Guarantee {#guarantee}
 
@@ -95,7 +105,4 @@ CRANE provides the technical measures listed above. The organization that runs C
 
 ## Related settings {#configure}
 
-- {{< xref "features/security/security-journal" >}} — the security journal, retention and the auditor bundle.
-- {{< xref "features/security/access-control" >}} — roles, step-up and separation of duties.
-- {{< xref "security/security-events" >}} — the events the server writes to the security journal today.
-- {{< xref "security/hardening" >}} — hardening a deployment.
+{{< cards "features/security/security-journal" "features/security/access-control" "security/security-events" "security/hardening" >}}

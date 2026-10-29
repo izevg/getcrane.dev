@@ -112,7 +112,4 @@ The server waits for the PostgreSQL connection for at most 5 s. An unreachable d
 
 ## What next {#next}
 
-- {{< xref "deploy/s3-storage" >}}
-- {{< xref "configure/settings-encryption" >}}
-- {{< xref "configure/cache" >}}
-- {{< xref "reference/server-cli" >}}
+{{< cards "deploy/s3-storage" "configure/settings-encryption" "configure/cache" "reference/server-cli" >}}

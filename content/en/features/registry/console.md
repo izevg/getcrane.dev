@@ -95,7 +95,4 @@ Package READMEs, metadata and evidence are untrusted, so the console runs under 
 
 ## Related pages {#related}
 
-- {{< xref "features/registry/search" >}}
-- {{< xref "features/registry/cli" >}}
-- {{< xref "features/security/access-control" >}}
-- {{< xref "features/security/security-journal" >}}
+{{< cards "features/registry/search" "features/registry/cli" "features/security/access-control" "features/security/security-journal" >}}

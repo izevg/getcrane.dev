@@ -93,6 +93,4 @@ Perses dashboards and their JSON versions for compatible systems ship with CRANE
 
 ## Related pages {#related}
 
-- {{< xref "features/operations/availability" >}}
-- {{< xref "features/security/security-journal" >}}
-- {{< xref "deploy/kubernetes-helm" >}}
+{{< cards "features/operations/availability" "features/security/security-journal" "deploy/kubernetes-helm" >}}

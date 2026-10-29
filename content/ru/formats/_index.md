@@ -35,7 +35,4 @@ terms: [hosted-repository, proxy-repository, upstream, static-token]
 
 ## Что дальше {#next}
 
-- {{< xref "formats/cargo" >}} — подключение cargo, публикация крейтов, yank, установка через proxy.
-- {{< xref "formats/npm" >}} — подключение npm, публикация пакетов со scope, dist-tags, deprecate, unpublish.
-- {{< xref "configure/repositories" >}} — как создать hosted- и proxy-репозитории.
-- {{< xref "features/security/immutable-versions" >}} — почему версию нельзя перезаписать.
+{{< cards "formats/cargo" "formats/npm" "configure/repositories" "features/security/immutable-versions" >}}

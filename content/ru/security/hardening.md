@@ -116,7 +116,4 @@ terms: [static-token, security-journal]
 
 ## Что дальше {#next}
 
-- {{< xref "security" >}} — границы доверия развёртывания.
-- {{< xref "security/security-events" >}} — события журнала ИБ.
-- {{< xref "deploy/valkey-cache" >}} — изоляция Valkey.
-- {{< xref "configure/network" >}} — доверенные прокси.
+{{< cards "security" "security/security-events" "deploy/valkey-cache" "configure/network" >}}

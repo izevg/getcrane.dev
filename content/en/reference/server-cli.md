@@ -74,6 +74,4 @@ The role connects to `127.0.0.1:<admin port>`, requests `/healthz/ready` and exi
 
 ## What next {#next}
 
-- {{< xref "reference/ports-and-health" >}}
-- {{< xref "reference/environment-variables" >}}
-- {{< xref "deploy/docker-compose" >}}
+{{< cards "reference/ports-and-health" "reference/environment-variables" "deploy/docker-compose" >}}

@@ -73,10 +73,8 @@ echo $?
 ## Probes in orchestrators {#orchestrators}
 
 - Compose: the `crane healthcheck` check with a 10 s interval, a 3 s timeout and six retries: {{< xref "deploy/docker-compose" >}}.
-- Kubernetes: `/healthz/ready` and `/healthz/live` probes on the admin port; the mismatch with the startup probe is described in {{< xref "deploy/kubernetes-helm#limitations" >}}.
+- Kubernetes: `/healthz/ready` and `/healthz/live` probes on the admin port. Deployment with a Helm chart is in development: {{< xref "deploy/kubernetes-helm" >}}.
 
 ## What next {#next}
 
-- {{< xref "reference/server-cli" >}}
-- {{< xref "configure/network" >}}
-- {{< xref "configure/storage" >}}
+{{< cards "reference/server-cli" "configure/network" "configure/storage" >}}

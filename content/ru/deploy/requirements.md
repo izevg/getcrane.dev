@@ -97,6 +97,4 @@ docker buildx imagetools inspect <образ:тег>
 
 ## Что дальше {#next}
 
-- {{< xref "deploy/docker-compose" >}}
-- {{< xref "deploy/kubernetes-helm" >}}
-- {{< xref "reference/environment-variables" >}}
+{{< cards "deploy/docker-compose" "deploy/kubernetes-helm" "reference/environment-variables" >}}

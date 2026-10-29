@@ -103,7 +103,7 @@ CRANE отвечает на ошибку кодом HTTP и коротким т�
 
 ## Что дальше {#next}
 
-- {{< xref "operations/troubleshooting" >}}
+{{< cards "operations/troubleshooting" "reference/protocol-endpoints" >}}
+
 - {{< xref "features/security/fail-closed#client-response" >}}
-- {{< xref "reference/protocol-endpoints" >}}
 - {{< xref "reference/ports-and-health#failure" >}}

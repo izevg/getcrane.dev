@@ -80,7 +80,4 @@ The client reaches Caddy over HTTPS. Caddy forwards the request to the `crane` s
 
 ## What's next {#next}
 
-- {{< xref "security/hardening" >}} — hardening a Compose deployment.
-- {{< xref "security/security-events" >}} — security journal events and their fields.
-- {{< xref "security/vulnerability-disclosure" >}} — how to report a vulnerability in CRANE.
-- {{< xref "security/release-verification" >}} — verifying release authenticity.
+{{< cards "security/hardening" "security/security-events" "security/vulnerability-disclosure" "security/release-verification" >}}

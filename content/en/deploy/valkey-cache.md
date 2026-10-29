@@ -131,7 +131,4 @@ The cache content is served to clients. For an artifact with an expected SHA-256
 
 ## What's next {#next}
 
-- {{< xref "configure/cache" >}}
-- {{< xref "deploy/s3-storage" >}}
-- {{< xref "security/hardening" >}}
-- {{< xref "operations/health-checks" >}}
+{{< cards "configure/cache" "deploy/s3-storage" "security/hardening" "operations/health-checks" >}}

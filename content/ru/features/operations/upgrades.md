@@ -43,7 +43,4 @@ CRANE обновляется без простоя. Миграции схемы 
 
 ## Связанные страницы {#related}
 
-- {{< xref "features/operations/deployment-model" >}}
-- {{< xref "features/operations/backup-restore" >}}
-- {{< xref "deploy/kubernetes-helm" >}}
-- {{< xref "deploy/docker-compose" >}}
+{{< cards "features/operations/deployment-model" "features/operations/backup-restore" "deploy/kubernetes-helm" "deploy/docker-compose" >}}

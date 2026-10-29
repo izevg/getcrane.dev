@@ -57,7 +57,4 @@ CRANE распространяется по лицензии Apache License 2.0.
 
 ## Куда идти дальше {#next}
 
-- {{< xref "start/quickstart" >}} — поднять CRANE на одном узле и опубликовать первый крейт.
-- {{< xref "start/concepts" >}} — репозитории, версии, blob, команды и токены.
-- {{< xref "features/security" >}} — какие угрозы закрыты и где границы гарантий.
-- {{< xref "deploy" >}} — выбрать способ развёртывания.
+{{< cards "start/quickstart" "start/concepts" "features/security" "deploy" >}}

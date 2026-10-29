@@ -69,6 +69,4 @@ CRANE_CACHE: значение со схемой `redis` пока не подде
 
 ## Что дальше {#next}
 
-- {{< xref "deploy/valkey-cache" >}}
-- {{< xref "configure/limits" >}}
-- {{< xref "reference/environment-variables" >}}
+{{< cards "deploy/valkey-cache" "configure/limits" "reference/environment-variables" >}}

@@ -73,10 +73,8 @@ echo $?
 ## Пробы в оркестраторах {#orchestrators}
 
 - Compose: проверка `crane healthcheck` с интервалом 10 с, таймаутом 3 с и шестью повторами: {{< xref "deploy/docker-compose" >}}.
-- Kubernetes: пробы `/healthz/ready` и `/healthz/live` на порту admin; расхождение с пробой запуска описано в {{< xref "deploy/kubernetes-helm#limitations" >}}.
+- Kubernetes: пробы `/healthz/ready` и `/healthz/live` на порту admin. Развёртывание через Helm-чарт в разработке: {{< xref "deploy/kubernetes-helm" >}}.
 
 ## Что дальше {#next}
 
-- {{< xref "reference/server-cli" >}}
-- {{< xref "configure/network" >}}
-- {{< xref "configure/storage" >}}
+{{< cards "reference/server-cli" "configure/network" "configure/storage" >}}

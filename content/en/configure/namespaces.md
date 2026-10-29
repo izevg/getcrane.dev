@@ -88,6 +88,4 @@ namespace acme_* уже принадлежит другому workspace; вла�
 
 ## What next {#next}
 
-- {{< xref "features/security/namespace-reservation" >}}
-- {{< xref "configure/repositories" >}}
-- {{< xref "reference/environment-variables" >}}
+{{< cards "features/security/namespace-reservation" "configure/repositories" "reference/environment-variables" >}}

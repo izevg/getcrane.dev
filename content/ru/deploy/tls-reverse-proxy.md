@@ -115,7 +115,6 @@ flowchart LR
 
 ## Что дальше {#next}
 
-- {{< xref "configure/network" >}}
+{{< cards "configure/network" "security/hardening" "deploy/production-checklist" >}}
+
 - {{< xref "deploy/docker-compose#edge" >}}
-- {{< xref "security/hardening" >}}
-- {{< xref "deploy/production-checklist" >}}

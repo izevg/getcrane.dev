@@ -55,6 +55,4 @@ proxy_max_artifact_bytes = 1073741824
 
 ## Что дальше {#next}
 
-- {{< xref "configure/repositories" >}}
-- {{< xref "configure/cache" >}}
-- {{< xref "reference/environment-variables" >}}
+{{< cards "configure/repositories" "configure/cache" "reference/environment-variables" >}}

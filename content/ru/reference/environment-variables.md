@@ -96,6 +96,4 @@ terms: []
 
 ## Что дальше {#next}
 
-- {{< xref "configure" >}}
-- {{< xref "reference/server-cli" >}}
-- {{< xref "reference/ports-and-health" >}}
+{{< cards "configure" "reference/server-cli" "reference/ports-and-health" >}}

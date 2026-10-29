@@ -144,7 +144,4 @@ Do not set {{< env "CRANE_TOKEN" >}} and {{< env "CRANE_TOKEN_FILE" >}} together
 
 ## What's next {#next}
 
-- {{< xref "deploy/s3-storage" >}}
-- {{< xref "deploy/valkey-cache" >}}
-- {{< xref "configure/access-token" >}}
-- {{< xref "operations/upgrades-and-migrations" >}}
+{{< cards "deploy/s3-storage" "deploy/valkey-cache" "configure/access-token" "operations/upgrades-and-migrations" >}}

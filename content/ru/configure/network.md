@@ -70,6 +70,6 @@ terms: [security-journal]
 
 ## Что дальше {#next}
 
+{{< cards "reference/ports-and-health" "reference/environment-variables" >}}
+
 - {{< xref "deploy/docker-compose#edge" >}}
-- {{< xref "reference/ports-and-health" >}}
-- {{< xref "reference/environment-variables" >}}

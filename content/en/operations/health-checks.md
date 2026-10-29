@@ -122,7 +122,4 @@ If the storage did not answer (connection, timeout), the probe answers `503` wit
 
 ## What next {#next}
 
-- {{< xref "reference/ports-and-health" >}}
-- {{< xref "operations/outages" >}}
-- {{< xref "operations/logs" >}}
-- {{< xref "operations/troubleshooting" >}}
+{{< cards "reference/ports-and-health" "operations/outages" "operations/logs" "operations/troubleshooting" >}}

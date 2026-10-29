@@ -55,6 +55,4 @@ The texts are printed in Russian. The examples are in this order: not a number, 
 
 ## What next {#next}
 
-- {{< xref "configure/repositories" >}}
-- {{< xref "configure/cache" >}}
-- {{< xref "reference/environment-variables" >}}
+{{< cards "configure/repositories" "configure/cache" "reference/environment-variables" >}}

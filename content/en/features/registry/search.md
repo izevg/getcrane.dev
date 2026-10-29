@@ -76,6 +76,6 @@ Search is also available to external agents: the `search_packages` skill of the 
 
 ## Related pages {#related}
 
-- {{< xref "features/registry/console" >}}
-- {{< xref "features/security/ai-boundaries" >}}
+{{< cards "features/registry/console" "features/security/ai-boundaries" >}}
+
 - {{< xref "features/registry/hosted#package-lifecycle" >}}

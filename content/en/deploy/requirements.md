@@ -97,6 +97,4 @@ The `memory` cache is bounded to 256 MiB of entry weight (proxy document bodies)
 
 ## What's next {#next}
 
-- {{< xref "deploy/docker-compose" >}}
-- {{< xref "deploy/kubernetes-helm" >}}
-- {{< xref "reference/environment-variables" >}}
+{{< cards "deploy/docker-compose" "deploy/kubernetes-helm" "reference/environment-variables" >}}

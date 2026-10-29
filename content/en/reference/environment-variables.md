@@ -96,6 +96,4 @@ Names that appear in CI configuration examples. The server does not read them.
 
 ## What next {#next}
 
-- {{< xref "configure" >}}
-- {{< xref "reference/server-cli" >}}
-- {{< xref "reference/ports-and-health" >}}
+{{< cards "configure" "reference/server-cli" "reference/ports-and-health" >}}

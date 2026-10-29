@@ -15,7 +15,17 @@ The check covers tampering with a file on the way from the upstream, in a mirror
 
 ## Threat {#threat}
 
+{{< threat summary="A file or version document is altered on the way from the upstream: CRANE compares the SHA-256 digest before writing to storage." chips="term:digest, term:attestation, term:upstream" flow="The file is altered on the way \| Client receives a foreign archive \| CRANE rejects the mismatched file" >}}
+{{< threat-what >}}
 A file or a version document is altered on the way from the upstream: in a mirror, on an intermediate node, in a cache. The client receives an archive that differs from what the author published. A second form of the threat is a malicious version published with a stolen token, bypassing the author's CI: it lacks the build platform signature that earlier versions had.
+{{< /threat-what >}}
+{{< threat-answer >}}
+- Every file in storage is addressed by its SHA-256 digest.
+- If the upstream states an expected digest for a file in the version document, CRANE compares it with the received bytes before writing to storage. On a mismatch the file is not written and the client gets `502`.
+- Upstream attestations and signatures are verified against the bytes that CRANE stores.
+- If earlier versions had a valid attestation and the new one has none or a different one, the new version is held and an event goes to the SIEM.
+{{< /threat-answer >}}
+{{< /threat >}}
 
 ## Guarantee {#guarantee}
 
@@ -97,6 +107,4 @@ Attestations from a team's own CI (hosted repositories) are verified by the same
 
 ## Related settings {#configure}
 
-- {{< xref "deploy/valkey-cache" >}} — Valkey isolation and authentication.
-- {{< xref "configure/cache" >}} — the proxy cache.
-- {{< xref "configure/storage" >}} — blob storage.
+{{< cards "deploy/valkey-cache" "configure/cache" "configure/storage" >}}

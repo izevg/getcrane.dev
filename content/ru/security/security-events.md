@@ -125,7 +125,4 @@ docker compose --project-directory . \
 
 ## Что дальше {#next}
 
-- {{< xref "features/security/security-journal" >}} — целевое устройство журнала ИБ.
-- {{< xref "security/hardening" >}} — усиление развёртывания.
-- {{< xref "configure/network" >}} — доверенные прокси для адреса клиента.
-- {{< xref "reference/environment-variables" >}} — справочник переменных.
+{{< cards "features/security/security-journal" "security/hardening" "configure/network" "reference/environment-variables" >}}

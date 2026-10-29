@@ -81,7 +81,4 @@ The semantics of hiding and deleting depend on the protocol: PyPI and Cargo have
 
 ## Related pages {#related}
 
-- {{< xref "formats" >}}
-- {{< xref "features/registry/cli" >}}
-- {{< xref "features/security/immutable-versions" >}}
-- {{< xref "features/registry/proxy-cache" >}}
+{{< cards "formats" "features/registry/cli" "features/security/immutable-versions" "features/registry/proxy-cache" >}}

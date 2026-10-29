@@ -267,7 +267,4 @@ docker compose --project-directory . -f deploy/compose/docker-compose.yaml down
 
 ## Что дальше {#next}
 
-- {{< xref "start/concepts" >}} — понятия, на которых построены репозитории, версии и доступ.
-- {{< xref "deploy/docker-compose" >}} — развёртывание на одном узле с публичным именем и сертификатом ACME.
-- {{< xref "features/security/namespace-reservation" >}} — как резервирование имён защищает от подмены внутренних пакетов.
-- {{< xref "start/first-run" >}} — мастер первого запуска.
+{{< cards "start/concepts" "deploy/docker-compose" "features/security/namespace-reservation" "start/first-run" >}}

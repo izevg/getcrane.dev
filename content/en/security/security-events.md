@@ -125,7 +125,4 @@ The server writes the reason for a guard refusal (host outside the allowlist, no
 
 ## What's next {#next}
 
-- {{< xref "features/security/security-journal" >}} — the target design of the security journal.
-- {{< xref "security/hardening" >}} — hardening a deployment.
-- {{< xref "configure/network" >}} — trusted proxies for the client address.
-- {{< xref "reference/environment-variables" >}} — the variable reference.
+{{< cards "features/security/security-journal" "security/hardening" "configure/network" "reference/environment-variables" >}}

@@ -80,6 +80,4 @@ printf 'header = "Authorization: %s"\n' "$(cat ./secrets/crane_token)" \
 
 ## Что дальше {#next}
 
-- {{< xref "configure/settings-encryption" >}}
-- {{< xref "configure/network" >}}
-- {{< xref "reference/environment-variables" >}}
+{{< cards "configure/settings-encryption" "configure/network" "reference/environment-variables" >}}

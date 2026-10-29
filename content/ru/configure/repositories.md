@@ -86,7 +86,4 @@ terms: [hosted-repository, proxy-repository, upstream]
 
 ## Что дальше {#next}
 
-- {{< xref "configure/namespaces" >}}
-- {{< xref "configure/cache" >}}
-- {{< xref "configure/limits" >}}
-- {{< xref "start/quickstart" >}}
+{{< cards "configure/namespaces" "configure/cache" "configure/limits" "start/quickstart" >}}

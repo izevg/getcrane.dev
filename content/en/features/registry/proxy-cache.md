@@ -107,8 +107,4 @@ Proxy files live in the `proxy-cache` storage class: it is not included in backu
 
 ## Related pages {#related}
 
-- {{< xref "features/security/upstream-quarantine" >}}
-- {{< xref "features/security/digest-verification" >}}
-- {{< xref "features/operations/availability" >}}
-- {{< xref "configure/repositories" >}}
-- {{< xref "configure/cache" >}}
+{{< cards "features/security/upstream-quarantine" "features/security/digest-verification" "features/operations/availability" "configure/repositories" "configure/cache" >}}

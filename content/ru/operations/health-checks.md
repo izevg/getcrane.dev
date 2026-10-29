@@ -122,7 +122,4 @@ docker compose --project-directory . \
 
 ## Что дальше {#next}
 
-- {{< xref "reference/ports-and-health" >}}
-- {{< xref "operations/outages" >}}
-- {{< xref "operations/logs" >}}
-- {{< xref "operations/troubleshooting" >}}
+{{< cards "reference/ports-and-health" "operations/outages" "operations/logs" "operations/troubleshooting" >}}

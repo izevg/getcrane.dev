@@ -50,6 +50,4 @@ CRANE переносит из Nexus {{< term "hosted-repository" "hosted-реп�
 
 ## Связанные страницы {#related}
 
-- {{< xref "features/registry/hosted" >}}
-- {{< xref "features/registry/proxy-cache" >}}
-- {{< xref "features/registry/cli" >}}
+{{< cards "features/registry/hosted" "features/registry/proxy-cache" "features/registry/cli" >}}

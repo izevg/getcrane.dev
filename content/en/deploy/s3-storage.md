@@ -115,7 +115,4 @@ When S3 fails, the request ends within seconds: the storage client makes three r
 
 ## What's next {#next}
 
-- {{< xref "configure/storage" >}}
-- {{< xref "deploy/valkey-cache" >}}
-- {{< xref "operations/health-checks" >}}
-- {{< xref "reference/environment-variables" >}}
+{{< cards "configure/storage" "deploy/valkey-cache" "operations/health-checks" "reference/environment-variables" >}}

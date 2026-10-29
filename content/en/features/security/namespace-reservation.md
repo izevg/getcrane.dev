@@ -15,7 +15,17 @@ A name becomes internal in two ways: a {{< term "namespace" >}} covers it, or it
 
 ## Threat {#threat}
 
+{{< threat summary="A public package with an internal name and a higher version lands in a build: CRANE never serves an internal name from an upstream." chips="term:dependency-confusion, term:namespace" flow="Attacker publishes the same name \| Package manager picks the higher version \| CRANE answers 404 for the internal name" >}}
+{{< threat-what >}}
 A company keeps an internal package `acme-billing`. An attacker publishes a package with the same name and a higher version in a public registry. A package manager configured with several sources picks the highest version, and foreign code lands in the build. {{< cite "birsan-dependency-confusion" >}} described the attack. Clients such as pip with `--extra-index-url`, NuGet and Maven with `maven-metadata.xml` can merge versions from several indexes, so the order of sources cannot be the defense.
+{{< /threat-what >}}
+{{< threat-answer >}}
+- The invariant: an internal name is never served from an upstream.
+- A proxy of any format answers an internal name with `404` before it touches the cache or the upstream, and does not reveal the reason.
+- Every such refusal is written to the {{< term "security-journal" >}}.
+- A hosted repository does not accept a name that is taken in a public registry or belongs to another team.
+{{< /threat-answer >}}
+{{< /threat >}}
 
 ## Guarantee {#guarantee}
 
@@ -95,6 +105,4 @@ CRANE does not merge hosted and proxy under one address. Safety rests on the nam
 
 ## Related settings {#configure}
 
-- {{< xref "configure/namespaces" >}} — how reservations are set.
-- {{< xref "configure/repositories" >}} — hosted and proxy repositories.
-- {{< xref "formats/npm" >}} — publishing scoped packages.
+{{< cards "configure/namespaces" "configure/repositories" "formats/npm" >}}

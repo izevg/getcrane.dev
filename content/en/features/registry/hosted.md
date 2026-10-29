@@ -23,7 +23,7 @@ The right to publish depends on the role and on the kind of repository. The `dev
 
 A publication either completes entirely or leaves no trace visible to clients.
 
-```mermaid
+```mermaid {caption="Figure 1. A version becomes visible to clients only after the catalog transaction completes."}
 flowchart TB
   parse["Parse the upload by format:<br>name, version, files, metadata"]
   decide["Check the right to publish<br>and ownership of the name"]
@@ -33,8 +33,6 @@ flowchart TB
   cache["Invalidate the metadata cache<br>on all replicas"]
   parse --> decide --> limits --> stream --> tx --> cache
 ```
-
-*Figure 1. A version becomes visible to clients only after the catalog transaction completes.*
 
 1. CRANE parses the upload according to the format: name, version, files, metadata.
 2. CRANE checks the right to publish and ownership of the name.

@@ -39,7 +39,7 @@ Details: {{< xref "features/security/namespace-reservation" >}}.
 
 A package version is immutable: a published release cannot be overwritten. A version moves through lifecycle states, and the state decides whether a client can see it.
 
-```mermaid
+```mermaid {caption="The lifecycle of a package version: from upload to release, hiding and deletion."}
 stateDiagram-v2
   direction TB
   [*] --> Staging: upload starts

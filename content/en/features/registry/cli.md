@@ -17,7 +17,7 @@ Package managers cannot go through an OIDC sign-in, so CRANE issues them its own
 
 The `cctl login` command obtains access and refresh tokens from the provider. The sign-in method depends on what the IdP supports.
 
-```mermaid
+```mermaid {caption="Figure 1. Choosing the sign-in method. Pasting a code from the browser of another device is not supported."}
 flowchart TB
   start["cctl login"]
   device{"Does the IdP support<br>device flow?"}
@@ -31,8 +31,6 @@ flowchart TB
   browser -- "yes" --> loop
   browser -- "no" --> token
 ```
-
-*Figure 1. Choosing the sign-in method. Pasting a code from the browser of another device is not supported.*
 
 - **Device flow.** If the IdP has device flow ({{< cite "rfc-8628" >}}), the CLI shows a code and a link, and the person signs in to the IdP with MFA under the provider's policy. This suits a server without a browser and an IDE.
 - **Loopback and PKCE.** Otherwise the CLI opens a browser and receives the response on `127.0.0.1` with a random port ({{< cite "rfc-8252" >}}, {{< cite "rfc-7636" >}}).

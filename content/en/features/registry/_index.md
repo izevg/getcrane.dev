@@ -17,7 +17,7 @@ This section describes how work with packages is organized: how a version enters
 
 A repository belongs to one package format and to one of two kinds.
 
-```mermaid
+```mermaid {caption="Figure 1. The client talks only to CRANE. CRANE itself contacts the {{< term “upstream“ >}}, and only from a proxy repository."}
 flowchart LR
   client["Package manager client"]
   crane["CRANE"]
@@ -29,8 +29,6 @@ flowchart LR
   crane --> proxy
   proxy -.-> upstream
 ```
-
-*Figure 1. The client talks only to CRANE. CRANE itself contacts the {{< term "upstream" >}}, and only from a proxy repository.*
 
 - **Hosted** is the place for your own packages. CRANE is their source of truth. Details: {{< xref "features/registry/hosted" >}}.
 - **Proxy** is a cache of a public registry. CRANE fetches packages from the upstream itself, checks them and serves them to the client. Details: {{< xref "features/registry/proxy-cache" >}}.

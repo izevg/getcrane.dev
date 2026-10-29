@@ -245,3 +245,23 @@ static-token:
 readiness-probe:
   ru: { term: "проба готовности", def: "Запрос /healthz/ready на порту admin: отвечает 200, когда доступны PostgreSQL и хранилище blob." }
   en: { term: "readiness probe", def: "The /healthz/ready request on the admin port: it returns 200 when PostgreSQL and the blob storage are reachable." }
+
+a2a:
+  ru: { term: "A2A", def: "Agent2Agent: открытый протокол, по которому внешние агенты обращаются к CRANE от имени принципала: чтение и запись только по плану, подтверждённому человеком." }
+  en: { term: "A2A", def: "Agent2Agent: an open protocol through which external agents call CRANE on behalf of a principal; writes happen only through a plan a human has confirmed." }
+
+systemone:
+  ru: { term: "оценки systemone", def: "Числовые оценки риска с уверенностью и главными факторами от совместимых скоринговых моделей. Они только ужесточают решения и не опускают их ниже правил." }
+  en: { term: "systemone scores", def: "Numeric risk scores with a confidence and top factors from compatible scoring models. They only tighten decisions and never lower them below the rules." }
+
+llm:
+  ru: { term: "LLM", def: "Генеративная языковая модель. В CRANE пишет объяснения и сводки со ссылками на источники и решений не принимает." }
+  en: { term: "LLM", def: "A generative language model. In CRANE it writes explanations and summaries with links to sources and makes no decisions." }
+
+dist-tag:
+  ru: { term: "dist-tag", def: "Именованная ссылка на версию пакета npm, например latest или next." }
+  en: { term: "dist-tag", def: "A named pointer to an npm package version, such as latest or next." }
+
+credential-provider:
+  ru: { term: "credential-provider", def: "Механизм cargo, который передаёт реестру токен доступа; для CRANE используется встроенный cargo:token." }
+  en: { term: "credential provider", def: "The cargo mechanism that supplies an access token to a registry; CRANE uses the built-in cargo:token." }

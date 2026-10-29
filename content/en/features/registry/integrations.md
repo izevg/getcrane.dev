@@ -42,7 +42,7 @@ For systems without OIDC, a team owner creates a robot in the console: a name, a
 
 A CI job presents CRANE with the token of its platform, and CRANE issues a `crci_` token for the duration of the job. No secret is stored in CI.
 
-```mermaid
+```mermaid {caption="Figure 1. Exchanging a platform token for a short-lived token. The trust policy defines the permissions, not the request."}
 sequenceDiagram
   autonumber
   participant J as CI job
@@ -54,8 +54,6 @@ sequenceDiagram
   C-->>J: crci_ token with permissions from the trust policy
   J->>C: Package publication with the crci_ token
 ```
-
-*Figure 1. Exchanging a platform token for a short-lived token. The trust policy defines the permissions, not the request.*
 
 CRANE checks the token signature against the issuer's keys and the `iss`, `aud`, `exp` and `nbf` values, then matches the claims against a trust policy. A trust policy lists the issuer, the allowed claims (project, namespace, branch, service account name) and the permissions; projects in it are named explicitly, not by a wildcard. For GitLab, write access is available only from a protected branch or tag: merge request pipelines and forks get read-only access, and the right to publish is limited to the names in the trust policy.
 

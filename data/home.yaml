@@ -1,4 +1,4 @@
-# Тексты главной getcrane.dev. Ведёт руководитель документации: ЗАПОЛНЯЕТ РУКОВОДИТЕЛЬ ДОКУМЕНТАЦИИ.
+# Тексты главной getcrane.dev. Ведёт руководитель документации: заполнено по страницам Features.
 # Шаблон (layouts/_partials/home/) тексты не сочиняет: пустое поле не выводится.
 # Каждое утверждение hero и карточек гарантий должно опираться на страницу Features
 # и вести на неё; механизм со статусом in-development нельзя подавать как доступный.
@@ -10,51 +10,68 @@
 
 hero:
   ru:
-    overline: ""   # черновик UI-спеки: «Self-hosted реестр пакетов и proxy upstream»
-    title: ""      # h1: что CRANE гарантирует для цепочки поставки
-    lead: ""       # 1–2 предложения, до 60 знаков в строке; каждое утверждение ведёт на страницу гарантии
+    overline: "Self-hosted реестр пакетов и proxy публичных реестров"
+    title: "Реестр пакетов, который проверяет то, что попадает в сборку"
+    lead: "Опубликованная версия не меняется, байты сверяются по дайджесту, внутреннее имя не придёт из публичного реестра. У каждой гарантии названы границы."
   en:
-    overline: ""
-    title: ""
-    lead: ""
+    overline: "Self-hosted package registry and proxy for public registries"
+    title: "A package registry that checks what goes into your build"
+    lead: "A published version never changes, bytes are checked against their digest, and an internal name never comes from a public registry. Every guarantee states its limits."
   # Подпись кнопки: глагол + объект; пустая — берётся title страницы-цели.
-  primary:   { href: start/quickstart, ru: "", en: "" }
-  secondary: { href: features/security/supply-chain-threats, ru: "", en: "" }
+  primary:   { href: start/quickstart, ru: "Запустить CRANE", en: "Run CRANE" }
+  secondary: { href: features/security/supply-chain-threats, ru: "Посмотреть угрозы и гарантии", en: "See threats and guarantees" }
 
 # Схема «путь пакета» в hero: upstream → группа CRANE → клиент сборки.
 # Подписи узлов — метки до 2 слов. Узлы группы — ссылки на страницы гарантий.
 path:
-  upstream: { ru: "", en: "" }
-  client:   { ru: "", en: "" }
+  upstream: { ru: "Публичный реестр", en: "Public registry" }
+  client:   { ru: "Сборка", en: "Build" }
   nodes:
-    - { href: features/security/namespace-reservation,  ru: "", en: "" }
-    - { href: features/security/upstream-quarantine,    ru: "", en: "" }
-    - { href: features/security/digest-verification,    ru: "", en: "" }
-    - { href: features/security/immutable-versions,     ru: "", en: "" }
+    - { href: features/security/namespace-reservation,  ru: "Namespace", en: "Namespace" }
+    - { href: features/security/upstream-quarantine,    ru: "Карантин", en: "Quarantine" }
+    - { href: features/security/digest-verification,    ru: "Дайджест", en: "Digest" }
+    - { href: features/security/immutable-versions,     ru: "Неизменяемость", en: "Immutability" }
 
 # Карточки гарантий: 6–8 штук. Первые две занимают по 6 колонок из 12 на широком экране.
-# availability: available | in-development.
+# href — страница Features; current — необязательная страница текущего состояния, со status которой
+# сверяется availability (available | in-development).
 guarantees:
   - href: features/security/immutable-versions
+    current: formats/cargo
     availability: available
-    ru: { title: "", claim: "", limit: "" }
-    en: { title: "", claim: "", limit: "" }
+    ru: { title: "Неизменяемые версии", claim: "Выпущенную версию нельзя перезаписать, а номер удалённой версии нельзя занять снова.", limit: "CRANE не оценивает содержимое версии: он хранит и скрывает, но не судит, безопасна ли она." }
+    en: { title: "Immutable versions", claim: "A released version cannot be overwritten, and the number of a deleted version cannot be taken again.", limit: "CRANE does not judge the content of a version: it stores and hides it, but does not decide whether it is safe." }
   - href: features/security/digest-verification
     availability: available
-    ru: { title: "", claim: "", limit: "" }
-    en: { title: "", claim: "", limit: "" }
+    ru: { title: "Проверка дайджестов", claim: "Файлы хранятся по SHA-256, а скачанное из upstream сверяется с ожидаемым дайджестом.", limit: "Где upstream не сообщает ожидаемый дайджест, сверять не с чем." }
+    en: { title: "Digest verification", claim: "Files are stored under their SHA-256, and what is fetched from an upstream is checked against the expected digest.", limit: "Where the upstream gives no expected digest, there is nothing to check against." }
   - href: features/security/namespace-reservation
+    current: configure/namespaces
     availability: available
-    ru: { title: "", claim: "", limit: "" }
-    en: { title: "", claim: "", limit: "" }
-  - href: features/security/upstream-quarantine
+    ru: { title: "Резервирование namespace", claim: "Внутреннее имя никогда не отдаётся из upstream: на него proxy отвечает 404.", limit: "Пакеты npm без scope этой защитой не покрываются." }
+    en: { title: "Namespace reservation", claim: "An internal name is never served from an upstream: the proxy answers 404 for it.", limit: "Unscoped npm packages are not covered by this protection." }
+  - href: features/security/public-upstreams-only
     availability: available
-    ru: { title: "", claim: "", limit: "" }
-    en: { title: "", claim: "", limit: "" }
+    ru: { title: "Только публичные upstream", claim: "Адреса upstream встроены в бинарник; приватный или произвольный реестр подключить нельзя.", limit: "Пакет, перенесённый вручную в hosted, CRANE проверяет как обычную публикацию, а отвечает за него публикующий." }
+    en: { title: "Public upstreams only", claim: "Upstream addresses are built into the binary; a private or arbitrary registry cannot be attached.", limit: "A package moved into a hosted repository by hand gets the checks of a normal publication, and the publisher is accountable for it." }
   - href: features/security/egress-guard
     availability: available
-    ru: { title: "", claim: "", limit: "" }
-    en: { title: "", claim: "", limit: "" }
+    ru: { title: "Контроль исходящих запросов", claim: "Каждый адрес после DNS и каждый redirect проверяются: запрос не уйдёт во внутреннюю сеть.", limit: "Сеть вокруг процесса защищают правила развёртывания, а не CRANE." }
+    en: { title: "Egress control", claim: "Every address after DNS and every redirect is checked, so a request does not reach the internal network.", limit: "The network around the process is protected by the deployment's rules, not by CRANE." }
+  - href: features/security/fail-closed
+    availability: available
+    ru: { title: "Отказ в закрытую сторону", claim: "Без каталога CRANE отвечает 503, а не отдаёт пакеты без проверок.", limit: "Цена — недоступность чтения, пока каталог не вернётся." }
+    en: { title: "Fail closed", claim: "Without its catalog CRANE answers 503 instead of serving packages unchecked.", limit: "The price is that reads are unavailable until the catalog is back." }
+  - href: features/security/upstream-quarantine
+    current: configure/upstream-quarantine
+    availability: in-development
+    ru: { title: "Карантин новых версий", claim: "Свежая версия из upstream выдерживается окном до выдачи клиентам proxy.", limit: "Окно выигрывает время, но не обнаруживает вредоносность." }
+    en: { title: "Quarantine for new versions", claim: "A fresh upstream version waits out a window before proxy clients receive it.", limit: "The window buys time; it does not detect malware." }
+  - href: features/security/vulnerability-flow
+    current: configure/vulnerability-feeds
+    availability: in-development
+    ru: { title: "Поток уязвимостей", claim: "Advisory из открытых фидов сопоставляются с инвентарём по PURL, вредоносные версии блокируются.", limit: "CRANE агрегирует открытые фиды и не ведёт собственных исследований." }
+    en: { title: "Vulnerability flow", claim: "Advisories from open feeds are matched against the inventory by PURL, and malicious versions are blocked.", limit: "CRANE aggregates open feeds and does no research of its own." }
 
 # Четыре входа по аудиториям (ia.md, столбцы «Что ищет» и «Вход»). Ссылок 2–3.
 audiences:
@@ -86,20 +103,20 @@ audiences:
 # Плитки форматов. Строка под названием — description страницы formats/<id>.
 formats: [cargo, npm, pypi, maven, nuget]
 
-# Карточки развёртывания. href пустой — карточка без ссылки (страница «Один бинарник» не определена, OPEN 5).
+# Карточки развёртывания.
 deploy:
   - id: binary
-    href: ""
-    ru: { title: "", text: "", command: "" }
-    en: { title: "", text: "", command: "" }
+    href: reference/server-cli
+    ru: { title: "Один бинарник", text: "Сервер, миграции и проба готовности — роли одного бинарника crane в одном образе.", command: "crane migrate" }
+    en: { title: "One binary", text: "The server, migrations and the readiness probe are roles of one crane binary in one image.", command: "crane migrate" }
   - id: compose
     href: deploy/docker-compose
-    ru: { title: "", text: "", command: "" }
-    en: { title: "", text: "", command: "" }
+    ru: { title: "Docker Compose на одном узле", text: "Caddy, PostgreSQL и CRANE; S3 и Valkey подключаются override-файлами.", command: "docker compose --project-directory . -f deploy/compose/docker-compose.yaml up -d --wait" }
+    en: { title: "Docker Compose on one node", text: "Caddy, PostgreSQL and CRANE; S3 and Valkey are added with override files.", command: "docker compose --project-directory . -f deploy/compose/docker-compose.yaml up -d --wait" }
   - id: kubernetes
     href: deploy/kubernetes-helm
-    ru: { title: "", text: "", command: "" }
-    en: { title: "", text: "", command: "" }
+    ru: { title: "Kubernetes и Helm", text: "Helm-чарт с внешними PostgreSQL, Valkey и S3. Функциональность в разработке.", command: "" }
+    en: { title: "Kubernetes and Helm", text: "A Helm chart with external PostgreSQL, Valkey and S3. This functionality is in development.", command: "" }
 
 # Полоса «Начало работы»: подписи берутся из title страниц.
 start: [start/, start/quickstart, start/concepts, deploy/requirements]

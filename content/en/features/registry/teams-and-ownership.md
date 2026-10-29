@@ -62,7 +62,7 @@ Access decisions read only the membership rows, and the IdP token is only observ
 
 Permissions from the IdP enter CRANE through a single path.
 
-```mermaid
+```mermaid {caption="Figure 1. The only path of permissions from the IdP. A group without a mapping grants nothing."}
 flowchart LR
   token["IdP token or directory poll"]
   norm["Claim normalization:<br>complete group list"]
@@ -71,8 +71,6 @@ flowchart LR
   decide["Access decisions<br>read the membership rows"]
   token --> norm --> map --> observe --> decide
 ```
-
-*Figure 1. The only path of permissions from the IdP. A group without a mapping grants nothing.*
 
 - **The mapping is explicit.** An IdP group maps to a pair "team and role" or to an instance role. A group without a mapping grants nothing, and a group does not create a team: the platform administrator creates teams.
 - **The platform administrator maintains the mappings** with {{< term "step-up" >}}, because a mapping grants permissions.

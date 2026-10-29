@@ -43,7 +43,7 @@ CRANE receives files as a stream and computes digests while receiving. A version
 
 ### Version states {#states}
 
-```mermaid
+```mermaid {caption="Version states and the transitions between them."}
 stateDiagram-v2
   direction TB
   [*] --> Staging: upload starts

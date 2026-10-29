@@ -17,7 +17,7 @@ CRANE хранит собственные пакеты команд в {{< term 
 
 Репозиторий относится к одному формату пакетов и к одному из двух видов.
 
-```mermaid
+```mermaid {caption="Рисунок 1. Клиент обращается только к CRANE. В {{< term “upstream“ >}} ходит сам CRANE, и только из proxy-репозитория."}
 flowchart LR
   client["Клиент пакетного менеджера"]
   crane["CRANE"]
@@ -29,8 +29,6 @@ flowchart LR
   crane --> proxy
   proxy -.-> upstream
 ```
-
-*Рисунок 1. Клиент обращается только к CRANE. В {{< term "upstream" >}} ходит сам CRANE, и только из proxy-репозитория.*
 
 - **Hosted** — место для собственных пакетов. CRANE для них источник истины. Подробнее: {{< xref "features/registry/hosted" >}}.
 - **Proxy** — кэш публичного реестра. CRANE сам получает пакеты из upstream, проверяет и отдаёт клиенту. Подробнее: {{< xref "features/registry/proxy-cache" >}}.

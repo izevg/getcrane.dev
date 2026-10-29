@@ -43,7 +43,7 @@ CRANE принимает файлы потоком и считает дайдж�
 
 ### Состояния версии {#states}
 
-```mermaid
+```mermaid {caption="Состояния версии и переходы между ними."}
 stateDiagram-v2
   direction TB
   [*] --> Staging: начало загрузки

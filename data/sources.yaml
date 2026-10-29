@@ -227,3 +227,49 @@ nuget-server-api:
   short: "Microsoft"
   url: "https://learn.microsoft.com/en-us/nuget/api/overview"
   accessed: 2026-10-29
+
+a2a-protocol:
+  title: "Agent2Agent (A2A) Protocol Specification"
+  publisher: "A2A Project, Linux Foundation"
+  short: "A2A"
+  url: "https://a2a-protocol.org/latest/specification/"
+  accessed: 2026-10-29
+
+fstec-order-21:
+  title: "Приказ ФСТЭК России от 18.02.2013 № 21 «Об утверждении Состава и содержания организационных и технических мер по обеспечению безопасности персональных данных при их обработке в информационных системах персональных данных»"
+  publisher: "ФСТЭК России"
+  short: "ФСТЭК"
+  url: "https://www.consultant.ru/document/cons_doc_LAW_146520/"
+  date: 2013-02-18
+  accessed: 2026-10-29
+
+fz-152:
+  title: "Федеральный закон от 27.07.2006 № 152-ФЗ «О персональных данных»"
+  publisher: "Российская Федерация"
+  short: "152-ФЗ"
+  url: "https://www.consultant.ru/document/cons_doc_LAW_61801/"
+  date: 2006-07-27
+  accessed: 2026-10-29
+
+gdpr:
+  title: "Regulation (EU) 2016/679 (General Data Protection Regulation)"
+  publisher: "European Union"
+  short: "EUR-Lex"
+  url: "https://eur-lex.europa.eu/eli/reg/2016/679/oj"
+  date: 2016-04-27
+  accessed: 2026-10-29
+
+eu-cra:
+  title: "Regulation (EU) 2024/2847 (Cyber Resilience Act)"
+  publisher: "European Union"
+  short: "EUR-Lex"
+  url: "https://eur-lex.europa.eu/eli/reg/2024/2847/oj"
+  date: 2024-10-23
+  accessed: 2026-10-29
+
+caddy-reverse-proxy:
+  title: "reverse_proxy (Caddyfile directive)"
+  publisher: "Caddy"
+  short: "Caddy"
+  url: "https://caddyserver.com/docs/caddyfile/directives/reverse_proxy"
+  accessed: 2026-10-29

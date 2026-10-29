@@ -68,7 +68,7 @@ Docker Compose and Kubernetes are supported equally. They share the image, the c
 
 ### Docker Compose on a single node {#compose}
 
-```mermaid
+```mermaid {caption="Figure 1. The single-node topology: the minimal variant consists of caddy, crane, PostgreSQL and a local volume."}
 flowchart LR
   clients["Clients, CI"]
   subgraph host["Host: Docker Compose"]
@@ -88,13 +88,11 @@ flowchart LR
   analyzer --> trivy
 ```
 
-*Figure 1. The single-node topology: the minimal variant consists of caddy, crane, PostgreSQL and a local volume.*
-
 Caddy terminates TLS and forwards requests to `crane` over a shared network whose address belongs to the trusted proxy list. Secrets live in files, not in environment variables. Valkey requires authentication and sits in a network with no outbound access, where only `crane` is present besides it. The analyzer runs in a separate network where only Trivy is reachable.
 
 ### Kubernetes {#kubernetes}
 
-```mermaid
+```mermaid {caption="Figure 2. The Kubernetes topology: every stateful component can be an external managed service of the organization."}
 flowchart TB
   gateway["Gateway API<br>Envoy Gateway, Traefik, Cilium"]
   subgraph namespace["namespace crane"]
@@ -121,8 +119,6 @@ flowchart TB
   api -.-> observability
   worker -.-> observability
 ```
-
-*Figure 2. The Kubernetes topology: every stateful component can be an external managed service of the organization.*
 
 The api replicas hold no state and scale by request rate and CPU; the worker replicas scale by queue length. A `Job` with a `pre-upgrade` hook runs the migrations. Valkey is isolated by NetworkPolicies and protected by a password from a `Secret`.
 

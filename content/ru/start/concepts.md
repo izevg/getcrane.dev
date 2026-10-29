@@ -39,7 +39,7 @@ terms: [hosted-repository, proxy-repository, upstream, namespace, dependency-con
 
 Версия пакета неизменяема: опубликованный релиз нельзя перезаписать. Версия проходит состояния жизненного цикла, и от состояния зависит, увидит ли её клиент.
 
-```mermaid
+```mermaid {caption="Жизненный цикл версии пакета: от загрузки до выпуска, скрытия и удаления."}
 stateDiagram-v2
   direction TB
   [*] --> Staging: начало загрузки

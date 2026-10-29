@@ -1,4 +1,6 @@
-{{- /* Карточки гарантий. availability сверяется со status страницы-цели: главная не обещает недоступное. */ -}}
+{{- /* Карточки гарантий. href — целевая страница Features (всегда available), current — необязательная
+     страница текущего состояния (configure/…, formats/…). availability обязана совпадать со status страницы current:
+     главная не обещает того, чего нет в текущей версии. Без current сверять не с чем — решает availability. */ -}}
 {{- $lang := .lang -}}
 <section class="section container" aria-labelledby="g-h">
   <h2 id="g-h">{{ i18n "home.guarantees" }}</h2>
@@ -7,8 +9,11 @@
     {{- $item := . -}}
     {{- $t := index . $lang -}}
     {{- with partial "home/page.html" .href }}
-      {{- $dev := eq .Params.status "in-development" -}}
-      {{- if and $dev (ne $item.availability "in-development") }}{{ errorf "home: %s имеет status in-development, а availability в data/home.yaml другая" .Path }}{{ end }}
+      {{- $dev := eq $item.availability "in-development" -}}
+      {{- if not (in (slice "available" "in-development") $item.availability) }}{{ errorf "home: availability %q у %s: допустимы available и in-development" $item.availability $item.href }}{{ end }}
+      {{- with $item.current }}{{ with partial "home/page.html" . }}
+        {{- if ne (eq .Params.status "in-development") $dev }}{{ errorf "home: availability у %s не совпадает со status страницы %s" $item.href .Path }}{{ end }}
+      {{- end }}{{ end }}
     <li class="card">
       <h3><a href="{{ .RelPermalink }}">{{ $t.title | default .Title }}</a>{{ if $dev }}<span class="badge badge-dev">{{ partial "ui/icon.html" "clock" }}{{ i18n "status.in-development" }}</span>{{ end }}</h3>
       {{- with $t.claim }}<p class="claim">{{ . }}</p>{{ end }}

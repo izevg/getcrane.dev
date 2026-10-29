@@ -54,61 +54,45 @@ terms: []
 
 ### Файл настроек {#group-config}
 
-| Имя | Назначение | По умолчанию | Обязательна | Из файла | Ключ TOML |
-| --- | --- | --- | --- | --- | --- |
-| {{< env "CRANE_CONFIG" >}} | Путь к необязательному файлу TOML. Пустое значение — файла нет | нет | Нет | Нет | только окружение |
+{{< env-table group="config" >}}
 
 ### Сеть {#group-network}
 
-| Имя | Назначение | По умолчанию | Обязательна | Из файла | Ключ TOML |
-| --- | --- | --- | --- | --- | --- |
-| {{< env "CRANE_HTTP_PORT" >}} | Порт API с протоколами пакетов; целое число 0–65535 | `8080` | Нет | Нет | `http_port` |
-| {{< env "CRANE_ADMIN_PORT" >}} | Порт проб `/healthz/live` и `/healthz/ready`; его читает и `crane healthcheck` | `9464` | Нет | Нет | `admin_port` |
-| {{< env "CRANE_PUBLIC_URL" >}} | Внешний адрес: `http://` или `https://` и хост; завершающие `/` отбрасываются | нет | Да | Нет | `public_url` |
-| {{< env "CRANE_TRUSTED_PROXIES" >}} | IP-адреса и сети CIDR (IPv4, IPv6) через запятую, чьим `X-Forwarded-For` и `X-Request-Id` верит сервер | пустая строка | Нет | Нет | `trusted_proxies` |
+{{< env-table group="network" >}}
 
 ### Доступ {#group-access}
 
-| Имя | Назначение | По умолчанию | Обязательна | Из файла | Ключ TOML |
-| --- | --- | --- | --- | --- | --- |
-| {{< env "CRANE_TOKEN" >}} | Статический токен доступа к протоколам; задаётся значением или файлом, ровно одним способом | нет | Да | Да, {{< env "CRANE_TOKEN_FILE" >}} | `token`, `token_file` |
-| {{< env "CRANE_TOKEN_PRINCIPAL" >}} | Имя принципала токена: непустое, без управляющих символов; пробелы по краям отбрасываются | `crane` | Нет | Нет | `token_principal` |
+{{< env-table group="access" >}}
 
 ### Хранилища {#group-storage}
 
-| Имя | Назначение | По умолчанию | Обязательна | Из файла | Ключ TOML |
-| --- | --- | --- | --- | --- | --- |
-| {{< env "CRANE_DATABASE_URL" >}} | Каталог: `memory`, `postgres://` или `postgresql://` | нет | Да | Да, {{< env "CRANE_DATABASE_URL_FILE" >}} | `database_url`, `database_url_file` |
-| {{< env "CRANE_BLOBS" >}} | Blob: `memory`, `file:///абсолютный/путь` или `s3://бакет[/префикс]` с несекретными параметрами запроса | нет | Да | Нет | `blobs` |
-| {{< env "AWS_ACCESS_KEY_ID" >}} | Идентификатор статического ключа S3. Значение читает клиент S3; форму `_FILE` читает сервер, парой с секретной частью | нет | Нет | Да, {{< env "AWS_ACCESS_KEY_ID_FILE" >}} | только окружение |
-| {{< env "AWS_SECRET_ACCESS_KEY" >}} | Секретная часть статического ключа S3 | нет | Нет | Да, {{< env "AWS_SECRET_ACCESS_KEY_FILE" >}} | только окружение |
-| {{< env "CRANE_SETTINGS_KEY" >}} | Ключ шифрования секретов настроек в PostgreSQL: base64 от ровно 32 байт (AES-256-GCM). При каталоге `memory` — ошибка | нет | Нет | Да, {{< env "CRANE_SETTINGS_KEY_FILE" >}} | `settings_key`, `settings_key_file` |
+{{< env-table group="storage" >}}
 
 ### Кэш и пределы {#group-limits}
 
-| Имя | Назначение | По умолчанию | Обязательна | Из файла | Ключ TOML |
-| --- | --- | --- | --- | --- | --- |
-| {{< env "CRANE_CACHE" >}} | Кэш proxy: `memory` или адрес Valkey со схемой `valkey`, `valkeys`, `valkey-cluster`, `valkeys-cluster`, `valkey-sentinel`, `valkeys-sentinel`. Без переменной и формы `_FILE` действует `memory` | — | Нет | Да, {{< env "CRANE_CACHE_FILE" >}} | `cache`, `cache_file` |
-| {{< env "CRANE_PROXY_MAX_ARTIFACT_BYTES" >}} | Предел размера одного проксируемого артефакта, байты; больше нуля | `2147483648` | Нет | Нет | `proxy_max_artifact_bytes` |
-| {{< env "CRANE_MAX_PUBLISH_BYTES" >}} | Предел тела публикации для Cargo и npm, байты; больше нуля | `10485760` | Нет | Нет | `max_publish_bytes` |
+{{< env-table group="limits" >}}
 
 ### Репозитории и namespace {#group-repositories}
 
-| Имя | Назначение | По умолчанию | Обязательна | Из файла | Ключ TOML |
-| --- | --- | --- | --- | --- | --- |
-| {{< env "CRANE_CARGO_REPOS" >}} | Имена hosted-репозиториев Cargo через запятую; пустое значение — ошибка | `internal` | Нет | Нет | `cargo_repos` |
-| {{< env "CRANE_CARGO_PROXY_REPOS" >}} | Имена proxy-репозиториев crates.io через запятую; пусто — proxy Cargo выключен | пустая строка | Нет | Нет | `cargo_proxy_repos` |
-| {{< env "CRANE_NPM_REPOS" >}} | Имена hosted-репозиториев npm через запятую; пусто — репозиториев нет | пустая строка | Нет | Нет | `npm_repos` |
-| {{< env "CRANE_NPM_PROXY_REPOS" >}} | Имена proxy-репозиториев registry.npmjs.org через запятую; пусто — proxy npm выключен | пустая строка | Нет | Нет | `npm_proxy_repos` |
-| {{< env "CRANE_NAMESPACES" >}} | Резервирование имён: записи `формат:шаблон` или `формат:шаблон=uuid` через запятую | пустая строка | Нет | Нет | `namespaces` |
+{{< env-table group="repositories" >}}
 
 Правила имён репозиториев: буквы ASCII, цифры, `-`, `_`, `.`; без пустых имён и повторов; proxy-репозиторий не повторяет имя hosted-репозитория того же формата.
 
 ### Журналы {#group-logging}
 
-| Имя | Назначение | По умолчанию | Обязательна | Из файла | Ключ TOML |
-| --- | --- | --- | --- | --- | --- |
-| {{< env "RUST_LOG" >}} | Фильтр обычных логов в синтаксисе `tracing-subscriber`. Неразбираемое значение заменяется на `info`. Цели `crane::audit`, `crane::access` и `crane::upstream` всегда включены на уровне `info` | `info` | Нет | Нет | только окружение |
+{{< env-table group="logging" >}}
+
+## Переменные Docker Compose {#compose}
+
+Эти переменные читает не сервер, а Docker Compose из файла `.env`. Значения ниже взяты из шаблона `.env.dist`: в compose-файлах умолчаний нет, и пропущенная переменная останавливает запуск.
+
+{{< env-table scope="compose" >}}
+
+## Переменные в примерах CI {#ci}
+
+Имена, которые встречаются в примерах конфигурации CI. Сервер их не читает.
+
+{{< env-table scope="ci" >}}
 
 ## Что дальше {#next}
 

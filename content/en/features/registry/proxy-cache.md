@@ -17,7 +17,7 @@ The cache speeds up builds and protects against upstream unavailability, but it 
 
 CRANE distinguishes two kinds of objects. Documents (a package's version list, an index, `maven-metadata.xml`) are small and change over time; the two-level cache holds them. Artifact files (package archives) are immutable; CRANE stores them as a {{< term "blob" >}} in the {{< term "cas" >}} under a SHA-256 digest.
 
-```mermaid
+```mermaid {caption="Figure 1. A simplified document path. If a copy is stale within the stale-while-revalidate window, the client gets it immediately and the refresh runs in the background."}
 flowchart TB
   req["Client request"]
   l1["L1: process memory"]
@@ -30,8 +30,6 @@ flowchart TB
   fresh -- "yes" --> resp
   fresh -- "no" --> up --> store --> resp
 ```
-
-*Figure 1. A simplified document path. If a copy is stale within the stale-while-revalidate window, the client gets it immediately and the refresh runs in the background.*
 
 The first level (L1) lives in process memory. The second (L2) is shared by replicas and stored in Valkey. If Valkey is unavailable, CRANE runs on the process cache: no data is lost, and the load shifts to the upstream rather than to PostgreSQL.
 

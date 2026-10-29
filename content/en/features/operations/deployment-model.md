@@ -70,7 +70,7 @@ Docker Compose and Kubernetes are supported equally. They share the image, the c
 
 The diagram shows the target topology, including the analyzer and Trivy. What ships today: {{< xref "deploy/docker-compose" >}}.
 
-```mermaid {caption="Figure 1. The target single-node topology: the minimal variant consists of caddy, crane, PostgreSQL and a local volume."}
+```mermaid {state="target" caption="Figure 1. The target single-node topology: the minimal variant consists of caddy, crane, PostgreSQL and a local volume."}
 flowchart LR
   clients["Clients, CI"]
   subgraph host["Host: Docker Compose"]
@@ -96,7 +96,7 @@ Caddy terminates TLS and forwards requests to `crane` over a shared network whos
 
 The diagram shows the target topology. Deployment to Kubernetes with a Helm chart is currently in development: {{< xref "deploy/kubernetes-helm" >}}.
 
-```mermaid {caption="Figure 2. The target Kubernetes topology: every stateful component can be an external managed service of the organization."}
+```mermaid {state="target" caption="Figure 2. The target Kubernetes topology: every stateful component can be an external managed service of the organization."}
 flowchart TB
   gateway["Gateway API<br>Envoy Gateway, Traefik, Cilium"]
   subgraph namespace["namespace crane"]

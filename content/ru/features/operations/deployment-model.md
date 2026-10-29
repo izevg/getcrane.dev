@@ -70,7 +70,7 @@ Docker Compose и Kubernetes поддерживаются одинаково. О
 
 Схема показывает целевую топологию, включая анализатор и Trivy. Что входит в поставку сейчас: {{< xref "deploy/docker-compose" >}}.
 
-```mermaid {caption="Рисунок 1. Целевая топология single node: минимальный вариант состоит из caddy, crane, PostgreSQL и локального тома."}
+```mermaid {state="target" caption="Рисунок 1. Целевая топология single node: минимальный вариант состоит из caddy, crane, PostgreSQL и локального тома."}
 flowchart LR
   clients["Клиенты, CI"]
   subgraph host["Хост: Docker Compose"]
@@ -96,7 +96,7 @@ Caddy принимает TLS и передаёт запросы `crane` по о�
 
 Схема показывает целевую топологию. Развёртывание в Kubernetes через Helm-чарт сейчас в разработке: {{< xref "deploy/kubernetes-helm" >}}.
 
-```mermaid {caption="Рисунок 2. Целевая топология Kubernetes: все компоненты с состоянием могут быть внешними управляемыми сервисами организации."}
+```mermaid {state="target" caption="Рисунок 2. Целевая топология Kubernetes: все компоненты с состоянием могут быть внешними управляемыми сервисами организации."}
 flowchart TB
   gateway["Gateway API<br>Envoy Gateway, Traefik, Cilium"]
   subgraph namespace["namespace crane"]

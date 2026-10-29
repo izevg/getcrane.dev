@@ -25,4 +25,4 @@
     {{- $graph = $graph | append (dict "@type" "DefinedTermSet" "name" $p.Title "inLanguage" $p.Language.LanguageCode "hasDefinedTerm" $terms) -}}
   {{- end -}}
 {{- end -}}
-<script type="application/ld+json">{{ dict "@context" "https://schema.org" "@graph" $graph | jsonify | safeHTML }}</script>
+<script type="application/ld+json">{{ dict "@context" "https://schema.org" "@graph" $graph | jsonify | safeJS }}</script>

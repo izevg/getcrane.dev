@@ -60,7 +60,7 @@
     .pkg-path::before, .pkg-path::after { inset-block: auto; inset-inline: 0; inset-block-start: 50%; inline-size: auto; block-size: 2px; margin-block-start: -1px; }
     .pkg-path::after { transform-origin: left; animation-name: fill-x; }
     .pkg-path > li::before { content: none; }
-    .pkg-path > li { background: var(--background); padding-inline: var(--space-2); }
+    .pkg-path > li { background: var(--background); padding-inline: var(--space-2); z-index: 1; }
     .pkg-path > li.pkg-mid { flex: 1; }
   }
   @keyframes fill-x { from { transform: scaleX(0); } }

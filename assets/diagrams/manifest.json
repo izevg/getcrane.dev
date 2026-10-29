@@ -1,0 +1,197 @@
+{
+  "theme": "2f603ecb70a4c72aa7275f7aabf546393555e63e3de776e11fb7ff7aa4eb81af",
+  "diagrams": {
+    "0027ddb452739554": {
+      "caption": {
+        "en": "Figure 1. The target single-node topology: the minimal variant consists of caddy, crane, PostgreSQL and a local volume."
+      },
+      "pages": [
+        "content/en/features/operations/deployment-model.md:73"
+      ]
+    },
+    "1157828e4e3209d3": {
+      "caption": {
+        "en": "The request path through the current deployment: client, Caddy, crane and storage."
+      },
+      "pages": [
+        "content/en/security/_index.md:18"
+      ]
+    },
+    "127884f5a5bf60ef": {
+      "caption": {
+        "ru": "Рисунок 1. Выбор способа входа. Вставка кода из браузера другого устройства не поддерживается."
+      },
+      "pages": [
+        "content/ru/features/registry/cli.md:20"
+      ]
+    },
+    "2da9393172fb3ba3": {
+      "caption": {
+        "ru": "Рисунок 1. Обмен токена платформы на краткоживущий токен. Права определяет trust policy, а не запрос."
+      },
+      "pages": [
+        "content/ru/features/registry/integrations.md:45"
+      ]
+    },
+    "2e802da2b08af46f": {
+      "caption": {
+        "en": "Figure 1. The client talks only to CRANE. CRANE itself contacts the upstream, and only from a proxy repository."
+      },
+      "pages": [
+        "content/en/features/registry/_index.md:20"
+      ]
+    },
+    "373201a1748c8b07": {
+      "caption": {
+        "ru": "Рисунок 1. Упрощённый путь документа. Если копия устарела в пределах окна stale-while-revalidate, клиент получает её сразу, а обновление идёт в фоне."
+      },
+      "pages": [
+        "content/ru/features/registry/proxy-cache.md:20"
+      ]
+    },
+    "45cb80977826bb72": {
+      "caption": {
+        "ru": "Рисунок 1. Клиент обращается только к CRANE. В upstream ходит сам CRANE, и только из proxy-репозитория."
+      },
+      "pages": [
+        "content/ru/features/registry/_index.md:20"
+      ]
+    },
+    "480de51e6dbb29b8": {
+      "caption": {
+        "en": "The lifecycle of a package version: from upload to release, hiding and deletion."
+      },
+      "pages": [
+        "content/en/start/concepts.md:42"
+      ]
+    },
+    "49849cee6b88b1d5": {
+      "caption": {
+        "en": "Figure 1. Exchanging a platform token for a short-lived token. The trust policy defines the permissions, not the request."
+      },
+      "pages": [
+        "content/en/features/registry/integrations.md:45"
+      ]
+    },
+    "763050927128a04b": {
+      "caption": {
+        "ru": "Рисунок 2. Целевая топология Kubernetes: все компоненты с состоянием могут быть внешними управляемыми сервисами организации."
+      },
+      "pages": [
+        "content/ru/features/operations/deployment-model.md:99"
+      ]
+    },
+    "79956901da8625d3": {
+      "caption": {
+        "en": "Version states and the transitions between them."
+      },
+      "pages": [
+        "content/en/features/security/immutable-versions.md:46"
+      ]
+    },
+    "7c34c1acad0173ac": {
+      "caption": {
+        "ru": "Рисунок 1. Единственный путь прав из IdP. Группа без маппинга ничего не даёт."
+      },
+      "pages": [
+        "content/ru/features/registry/teams-and-ownership.md:65"
+      ]
+    },
+    "7efca27b4d107568": {
+      "caption": {
+        "ru": "Рисунок 1. Версия видима клиентам только после завершения транзакции каталога."
+      },
+      "pages": [
+        "content/ru/features/registry/hosted.md:26"
+      ]
+    },
+    "891ee2ac38a6a5a3": {
+      "caption": {
+        "en": "Figure 1. The only path of permissions from the IdP. A group without a mapping grants nothing."
+      },
+      "pages": [
+        "content/en/features/registry/teams-and-ownership.md:65"
+      ]
+    },
+    "9b00fa972f73a1dd": {
+      "caption": {
+        "ru": "Состояния версии и переходы между ними."
+      },
+      "pages": [
+        "content/ru/features/security/immutable-versions.md:46"
+      ]
+    },
+    "a2dc27f571fb211a": {
+      "caption": {
+        "en": "Figure 1. A simplified document path. If a copy is stale within the stale-while-revalidate window, the client gets it immediately and the refresh runs in the background."
+      },
+      "pages": [
+        "content/en/features/registry/proxy-cache.md:20"
+      ]
+    },
+    "b475a22e25b55d98": {
+      "caption": {
+        "ru": "Рисунок 1. Целевая топология single node: минимальный вариант состоит из caddy, crane, PostgreSQL и локального тома."
+      },
+      "pages": [
+        "content/ru/features/operations/deployment-model.md:73"
+      ]
+    },
+    "b6087537b8279a51": {
+      "caption": {
+        "en": "Figure 1. A version becomes visible to clients only after the catalog transaction completes."
+      },
+      "pages": [
+        "content/en/features/registry/hosted.md:26"
+      ]
+    },
+    "c389021e49619ba7": {
+      "caption": {
+        "en": "Figure 2. The target Kubernetes topology: every stateful component can be an external managed service of the organization."
+      },
+      "pages": [
+        "content/en/features/operations/deployment-model.md:99"
+      ]
+    },
+    "e59c83585e8ecd0e": {
+      "caption": {
+        "ru": "Путь запроса через текущее развёртывание: клиент, Caddy, crane и хранилища."
+      },
+      "pages": [
+        "content/ru/security/_index.md:18"
+      ]
+    },
+    "ed500d3c217b1cee": {
+      "caption": {
+        "ru": "Рисунок 1. Заголовки на пути запроса: Caddy удаляет клиентский X-Request-Id и выставляет X-Forwarded-For, сервер проверяет пира по списку CRANE_TRUSTED_PROXIES."
+      },
+      "pages": [
+        "content/ru/deploy/tls-reverse-proxy.md:33"
+      ]
+    },
+    "ee20eea4b9b8e450": {
+      "caption": {
+        "ru": "Жизненный цикл версии пакета: от загрузки до выпуска, скрытия и удаления."
+      },
+      "pages": [
+        "content/ru/start/concepts.md:42"
+      ]
+    },
+    "f90f389cbeaad4f1": {
+      "caption": {
+        "en": "Figure 1. Choosing the sign-in method. Pasting a code from the browser of another device is not supported."
+      },
+      "pages": [
+        "content/en/features/registry/cli.md:20"
+      ]
+    },
+    "fdf45db5bec9c098": {
+      "caption": {
+        "en": "Figure 1. Headers along the request path: Caddy removes the client X-Request-Id and sets X-Forwarded-For, and the server checks the peer against the CRANE_TRUSTED_PROXIES list."
+      },
+      "pages": [
+        "content/en/deploy/tls-reverse-proxy.md:33"
+      ]
+    }
+  }
+}

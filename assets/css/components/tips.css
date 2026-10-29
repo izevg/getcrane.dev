@@ -32,9 +32,9 @@
     background: var(--tooltip-bg); color: var(--tooltip-fg); border: 1px solid var(--tooltip-border);
     border-radius: var(--radius); box-shadow: var(--tooltip-shadow); font-size: var(--type-small); line-height: 1.5;
     opacity: 0; transform: translateY(4px);
-    transition: opacity var(--dur-instant) var(--ease-out), transform var(--dur-instant) var(--ease-out), overlay var(--dur-instant) allow-discrete, display var(--dur-instant) allow-discrete;
+    transition: opacity var(--tip-exit, 90ms) ease-out, transform var(--tip-exit, 90ms) ease-out, overlay var(--tip-exit, 90ms) allow-discrete, display var(--tip-exit, 90ms) allow-discrete;
   }
-  .tip:popover-open { opacity: 1; transform: none; transition-duration: var(--dur-fast); }
+  .tip:popover-open { opacity: 1; transform: none; transition-duration: var(--tip-enter, 150ms); }
   @starting-style { .tip:popover-open { opacity: 0; transform: translateY(4px); } }
   .tip.tip-env { inline-size: min(24rem, calc(100vw - 32px)); }
   .tip.no-anim, .tip.no-anim:popover-open { transition: none; }
@@ -59,7 +59,6 @@
   .tip-cite-nav { display: flex; justify-content: space-between; gap: var(--space-2); }
   @media (prefers-reduced-motion: reduce) {
     .tip { transform: none; }
-    .tip:popover-open { transition-duration: var(--dur-instant); }
     @starting-style { .tip:popover-open { transform: none; } }
   }
 

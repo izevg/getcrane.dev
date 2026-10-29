@@ -6,6 +6,7 @@ defaultContentLanguageInSubdir: true
 # Корень «/» — отдельный EN-лендинг (формат RootHTML), поэтому редирект Hugo на язык по умолчанию выключен.
 disableDefaultLanguageRedirect: true
 disableHugoGeneratorInject: true
+printI18nWarnings: true
 disableKinds: [taxonomy, term, rss]
 enableGitInfo: false
 timeout: 120s
@@ -42,7 +43,9 @@ outputs:
 cascade:
   - target:
       kind: home
-      lang: en
+      sites:
+        matrix:
+          languages: [en]
     outputs: [HTML, RootHTML, LLMS, LLMSRoot, LLMSFull]
 
 mediaTypes:

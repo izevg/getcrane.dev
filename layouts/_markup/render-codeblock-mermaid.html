@@ -1,7 +1,7 @@
 {{- /*
   Диаграмма mermaid. SVG (светлый и тёмный) рендерит scripts/render-mermaid.ts при сборке в CI → assets/diagrams/<хэш>.{light,dark}.svg;
   у читателя JS для диаграмм нет. Хэш — первые 16 знаков SHA-256 от исходника без краевых пробелов (тот же расчёт в скрипте).
-  Локально шаг пропускается переменной CRANE_SKIP_MERMAID=1; тогда вместо картинки выводится исходник (в production без SVG — ошибка сборки).
+  SVG лежат в репозитории; без них сборка падает (в любом окружении).
   Подпись обязательна: ```mermaid {caption="…"}.
 */ -}}
 {{- $src := trim .Inner " \n\r\t" -}}
@@ -16,7 +16,7 @@
   <div class="diagram-img diagram-light" role="img" aria-labelledby="{{ $capid }}" data-pagefind-ignore>{{ $light.Content | safeHTML }}</div>
   <div class="diagram-img diagram-dark" role="img" aria-labelledby="{{ $capid }}" data-pagefind-ignore>{{ $dark.Content | safeHTML }}</div>
 {{- else }}
-  {{- if hugo.IsProduction }}{{ errorf "mermaid: нет SVG для диаграммы %s в %s; выполните npm run mermaid (или задайте HUGO_ENV=development для локальной сборки без диаграмм)" $h .Page.Path }}{{ end }}
+  {{- if hugo.IsProduction }}{{ errorf "mermaid: нет SVG для диаграммы %s:%d, выполните npm run mermaid" .Page.File.Path .Position.LineNumber }}{{ else }}{{ warnidf "mermaid-svg" "mermaid: нет SVG для диаграммы %s:%d, выполните npm run mermaid" .Page.File.Path .Position.LineNumber }}{{ end }}
 {{- end }}
   <figcaption id="{{ $capid }}"{{ if not $cap }} class="sr"{{ end }}>{{ $cap | default (i18n "diagram.default") }}</figcaption>
   <details class="diagram-src" data-pagefind-ignore{{ if not (and $light $dark) }} open{{ end }}>

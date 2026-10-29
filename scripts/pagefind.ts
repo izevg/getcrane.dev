@@ -4,17 +4,20 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { ROOT } from "./lib/content.ts";
 
+// --dev: индекс пишется в static/pagefind (в .gitignore), чтобы его отдавал hugo server на :1313. Сайт для индексации берётся из public/.
+const dev = process.argv.includes("--dev");
 const site = join(ROOT, "public");
+const outDir = dev ? join(ROOT, "static", "pagefind") : join(site, "pagefind");
 if (!existsSync(join(site, "en", "index.html"))) {
   process.stderr.write("pagefind: нет public/en/index.html, сначала соберите сайт (hugo)\n");
   process.exit(1);
 }
-const run = spawnSync("npx", ["--no-install", "pagefind", "--site", "public", "--output-subdir", "pagefind"], { cwd: ROOT, stdio: "inherit" });
+const run = spawnSync("npx", ["--no-install", "pagefind", "--site", "public", ...(dev ? ["--output-path", outDir] : ["--output-subdir", "pagefind"])], { cwd: ROOT, stdio: "inherit" });
 if (run.status !== 0) {
   process.exit(run.status ?? 1);
 }
-if (!existsSync(join(site, "pagefind", "pagefind-entry.json"))) {
-  process.stderr.write("pagefind: не создан public/pagefind/pagefind-entry.json\n");
+if (!existsSync(join(outDir, "pagefind-entry.json"))) {
+  process.stderr.write(`pagefind: не создан ${outDir}/pagefind-entry.json\n`);
   process.exit(1);
 }
-process.stdout.write("pagefind: индекс записан в public/pagefind\n");
+process.stdout.write(`pagefind: индекс записан в ${outDir}\n`);

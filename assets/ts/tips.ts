@@ -2,9 +2,8 @@ import { $, $$, ready } from "./lib/dom";
 import { t } from "./lib/strings";
 import { isGone, place } from "./tips/position";
 import { initCodeGroups } from "./tips/envcode";
+import { CLOSE_DELAY_MS, OPEN_DELAY_MS, applyTiming } from "./tips/timing";
 
-const OPEN_DELAY = 400;
-const CLOSE_DELAY = 250;
 type Mode = "hover" | "focus" | "pinned";
 
 interface Open {
@@ -108,7 +107,7 @@ function scheduleOpen(trigger: HTMLElement): void {
   }
   window.clearTimeout(openTimer);
   // Пока открыт слой соседнего триггера, переход мгновенный.
-  const delay = current ? 0 : OPEN_DELAY;
+  const delay = current ? 0 : OPEN_DELAY_MS;
   openTimer = window.setTimeout(() => show(trigger, "hover", delay === 0), delay);
 }
 
@@ -116,7 +115,7 @@ function scheduleClose(): void {
   window.clearTimeout(openTimer);
   window.clearTimeout(closeTimer);
   if (current && current.mode !== "pinned") {
-    closeTimer = window.setTimeout(() => close(), CLOSE_DELAY);
+    closeTimer = window.setTimeout(() => close(), CLOSE_DELAY_MS);
   }
 }
 
@@ -250,6 +249,7 @@ function focusAfter(trigger: HTMLElement): void {
 }
 
 ready(() => {
+  applyTiming();
   const triggers = $$("[data-tip]");
   const groups = initCodeGroups();
   for (const group of groups) {

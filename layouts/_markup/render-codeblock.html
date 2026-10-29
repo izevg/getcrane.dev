@@ -6,8 +6,13 @@
 */ -}}
 {{- $p := .Page -}}
 {{- $lang := lower (.Type | default "text") -}}
-{{- $hl := transform.HighlightCodeBlock . -}}
-{{- $inner := $hl.Inner -}}
+{{- /* У Chroma нет лексера dotenv: .env разбирается лексером bash (KEY=value, кавычки, $VAR, комментарии #). Метка языка остаётся исходной. */ -}}
+{{- $inner := "" -}}
+{{- if in (slice "dotenv" "env") $lang -}}
+  {{- $inner = replaceRE `(?s)^.*?<code[^>]*>(.*)</code></pre>.*$` "$1" (transform.Highlight .Inner "bash" (dict "noClasses" false)) -}}
+{{- else -}}
+  {{- $inner = (transform.HighlightCodeBlock .).Inner -}}
+{{- end -}}
 {{- $envLangs := slice "bash" "sh" "shell" "zsh" "console" "shell-session" "ini" "yaml" "yml" "toml" "env" "dotenv" "dockerfile" -}}
 {{- if in $envLangs $lang -}}
   {{- $url := partial "env/url.html" -}}

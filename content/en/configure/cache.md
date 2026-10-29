@@ -27,7 +27,7 @@ The cache is not a source of truth, and losing it loses no data. Unlike the cata
 
 2. For Valkey, save the address in a file. The address contains a password, so pass it in a file.
 
-   ```text
+   ```txt
    valkey://crane:<password>@valkey:6379
    ```
 

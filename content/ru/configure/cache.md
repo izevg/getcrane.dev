@@ -27,7 +27,7 @@ terms: [proxy-repository, upstream]
 
 2. Для Valkey сохраните адрес в файле. Адрес содержит пароль, поэтому передайте его файлом.
 
-   ```text
+   ```txt
    valkey://crane:<пароль>@valkey:6379
    ```
 

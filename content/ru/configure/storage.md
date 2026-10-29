@@ -38,7 +38,7 @@ terms: [blob, cas]
 
    Файл содержит одну строку:
 
-   ```text
+   ```txt
    postgres://crane:<пароль>@postgres:5432/crane
    ```
 

@@ -38,7 +38,7 @@ The storages are chosen as a pair. A persistent catalog works only with persiste
 
    The file holds one line:
 
-   ```text
+   ```txt
    postgres://crane:<password>@postgres:5432/crane
    ```
 

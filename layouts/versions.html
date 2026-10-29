@@ -26,7 +26,7 @@
           {{- range $V.all }}
             {{- $here := eq (string .id) (string $V.read.id) }}
             <tr>
-              <th scope="row"><a href="{{ .path }}{{ $lang }}/"{{ if $here }} aria-current="page"{{ end }}>{{ .text }}</a>{{ if $here }} <span class="sr">{{ i18n "versions.here" }}</span>{{ end }}</th>
+              <th scope="row"><a href="{{ .path }}{{ $lang }}/">{{ .text }}</a>{{ if $here }} <span class="sr">{{ i18n "versions.here" }}</span>{{ end }}</th>
               <td><span class="badge badge-version">{{ i18n (printf "version.status.%s" .status) }}</span></td>
               <td>{{ with .date }}<time datetime="{{ . }}">{{ time.Format ":date_long" . }}</time>{{ else }}{{ i18n "versions.empty.date" }}{{ end }}</td>
               <td>{{ with .upgrade }}{{ with $.GetPage (printf "/%s" .) }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ else }}{{ i18n "versions.empty.date" }}{{ end }}{{ else }}{{ i18n "versions.empty.date" }}{{ end }}</td>

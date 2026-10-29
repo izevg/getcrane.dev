@@ -65,6 +65,7 @@ function translateInstance(modal: HTMLElement): void {
     return key === "clear_search" ? t("search.clear") : original(key, vars);
   };
   // Кнопки очистки отрисованы до подмены translate, поэтому правим их подписи один раз. Повторная отрисовка через setTranslations дублирует диалог.
+  relabel(modal);
   const clear = t("search.clear");
   for (const button of $$(".pf-input-clear", modal)) {
     button.textContent = clear;
@@ -73,6 +74,28 @@ function translateInstance(modal: HTMLElement): void {
     const label = button.parentElement?.querySelector(".pf-dropdown-trigger-label")?.textContent ?? "";
     button.textContent = clear;
     button.setAttribute("aria-label", `${clear} ${label}`.trim());
+  }
+}
+
+/** Служебные строки Pagefind без перевода в каталоге ru: подпись поля и подсказка пустого состояния. Подменяем текст и имя поля строками сайта (WCAG 3.1.2). */
+const UNTRANSLATED: Record<string, string> = {
+  "Search this site": "search.placeholder",
+  "Results will appear as you type": "search.hint",
+};
+
+function relabel(modal: HTMLElement): void {
+  const walker = document.createTreeWalker(modal, NodeFilter.SHOW_TEXT);
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+    const key = UNTRANSLATED[(node.nodeValue ?? "").trim()];
+    if (key) {
+      node.nodeValue = t(key);
+    }
+  }
+  for (const el of $$("[aria-label]", modal)) {
+    const key = UNTRANSLATED[el.getAttribute("aria-label") ?? ""];
+    if (key) {
+      el.setAttribute("aria-label", t(key));
+    }
   }
 }
 

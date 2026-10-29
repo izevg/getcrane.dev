@@ -16,6 +16,7 @@ sitemap: Site map
 search.trigger: Search
 search.placeholder: Search the docs
 search.empty: No results for “{q}”. Check the spelling or clear the filters.
+search.hint: Results will appear as you type
 search.clear: Clear
 search.count.one: "{n} result"
 search.count.few: "{n} results"

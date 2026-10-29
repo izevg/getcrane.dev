@@ -42,7 +42,7 @@
   .tick .i { inline-size: 12px; block-size: 12px; stroke-width: 3; translate: 0 0.5px; }
 
   /* Кнопки и элементы, существующие только с JS: до гидратации скрыты и не занимают места. */
-  .js-only { display: none; }
+  /* Скрытие .js-only без JS живёт в слое a11y (assets/css/a11y.css): иначе .btn из слоя component перебивает display. */
   .no-js-only { display: inline-flex; }
   .js .no-js-only { display: none; }
   .js .js-only { display: inline-flex; }

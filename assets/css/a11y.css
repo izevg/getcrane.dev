@@ -5,12 +5,20 @@
 ::view-transition-group(root) { animation-duration: var(--dur-base); animation-timing-function: var(--ease-out); }
 
 @layer a11y {
+  /* Прогрессивное улучшение: без JS элементы .js-only скрыты при любом компоненте (последний слой побеждает .btn из component). */
+  :root:not(.js) .js-only { display: none; }
+
   @media (prefers-contrast: more) {
     :root { --border: var(--input); --hint: var(--muted-foreground); }
     .callout { --edge: 4px; }
   }
 
   @media (forced-colors: active) {
+    /* Шевроны раскрытия нарисованы маской по фону; forced-colors сбрасывает фон, поэтому цвет задаётся системный. */
+    .tree summary::before, .toc-inline > summary::before, .terms-block > summary::before, .env-mentions > summary::before,
+    .diagram-src > summary::before, details.callout > summary::after, .aud-block > summary::before, .rm-ver > summary::before {
+      forced-color-adjust: none; background: CanvasText;
+    }
     /* Граница, несущая смысл, — border/outline, а не фон и не тень. */
     .callout, .aud-block, .chip, .badge, .tabs, .tip, .pop, .terms-block, .toc-inline, .pager a, .children li, .dev-panel, .code, .table-wrap {
       border: 1px solid CanvasText;

@@ -16,6 +16,7 @@ sitemap: Карта сайта
 search.trigger: Поиск
 search.placeholder: Поиск по документации
 search.empty: По запросу «{q}» ничего не найдено. Проверьте написание или сбросьте фильтры.
+search.hint: Результаты появятся по мере ввода
 search.clear: Очистить
 search.count.one: "{n} результат"
 search.count.few: "{n} результата"

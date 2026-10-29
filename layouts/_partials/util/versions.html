@@ -2,13 +2,19 @@
   Версии документации из data/versions.yaml с проверкой схемы. Вход: нет. Выход: dict
   all (записи по порядку показа), rank (id → позиция, 0 — самая новая), multi (версий не меньше двух: селектор и чипы разрешены),
   oldest (позиция самой старой), read (запись читаемой версии: params.docsVersion, по умолчанию запись со статусом current).
+  У каждой записи добавлено поле text — подпись в языке сайта: label — строка для пронумерованных версий («0.3») или { ru, en }.
   Нарушение схемы ломает сборку.
 */ -}}
-{{- $all := site.Data.versions | default slice -}}
+{{- $all := slice -}}
+{{- range site.Data.versions | default slice -}}
+  {{- $text := "" -}}{{- if reflect.IsMap .label }}{{ $text = index .label site.Language.Lang }}{{ else }}{{ $text = string .label }}{{ end -}}
+  {{- $all = $all | append (merge . (dict "text" $text)) -}}
+{{- end -}}
 {{- $rank := dict -}}
 {{- $current := 0 -}}
 {{- range $i, $v := $all -}}
-  {{- if not (and $v.id $v.status $v.path (or $v.label $v.labelKey)) }}{{ errorf "data/versions.yaml: запись %d без id, status, path или label/labelKey" $i }}{{ end -}}
+  {{- if not (and $v.id $v.status $v.path $v.label) }}{{ errorf "data/versions.yaml: запись %d без id, status, path или label" $i }}{{ end -}}
+  {{- if and (reflect.IsMap $v.label) (not (and $v.label.ru $v.label.en)) }}{{ errorf "data/versions.yaml: у %q label — это { ru, en } с обоими языками" $v.id }}{{ end -}}
   {{- if not (in (slice "current" "next" "previous") $v.status) }}{{ errorf "data/versions.yaml: неизвестный status %q у %q" $v.status $v.id }}{{ end -}}
   {{- if not (and (hasPrefix $v.path "/") (hasSuffix $v.path "/")) }}{{ errorf "data/versions.yaml: path %q у %q должен начинаться и заканчиваться косой чертой" $v.path $v.id }}{{ end -}}
   {{- if isset $rank (string $v.id) }}{{ errorf "data/versions.yaml: повторяется id %q" $v.id }}{{ end -}}

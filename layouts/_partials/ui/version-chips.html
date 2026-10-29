@@ -14,11 +14,11 @@
   {{- $href := printf "/%s/versions/#labels" $p.Language.Lang -}}
   {{- if ne $until "" -}}
     {{- $untilEntry := index $V.all (index $V.rank $until) -}}
-    {{- $v := dict "from" (partial "versions/label.html" $sinceEntry) "to" (partial "versions/label.html" $untilEntry) -}}
+    {{- $v := dict "from" $sinceEntry.text "to" $untilEntry.text -}}
     {{- $tid := partial "tips/chip.html" (dict "page" $p "id" "ver-range" "text" (partial "ui/t.html" (dict "k" "tip.range" "v" $v)) "href" $href) -}}
     <a class="badge badge-version" href="{{ $href }}" data-ver data-tip="{{ $tid }}" aria-describedby="{{ $tid }}-d">{{ partial "ui/icon.html" "tag" }}{{ partial "ui/t.html" (dict "k" "chip.range" "v" $v) }}</a>
   {{- else if lt $sinceRank $V.oldest -}}
-    {{- $v := dict "v" (partial "versions/label.html" $sinceEntry) -}}
+    {{- $v := dict "v" $sinceEntry.text -}}
     {{- $tid := partial "tips/chip.html" (dict "page" $p "id" "ver-since" "text" (partial "ui/t.html" (dict "k" "tip.since" "v" $v)) "href" $href) -}}
     <a class="badge badge-version" href="{{ $href }}" data-ver data-tip="{{ $tid }}" aria-describedby="{{ $tid }}-d">{{ partial "ui/icon.html" "tag" }}{{ partial "ui/t.html" (dict "k" "chip.since" "v" $v) }}</a>
   {{- end -}}
@@ -27,10 +27,10 @@
   {{- $list := slice -}}
   {{- range $c := ($p.Params.changed | default slice) -}}
     {{- $r := index $V.rank (printf "%v" $c) -}}
-    {{- if ge $r $readRank }}{{ if lt $r $newest }}{{ $newest = $r }}{{ end }}{{ $list = $list | append (partial "versions/label.html" (index $V.all $r)) }}{{ end -}}
+    {{- if ge $r $readRank }}{{ if lt $r $newest }}{{ $newest = $r }}{{ end }}{{ $list = $list | append (index $V.all $r).text }}{{ end -}}
   {{- end -}}
   {{- if and $list (lt $newest $sinceRank) -}}
-    {{- $v := dict "v" (partial "versions/label.html" (index $V.all $newest)) "list" (delimit $list ", ") -}}
+    {{- $v := dict "v" (index $V.all $newest).text "list" (delimit $list ", ") -}}
     {{- $tid := partial "tips/chip.html" (dict "page" $p "id" "ver-changed" "text" (partial "ui/t.html" (dict "k" "tip.changed" "v" $v)) "href" $href) -}}
     <a class="badge badge-version" href="{{ $href }}" data-ver data-tip="{{ $tid }}" aria-describedby="{{ $tid }}-d">{{ partial "ui/icon.html" "file-clock" }}{{ partial "ui/t.html" (dict "k" "chip.changed" "v" $v) }}</a>
   {{- end -}}

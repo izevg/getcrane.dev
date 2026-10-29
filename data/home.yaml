@@ -33,17 +33,17 @@ path:
     - { href: features/security/digest-verification,    icon: fingerprint-pattern, ru: "Дайджест", en: "Digest", note: { ru: "байты сверяются по SHA-256", en: "bytes checked against SHA-256" } }
     - { href: features/security/immutable-versions,     icon: lock, ru: "Неизменяемость", en: "Immutability", note: { ru: "выпущенная версия не меняется", en: "a released version never changes" } }
 
-# Снимки Storybook веб-консоли (data/screenshot-variants.yaml — размеры вариантов, static/screens/<история>/<вариант>.<ext> — файлы).
-# light / dark — варианты историй для светлой и тёмной темы; enVariant — вариант English для EN-страницы (пока без тёмного: светлый снимок в обеих темах).
+# Снимки Storybook веб-консоли: файлы — assets/screens/<история>/<вариант>.<ext>, размеры берёт Hugo из самих файлов.
+# shot — «История/СветлыйВариант»; тёмный и английский варианты записи берутся из data/screen-pairs.yaml (EN: один снимок в обеих темах).
 # Пустой alt не выводит снимок. Подписи всегда заканчиваются пометкой «Демонстрационные данные» / «Demo data» (добавляет шаблон).
 screens:
-  hero: { story: S2Package, light: DesktopLight, dark: DesktopDark, enVariant: English, ru: { alt: "Карточка пакета в веб-консоли CRANE: версии, команда установки и сведения о пакете" }, en: { alt: "A package page in the CRANE web console: versions, the install command and package details" } }
+  hero: { shot: "S2Package/DesktopLight", ru: { alt: "Карточка пакета в веб-консоли CRANE: версии, команда установки и сведения о пакете" }, en: { alt: "A package page in the CRANE web console: versions, the install command and package details" } }
 
 # Секция «Веб-консоль»: три снимка с подписью-ссылкой на гарантию. Секция выводится, если заполнена подпись (caption) хотя бы у одной записи.
 console:
-  - { story: S3Versions, light: Desktop1440Sheet, dark: Desktop1440Dark, enVariant: English, href: features/security/immutable-versions, ru: { caption: "Версии пакета: состояние каждой версии и панель подробностей", alt: "Список версий пакета в веб-консоли с состоянием каждой версии и открытой панелью подробностей" }, en: { caption: "Package versions: the state of each version and a details panel", alt: "The list of package versions in the web console with the state of each version and an open details panel" } }
-  - { story: S9Journal, light: Desktop1440, dark: DesktopDark, enVariant: English, href: features/security/security-journal, ru: { caption: "Журнал действий: кто, что и когда сделал", alt: "Журнал действий в веб-консоли: список событий с автором, действием и временем" }, en: { caption: "The action journal: who did what and when", alt: "The action journal in the web console: a list of events with the actor, the action and the time" } }
-  - { story: S1Search, light: DesktopLight, dark: DesktopDark, enVariant: English, href: features/registry/search, ru: { caption: "Поиск пакетов по задаче, а не только по имени", alt: "Поиск пакетов в веб-консоли: строка запроса и карточки найденных пакетов" }, en: { caption: "Package search by task, not only by name", alt: "Package search in the web console: the query field and cards of the packages found" } }
+  - { shot: "S3Versions/Desktop1440Sheet", href: features/security/immutable-versions, ru: { caption: "Версии пакета: состояние каждой версии и панель подробностей", alt: "Список версий пакета в веб-консоли с состоянием каждой версии и открытой панелью подробностей" }, en: { caption: "Package versions: the state of each version and a details panel", alt: "The list of package versions in the web console with the state of each version and an open details panel" } }
+  - { shot: "S9Journal/Desktop1440", href: features/security/security-journal, ru: { caption: "Журнал действий: кто, что и когда сделал", alt: "Журнал действий в веб-консоли: список событий с автором, действием и временем" }, en: { caption: "The action journal: who did what and when", alt: "The action journal in the web console: a list of events with the actor, the action and the time" } }
+  - { shot: "S1Search/DesktopLight", href: features/registry/search, ru: { caption: "Поиск пакетов по задаче, а не только по имени", alt: "Поиск пакетов в веб-консоли: строка запроса и карточки найденных пакетов" }, en: { caption: "Package search by task, not only by name", alt: "Package search in the web console: the query field and cards of the packages found" } }
 
 # Карточки гарантий: 6–8 штук. Первые две занимают по 6 колонок из 12 на широком экране.
 # href — страница Features; current — необязательная страница текущего состояния, со status которой

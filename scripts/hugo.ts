@@ -1,8 +1,8 @@
-// Обёртка над hugo для сборок: пропущенный ключ перевода (i18n|MISSING_TRANSLATION) ломает сборку, остальной вывод проходит как есть.
+// Обёртка над hugo для сборок (printI18nWarnings включён в hugo.yaml): пропущенный ключ перевода (i18n|MISSING_TRANSLATION) ломает сборку, остальной вывод проходит как есть.
 import { spawnSync } from "node:child_process";
 import { ROOT, SITE } from "./lib/content.ts";
 
-const run = spawnSync("hugo", ["--printI18nWarnings", ...(process.env.SITE_DIR ? ["--destination", SITE] : []), ...process.argv.slice(2)], { cwd: ROOT, encoding: "utf8" });
+const run = spawnSync("hugo", [...(process.env.SITE_DIR ? ["--destination", SITE] : []), ...process.argv.slice(2)], { cwd: ROOT, encoding: "utf8" });
 process.stdout.write(run.stdout);
 process.stderr.write(run.stderr);
 const missing = (run.stdout + run.stderr).split("\n").filter((l) => l.includes("MISSING_TRANSLATION"));

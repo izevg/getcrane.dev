@@ -5,7 +5,7 @@
 */ -}}
 {{- $lang := .lang -}}{{- $d := .d -}}
 {{- $h := index $d.hero $lang | default dict -}}
-{{- $shot := partial "home/shot.html" (dict "cfg" $d.screens.hero "lang" $lang "eager" true) -}}
+{{- $shot := "" -}}{{- with (index $d.screens.hero $lang).alt }}{{ $shot = partial "screens/render.html" (dict "ref" $d.screens.hero.shot "lang" $lang "alt" . "eager" true) }}{{ end -}}
 {{- $hasShot := ne (trim (string $shot) " \n") "" -}}
 <section class="hero container" aria-labelledby="hero-h">
   <div class="hero-copy">

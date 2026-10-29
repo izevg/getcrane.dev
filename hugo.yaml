@@ -33,9 +33,10 @@ params:
   # Снимки экрана: true — отсутствующий файл ломает сборку, false — выводится плейсхолдер.
   screenshotsRequired: false
 
-# Выходные форматы: HTML, Markdown-версия страницы, llms.txt и llms-full.txt.
+# Выходные форматы: HTML, Markdown-версия страницы и llms.txt. llms-full.txt собирает scripts/postbuild.ts из готовых .md:
+# шорткоды внутри страницы Hugo разворачивает в формате самой страницы, поэтому из шаблона главной Markdown-версию других страниц не получить.
 outputs:
-  home: [HTML, LLMS, LLMSFull]
+  home: [HTML, LLMS]
   section: [HTML, Markdown]
   page: [HTML, Markdown]
 
@@ -46,7 +47,7 @@ cascade:
       sites:
         matrix:
           languages: [en]
-    outputs: [HTML, RootHTML, LLMS, LLMSRoot, LLMSFull, VersionsJSON, PagesJSON]
+    outputs: [HTML, RootHTML, LLMS, LLMSRoot, VersionsJSON, PagesJSON]
 
 mediaTypes:
   text/markdown:
@@ -73,12 +74,6 @@ outputFormats:
     notAlternative: true
     permalinkable: false
     root: true
-  LLMSFull:
-    mediaType: text/plain
-    baseName: llms-full
-    isPlainText: true
-    notAlternative: true
-    permalinkable: false
   # Манифесты версий документации (design/versions-spec.md, A3): их читает селектор версий и страница 404.
   VersionsJSON:
     mediaType: application/json
@@ -118,7 +113,8 @@ markup:
       # Кавычки и тире ставит писатель; шаблон их не заменяет.
       typographer:
         disable: true
-      linkify: false
+      # Голый URL в тексте становится автоссылкой и ломает сборку в _markup/render-link.html (текст равен адресу): отдельной проверки в TypeScript нет.
+      linkify: true
       strikethrough: true
       table: true
       taskList: true
@@ -128,9 +124,6 @@ markup:
     guessSyntax: false
     lineNos: false
     tabWidth: 2
-  tableOfContents:
-    startLevel: 2
-    endLevel: 3
 
 minify:
   tdewolff:

@@ -1,0 +1,35 @@
+{{- /*
+  Слой подсказки переменной окружения (общий для инлайн-варианта и блоков кода): данные из data/env.yaml → tips/layer.html.
+  Вход: dict "page" "r" (результат env/lookup.html). Идентификатор: env-<anchor> или env-<anchor>-file. Выход: id слоя.
+*/ -}}
+{{- $r := .r -}}
+{{- $e := $r.e -}}
+{{- $id := printf "env-%s%s" $r.anchor (cond $r.isFile "-file" "") -}}
+{{- $scope := $e.scope | default "server" -}}
+{{- $compose := ne $scope "server" -}}
+{{- $rows := slice -}}
+{{- if not $e.secret -}}
+  {{- $d := $e.default -}}
+  {{- $row := dict "k" (i18n "env.default") "v" (i18n "env.none") "code" false -}}
+  {{- if ne (printf "%T" $d) "<nil>" -}}
+    {{- if eq (string $d) "" }}{{ $row = dict "k" (i18n "env.default") "v" (i18n "env.empty") "code" false }}
+    {{- else }}{{ $row = dict "k" (i18n "env.default") "v" (string $d) "code" true }}{{ end -}}
+  {{- end -}}
+  {{- $rows = $rows | append $row -}}
+{{- end -}}
+{{- if not $compose -}}
+  {{- $file := i18n "env.none" -}}{{- if $e.file }}{{ $file = printf "%s_FILE" $r.base }}{{ end -}}
+  {{- $rows = $rows | append (dict "k" (i18n "env.file") "v" $file "code" false) -}}
+  {{- $rows = $rows | append (dict "k" (i18n "env.toml") "v" ($e.toml | default (i18n "env.envOnly")) "code" false) -}}
+{{- end -}}
+{{- $actions := slice (dict "copy" $r.name "label" (i18n "env.copy")) (dict "href" (printf "%s#%s%s" (partial "env/url.html") $r.anchor (cond $r.isFile "-file" "")) "label" (i18n "env.ref")) -}}
+{{- if and $e.file (not $r.isFile) (not $compose) }}{{ $actions = $actions | append (dict "copy" (printf "%s_FILE" $r.base) "label" (printf "%s_FILE" $r.base)) }}{{ end -}}
+{{- $note := "" -}}
+{{- if eq $scope "compose" }}{{ $note = i18n "env.compose" }}{{ else if eq $scope "ci" }}{{ $note = i18n "env.ci" }}{{ end -}}
+{{- $badge := i18n "env.optional" -}}{{- if $e.required }}{{ $badge = i18n "env.required" }}{{ end -}}
+{{- $desc := index $e .page.Language.Lang -}}{{- if $r.isFile }}{{ $desc = partial "ui/t.html" (dict "k" "env.fileOf" "v" (dict "name" $r.base)) }}{{ end -}}
+{{- $hint := "" -}}{{- if $e.secret }}{{ $hint = partial "ui/t.html" (dict "k" "env.secret" "v" (dict "name" $r.base)) }}{{ end -}}
+{{- return (partial "tips/layer.html" (dict
+  "page" .page "id" $id "kind" "env" "mode" "pin" "label" $r.name
+  "head" (dict "code" $r.name "badge" $badge) "desc" $desc "hint" $hint
+  "rows" $rows "note" $note "actions" $actions "group" true)) -}}

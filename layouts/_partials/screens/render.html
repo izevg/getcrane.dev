@@ -1,0 +1,15 @@
+{{- /*
+  Снимок экрана консоли для главной и шорткода screenshot: один <picture> или пара светлый/тёмный (классы shot-light, shot-dark;
+  показ по теме — CSS в components/blocks.css). Вход: dict "ref" (История/Вариант) "lang" "alt" "eager" (bool).
+  Приоритет загрузки: тема читателя (системная или выбранная вручную) известна только JS, поэтому оба варианта пары eager (скрытый не остаётся lazy),
+  а fetchpriority=high получает вариант системной темы через <link rel="preload" media> в head (head/preload-hero.html); единственный снимок получает high сам.
+  Нет файлов: пустая строка. Выход: HTML.
+*/ -}}
+{{- with partial "screens/resolve.html" (dict "ref" .ref "lang" .lang) -}}
+  {{- if .dark -}}
+    {{- partial "screens/picture.html" (dict "v" .light "alt" $.alt "class" "shot-light" "eager" $.eager) -}}
+    {{- partial "screens/picture.html" (dict "v" .dark "alt" $.alt "class" "shot-dark" "eager" $.eager) -}}
+  {{- else -}}
+    {{- partial "screens/picture.html" (dict "v" .light "alt" $.alt "class" "" "eager" $.eager "high" $.eager) -}}
+  {{- end -}}
+{{- end -}}

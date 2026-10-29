@@ -1,19 +1,14 @@
-{{- /* Список ссылок оглавления: h2 с вложенными h3. Вход: dict "heads" (плоский список из nav/toc-flat.html) "sources". */ -}}
-{{- $out := `<ol class="toc">` -}}
-{{- $open := false -}}
-{{- $sub := false -}}
-{{- range .heads -}}
-  {{- if eq .level 2 -}}
-    {{- if $sub }}{{ $out = printf `%s</ol>` $out }}{{ $sub = false }}{{ end -}}
-    {{- if $open }}{{ $out = printf `%s</li>` $out }}{{ end -}}
-    {{- $out = printf `%s<li><a href="#%s">%s</a>` $out .id (.title | htmlEscape) -}}
-    {{- $open = true -}}
+{{- /*
+  Пункты оглавления рекурсивно по дереву .Fragments.Headings: h2 с вложенными h3. Вход: dict "nodes" (список узлов дерева).
+  Корень дерева в Hugo 0.157 — служебный узел уровня 0 без ID, как и заголовки вне диапазона h2–h3: они пропускаются, а их потомки обходятся дальше.
+  Выход: набор <li> (без внешнего <ol>).
+*/ -}}
+{{- range .nodes -}}
+  {{- if and .ID (in (slice 2 3) .Level) -}}
+<li><a href="#{{ .ID }}">{{ .Title }}</a>
+    {{- with partial "nav/toc-list.html" (dict "nodes" .Headings) }}<ol>{{ . }}</ol>{{ end -}}
+</li>
   {{- else -}}
-    {{- if not $sub }}{{ $out = printf `%s<ol>` $out }}{{ $sub = true }}{{ end -}}
-    {{- $out = printf `%s<li><a href="#%s">%s</a></li>` $out .id (.title | htmlEscape) -}}
+    {{- partial "nav/toc-list.html" (dict "nodes" .Headings) -}}
   {{- end -}}
 {{- end -}}
-{{- if $sub }}{{ $out = printf `%s</ol>` $out }}{{ end -}}
-{{- if $open }}{{ $out = printf `%s</li>` $out }}{{ end -}}
-{{- if .sources }}{{ $out = printf `%s<li><a href="#sources">%s</a></li>` $out (i18n "sources") }}{{ end -}}
-{{- return (printf "%s</ol>" $out | safeHTML) -}}

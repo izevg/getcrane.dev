@@ -1,6 +1,5 @@
-import { roadmapAnchors } from "../../tools/check-roadmap.ts";
 import type { Page } from "../lib/content.ts";
-import { lineOf, stripCode, type Report } from "../lib/content.ts";
+import { stripCode, type Report } from "../lib/content.ts";
 
 const SHORTCODE = /\{\{[<%]\s*(\/?)([a-z-]+)((?:\s+(?:"[^"]*"|[\w-]+="[^"]*"))*)\s*[>%]\}\}/g;
 const EXPLICIT_ANCHOR = /^(#{2,3})\s+.*\{#([a-z0-9][a-z0-9-]*)(?:\s[^}]*)?\}\s*$/;
@@ -74,25 +73,6 @@ export function checkParity(pages: Page[], report: Report): void {
     const sb = shortcodes(b.body);
     if (JSON.stringify(sa) !== JSON.stringify(sb)) {
       report.error(a.file, `набор шорткодов отличается от ${b.file}`);
-    }
-  }
-}
-
-export function checkXrefs(pages: Page[], report: Report): void {
-  const index = new Map(pages.map((p) => [`${p.lang}:${p.rel}`, p]));
-  // У страницы дорожной карты якоря версий строит шаблон из data/roadmap.yaml, в тексте заголовков нет.
-  const anchorsOf = new Map(pages.map((p) => [`${p.lang}:${p.rel}`, new Set(p.front.layout === "roadmap" ? roadmapAnchors() : anchors(p))]));
-  for (const p of pages) {
-    const body = stripCode(p.body);
-    for (const m of body.matchAll(/\{\{<\s*xref\s+"([^"#]+)(?:#([^"]+))?"/g)) {
-      const path = (m[1] ?? "").replace(/^\/|\/$/g, "");
-      const target = index.get(`${p.lang}:${path}`) ?? index.get(`${p.lang}:${path}/_index`);
-      const where = `${p.file}:${p.bodyLine + lineOf(body, m.index ?? 0) - 1}`;
-      if (!target) {
-        report.error(where, `xref: страница ${path} не найдена`);
-      } else if (m[2] && !anchorsOf.get(`${target.lang}:${target.rel}`)?.has(m[2])) {
-        report.error(where, `xref: в ${target.file} нет якоря #${m[2]}`);
-      }
     }
   }
 }

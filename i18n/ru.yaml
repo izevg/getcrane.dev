@@ -174,8 +174,6 @@ version.trigger.name: "Версия документации: {label}, {status}"
 version.status.current: текущая
 version.status.previous: прежняя
 version.status.next: следующая
-version.current.label: Текущая
-version.next.label: Следующая
 version.all: Все версии
 version.nav: Версии документации
 chip.since: "С версии {v}"

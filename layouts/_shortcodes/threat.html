@@ -17,7 +17,7 @@
   {{- if $steps }}
   <ol class="threat-flow" aria-label="{{ i18n "threat.flow" }}">
     {{- range $i, $s := $steps }}
-    {{- if gt (strings.RuneCount $s) 60 }}{{ errorf "threat: шаг flow длиннее 60 знаков: %q (%s)" $s $.Position }}{{ else if gt (strings.RuneCount $s) 40 }}{{ warnf "threat: шаг flow длиннее 40 знаков (%d): %q (%s)" (strings.RuneCount $s) $s $.Position }}{{ end }}
+    {{- if gt (strings.RuneCount $s) 60 }}{{ errorf "threat: шаг flow длиннее 60 знаков: %q (%s)" $s $.Position }}{{ else if gt (strings.RuneCount $s) 40 }}{{ warnidf "threat-flow-length" "threat: шаг flow длиннее 40 знаков (%d): %q (%s)" (strings.RuneCount $s) $s $.Position }}{{ end }}
     {{- $icon := index (slice "crosshair" "user-round" "shield-check") $i }}
     <li class="threat-step threat-step-{{ add $i 1 }}">
       {{- if lt $i 2 }}<svg class="threat-arrow" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M3 12h16m-5-5 5 5-5 5"/></svg>{{ end -}}

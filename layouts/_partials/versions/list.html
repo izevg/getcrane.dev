@@ -8,6 +8,6 @@
 <ul>
 {{- range $V.all }}
   {{- $here := eq (string .id) (string $V.read.id) }}
-  <li><a href="{{ printf "%s%s/%s" .path $lang $rest }}"{{ if $here }} aria-current="page"{{ end }} data-ver data-version="{{ .id }}"><span class="ver-label">{{ partial "versions/label.html" . }}</span> <span class="ver-status">{{ i18n (printf "version.status.%s" .status) }}</span>{{ if $here }}{{ partial "ui/icon.html" (dict "name" "check" "class" "i i-16 ver-check") }}{{ end }}</a></li>
+  <li><a href="{{ printf "%s%s/%s" .path $lang $rest }}"{{ if $here }} aria-current="page"{{ end }} data-ver data-version="{{ .id }}"><span class="ver-label">{{ .text }}</span> <span class="ver-status">{{ i18n (printf "version.status.%s" .status) }}</span>{{ if $here }}{{ partial "ui/icon.html" (dict "name" "check" "class" "i i-16 ver-check") }}{{ end }}</a></li>
 {{- end }}
 </ul>

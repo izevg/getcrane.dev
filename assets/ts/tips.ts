@@ -4,12 +4,34 @@ import { isGone, place } from "./tips/position";
 import { initCodeGroups } from "./tips/envcode";
 import { CLOSE_DELAY_MS, GROUP_TIMEOUT_MS, OPEN_DELAY_MS } from "./tips/timing";
 
-type Mode = "hover" | "focus" | "pinned";
+/** Состояние открытого слоя: от наведения, от фокуса с клавиатуры или закреплённый кликом. */
+type State = "hover" | "focus" | "pinned";
+
+/** Поведение триггера задаёт разметка: data-tip-mode (tips/layer.html и шаблоны триггеров). Каждому режиму — свои правила, таблица одна. */
+type TipMode = "hover" | "pin" | "toggle";
+
+interface ModeRules {
+  /** Триггер ведёт себя как кнопка: role, aria-haspopup, aria-expanded, Пробел. */
+  button: boolean;
+  /** Фокус с клавиатуры открывает слой. */
+  focusShows: boolean;
+  /** Esc закрывает слой сам скрипт (у toggle слой popover="auto", Esc закрывает браузер). */
+  escCloses: boolean;
+}
+
+const MODES: Record<TipMode, ModeRules> = {
+  // term, xref, чипы версий: наведение и фокус показывают, первый тап на касании открывает слой с явной ссылкой.
+  hover: { button: false, focusShows: true, escCloses: true },
+  // env: ещё и клик закрепляет слой с кнопками.
+  pin: { button: true, focusShows: true, escCloses: true },
+  // источники: клик открывает и закрывает popover="auto".
+  toggle: { button: true, focusShows: false, escCloses: false },
+};
 
 interface Open {
   trigger: HTMLElement;
   tip: HTMLElement;
-  mode: Mode;
+  state: State;
 }
 
 let current: Open | undefined;
@@ -21,8 +43,11 @@ let lastPointer = "";
 let frame = 0;
 const groupOf = new Map<HTMLElement, number>();
 
-const isEnv = (el: HTMLElement): boolean => el.matches(".env, .env-inline");
-const isCite = (el: HTMLElement): boolean => el.matches(".cite");
+const modeOf = (el: HTMLElement): TipMode => {
+  const mode = el.dataset.tipMode;
+  return mode === "pin" || mode === "toggle" ? mode : "hover";
+};
+const rulesOf = (el: HTMLElement): ModeRules => MODES[modeOf(el)];
 const tipOf = (el: HTMLElement): HTMLElement | null => document.getElementById(el.dataset.tip ?? "");
 
 function setActionsInert(tip: HTMLElement, inert: boolean): void {
@@ -48,7 +73,7 @@ function onScroll(): void {
   frame = requestAnimationFrame(reposition);
 }
 
-function show(trigger: HTMLElement, mode: Mode, instant = false): void {
+function show(trigger: HTMLElement, state: State, instant = false): void {
   window.clearTimeout(openTimer);
   window.clearTimeout(closeTimer);
   const tip = tipOf(trigger);
@@ -66,16 +91,17 @@ function show(trigger: HTMLElement, mode: Mode, instant = false): void {
     tip.classList.toggle("no-anim", instant);
     tip.showPopover();
   }
-  current = { trigger, tip, mode };
-  if (isEnv(trigger)) {
-    setActionsInert(tip, mode === "focus");
-    const hint = $("[data-env-group]", tip);
+  current = { trigger, tip, state };
+  // Кнопки слоя недоступны, пока он открыт только фокусом: Tab идёт дальше по странице, а не в слой (закрепление — Enter).
+  setActionsInert(tip, state === "focus");
+  const hint = $("[data-env-group]", tip);
+  if (hint) {
     const size = groupOf.get(trigger) ?? 0;
-    if (hint) {
-      hint.hidden = size < 2;
-      hint.textContent = size > 1 ? t("env.group") : "";
-    }
-    trigger.setAttribute("aria-expanded", String(mode === "pinned"));
+    hint.hidden = size < 2;
+    hint.textContent = size > 1 ? t("env.group") : "";
+  }
+  if (rulesOf(trigger).button) {
+    trigger.setAttribute("aria-expanded", String(state === "pinned"));
   }
   trigger.classList.add("is-open");
   place(trigger, tip);
@@ -95,7 +121,7 @@ function close(instant = false): void {
     tip.hidePopover();
   }
   trigger.classList.remove("is-open");
-  if (isEnv(trigger)) {
+  if (rulesOf(trigger).button) {
     trigger.setAttribute("aria-expanded", "false");
   }
   window.removeEventListener("scroll", onScroll, true);
@@ -117,13 +143,13 @@ function scheduleOpen(trigger: HTMLElement): void {
 function scheduleClose(): void {
   window.clearTimeout(openTimer);
   window.clearTimeout(closeTimer);
-  if (current && current.mode !== "pinned") {
+  if (current && current.state !== "pinned") {
     closeTimer = window.setTimeout(() => close(), CLOSE_DELAY_MS);
   }
 }
 
 function pin(trigger: HTMLElement, focusAction: boolean): void {
-  if (current?.trigger === trigger && current.mode === "pinned") {
+  if (current?.trigger === trigger && current.state === "pinned") {
     close();
     return;
   }
@@ -134,19 +160,19 @@ function pin(trigger: HTMLElement, focusAction: boolean): void {
 }
 
 function bindTrigger(trigger: HTMLElement): void {
-  const env = isEnv(trigger);
-  const cite = isCite(trigger);
+  const mode = modeOf(trigger);
+  const rules = MODES[mode];
   const tip = tipOf(trigger);
   if (!tip) {
     return;
   }
-  if (env || cite) {
+  if (rules.button) {
     trigger.setAttribute("role", "button");
     trigger.setAttribute("aria-haspopup", "dialog");
     trigger.setAttribute("aria-expanded", "false");
     trigger.setAttribute("aria-controls", tip.id);
   }
-  if (cite) {
+  if (mode === "toggle") {
     tip.addEventListener("toggle", (event) => {
       const open = (event as ToggleEvent).newState === "open";
       trigger.setAttribute("aria-expanded", String(open));
@@ -184,7 +210,7 @@ function bindTrigger(trigger: HTMLElement): void {
   });
   trigger.addEventListener("focus", () => {
     // После Esc фокус возвращается на триггер без повторного показа слоя (WCAG 1.4.13).
-    if (suppressed !== trigger && !cite && trigger.matches(":focus-visible")) {
+    if (suppressed !== trigger && rules.focusShows && trigger.matches(":focus-visible")) {
       show(trigger, "focus", true);
     }
   });
@@ -192,7 +218,7 @@ function bindTrigger(trigger: HTMLElement): void {
     if (suppressed === trigger) {
       suppressed = undefined;
     }
-    if (current?.mode === "focus" && current.trigger === trigger) {
+    if (current?.state === "focus" && current.trigger === trigger) {
       close(true);
     }
   });
@@ -201,12 +227,12 @@ function bindTrigger(trigger: HTMLElement): void {
     const keyboard = event.detail === 0 && lastPointer === "";
     lastPointer = "";
     const modified = event.ctrlKey || event.metaKey || event.shiftKey || event.button !== 0;
-    if (cite) {
+    if (mode === "toggle") {
       event.preventDefault();
       tip.togglePopover();
       return;
     }
-    if (env) {
+    if (mode === "pin") {
       if (modified) {
         return;
       }
@@ -214,13 +240,13 @@ function bindTrigger(trigger: HTMLElement): void {
       pin(trigger, keyboard);
       return;
     }
-    // term и xref: первый тап открывает слой с явной ссылкой, второй — переход.
+    // hover (term, xref, чипы): первый тап открывает слой с явной ссылкой, второй — переход.
     if (touch && current?.trigger !== trigger) {
       event.preventDefault();
       show(trigger, "pinned", true);
     }
   });
-  if (env || cite) {
+  if (rules.button) {
     trigger.addEventListener("keydown", (event) => {
       if (event.key === " ") {
         event.preventDefault();
@@ -228,11 +254,43 @@ function bindTrigger(trigger: HTMLElement): void {
       }
     });
   }
+  if (mode === "toggle") {
+    bindToggleFocus(trigger, tip);
+  }
+}
+
+/**
+ * Слой источника лежит в конце страницы, а не рядом с триггером, поэтому порядок Tab ведём вручную: из триггера в слой, из конца слоя — к следующему
+ * элементу после триггера, из начала — обратно на триггер. Без этого ссылки слоя были бы недостижимы с клавиатуры (WCAG 2.1.1).
+ */
+function bindToggleFocus(trigger: HTMLElement, tip: HTMLElement): void {
+  const items = (): HTMLElement[] => $$<HTMLElement>("a[href]", tip);
+  trigger.addEventListener("keydown", (event) => {
+    const first = items()[0];
+    if (event.key === "Tab" && !event.shiftKey && tip.matches(":popover-open") && first) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+  tip.addEventListener("keydown", (event) => {
+    const list = items();
+    if (event.key !== "Tab" || !tip.matches(":popover-open")) {
+      return;
+    }
+    if (!event.shiftKey && document.activeElement === list[list.length - 1]) {
+      event.preventDefault();
+      tip.hidePopover();
+      focusAfter(trigger);
+    } else if (event.shiftKey && document.activeElement === list[0]) {
+      event.preventDefault();
+      trigger.focus();
+    }
+  });
 }
 
 function bindTip(tip: HTMLElement): void {
   tip.addEventListener("keydown", (event) => {
-    if (!current || current.tip !== tip || current.mode !== "pinned") {
+    if (!current || current.tip !== tip || current.state !== "pinned") {
       return;
     }
     const actions = $$<HTMLElement>("button, a[href]", $("[data-env-actions]", tip) ?? tip);
@@ -290,7 +348,7 @@ ready(() => {
     bindTip(tip);
   }
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && current && !isCite(current.trigger)) {
+    if (event.key === "Escape" && current && rulesOf(current.trigger).escCloses) {
       const { trigger, tip } = current;
       const inside = tip.contains(document.activeElement);
       suppressed = trigger;
@@ -301,7 +359,7 @@ ready(() => {
     }
   });
   document.addEventListener("pointerdown", (event) => {
-    if (current && current.mode !== "hover" && !current.tip.contains(event.target as Node) && !current.trigger.contains(event.target as Node)) {
+    if (current && current.state !== "hover" && !current.tip.contains(event.target as Node) && !current.trigger.contains(event.target as Node)) {
       close();
     }
   });

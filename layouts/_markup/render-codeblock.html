@@ -15,16 +15,12 @@
 {{- end -}}
 {{- $envLangs := slice "bash" "sh" "shell" "zsh" "console" "shell-session" "ini" "yaml" "yml" "toml" "env" "dotenv" "dockerfile" -}}
 {{- if in $envLangs $lang -}}
-  {{- $url := partial "env/url.html" -}}
   {{- $out := slice -}}
   {{- range $i, $w := findRE `[A-Za-z0-9_]+|[^A-Za-z0-9_]+` $inner -}}
     {{- if findRE `^[A-Z][A-Z0-9_]+$` $w 1 -}}
       {{- $r := partial "env/lookup.html" $w -}}
       {{- if $r -}}
-        {{- $id := partial "env/register.html" (dict "page" $p "r" $r) -}}
-        {{- $frag := printf "%s%s" $r.anchor (cond $r.isFile "-file" "") -}}
-        {{- $mid := partial "env/first.html" (dict "page" $p "r" $r "key" (printf "c%d:%d:%d" $.Position.LineNumber $.Position.ColumnNumber $i)) -}}
-        {{- $out = $out | append (printf `<a class="env"%s href="%s#%s" data-tip="%s" data-env="%s" draggable="false">%s</a>` (cond (ne $mid "") (printf ` id="%s"` $mid) "") $url $frag $id $w $w) -}}
+        {{- $out = $out | append (partial "env/link.html" (dict "page" $p "r" $r "key" (printf "c%d:%d:%d" $.Position.LineNumber $.Position.ColumnNumber $i) "inline" false)) -}}
       {{- else -}}
         {{- if and site.Params.envStrict (findRE `^CRANE_[A-Z0-9_]+$` $w) }}{{ errorf "env: неизвестное имя %s в блоке кода %q (%s); опечатка или его нет в data/env.yaml" $w $lang $p.Path }}{{ end -}}
         {{- $out = $out | append $w -}}

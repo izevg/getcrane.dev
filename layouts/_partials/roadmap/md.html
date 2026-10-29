@@ -1,0 +1,29 @@
+{{- /*
+  Дорожная карта из data/roadmap.yaml в Markdown для .md-версии страницы и llms-full: версия — заголовок со статусом, функции — список «[название](адрес): польза»,
+  затем направления. Тот же состав и порядок, что в HTML (roadmap.html). Вход: страница дорожной карты.
+*/ -}}
+{{- $lang := .Language.Lang -}}
+{{- $R := partial "util/roadmap.html" -}}
+{{- $out := slice -}}
+{{- range $R.versions -}}
+  {{- $v := . -}}
+  {{- $lines := slice (printf "## %v — %s (%s)" $v.id (index $v.title $lang) (i18n (printf "roadmap.status.%s" $v.status))) -}}
+  {{- range $v.features -}}
+    {{- $t := index . $lang -}}
+    {{- with site.GetPage (strings.TrimPrefix "/" .href) -}}
+      {{- $lines = $lines | append (printf "- [%s](%s): %s" $t.title .Permalink $t.benefit) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $out = $out | append (delimit $lines "\n") -}}
+{{- end -}}
+{{- with $R.directions -}}
+  {{- $lines := slice (printf "## %s" (i18n "roadmap.directions")) (i18n "roadmap.directions.lead") "" -}}
+  {{- range . -}}
+    {{- $t := index . $lang -}}
+    {{- with site.GetPage (strings.TrimPrefix "/" .href) -}}
+      {{- $lines = $lines | append (printf "- [%s](%s): %s" $t.title .Permalink $t.benefit) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $out = $out | append (delimit $lines "\n") -}}
+{{- end -}}
+{{- return (delimit $out "\n\n") -}}

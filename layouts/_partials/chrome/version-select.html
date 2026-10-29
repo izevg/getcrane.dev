@@ -6,7 +6,7 @@
 {{- $p := . -}}
 {{- $V := partial "util/versions.html" -}}
 {{- if $V.multi -}}
-{{- $label := partial "versions/label.html" $V.read -}}
+{{- $label := $V.read.text -}}
 {{- $status := i18n (printf "version.status.%s" $V.read.status) -}}
 <div class="ver" data-version-select>
   <button class="btn btn-ghost ver-btn" type="button" popovertarget="ver-pop" aria-label="{{ partial "ui/t.html" (dict "k" "version.trigger.name" "v" (dict "label" $label "status" $status)) }}"><span data-ver>{{ $label }}</span>{{ partial "ui/icon.html" (dict "name" "chevron-down" "class" "i i-16 ver-chevron") }}</button>

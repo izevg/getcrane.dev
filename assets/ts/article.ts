@@ -1,5 +1,5 @@
 import { $, $$, icon, ready, tick } from "./lib/dom";
-import { announce, copyFetched, feedback, writeText } from "./lib/clipboard";
+import { copyFetched, feedback, writeText } from "./lib/clipboard";
 import { t } from "./lib/strings";
 
 /** Исходник блока без приглашения `$ ` и строк вывода (Chroma: .gp, .go); обёртки env текста не добавляют. */
@@ -247,6 +247,47 @@ function initToc(): void {
   }
 }
 
+const BACK_KEY = "crane.envBack";
+
+interface Origin {
+  href: string;
+  title: string;
+}
+
+function isOrigin(value: unknown): value is Origin {
+  return typeof value === "object" && value !== null && typeof (value as Origin).href === "string" && typeof (value as Origin).title === "string";
+}
+
+/**
+ * Запоминает страницу, с которой читатель ушёл в справочник переменных (ссылка на имя или «В справочнике» в слое): справочник покажет «← Назад к …».
+ * Сеть не нужна: заголовок берётся у текущей страницы до перехода. Закреплённая кликом ссылка (клик отменён скриптом подсказок) никуда не ведёт.
+ */
+function rememberEnvOrigin(): void {
+  document.addEventListener("click", (event) => {
+    const link = (event.target as Element).closest("a[data-env], .tip-actions a");
+    const modified = event.ctrlKey || event.metaKey || event.shiftKey || event.button !== 0;
+    const title = $("h1")?.textContent?.trim();
+    if (!link || event.defaultPrevented || modified || !title) {
+      return;
+    }
+    try {
+      sessionStorage.setItem(BACK_KEY, JSON.stringify({ href: location.pathname + location.search, title }));
+    } catch {
+      /* хранилище недоступно: ссылки «Назад» не будет */
+    }
+  });
+}
+
+function readEnvOrigin(): Origin | undefined {
+  try {
+    const parsed: unknown = JSON.parse(sessionStorage.getItem(BACK_KEY) ?? "null");
+    sessionStorage.removeItem(BACK_KEY);
+    return isOrigin(parsed) && parsed.href !== location.pathname + location.search ? parsed : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 /** Справочник переменных: фокус на ссылке строки-цели и возврат на страницу, откуда пришли. */
 function initEnvReference(): void {
   const table = $(".env-table");
@@ -259,28 +300,28 @@ function initEnvReference(): void {
   };
   focusRow();
   window.addEventListener("hashchange", focusRow);
-  if (document.referrer.startsWith(location.origin) && new URL(document.referrer).pathname !== location.pathname) {
-    const back = document.referrer;
-    void fetch(back)
-      .then((r) => r.text())
-      .then((html) => {
-        const title = /<h1[^>]*>([\s\S]*?)<\/h1>/.exec(html)?.[1]?.replace(/<[^>]+>/g, "").trim();
-        if (!title) {
-          return;
-        }
-        const p = document.createElement("p");
-        p.className = "env-back";
-        const a = document.createElement("a");
-        a.href = back;
-        a.textContent = t("env.back", { title });
-        p.append(a);
-        table.closest("[data-table]")?.before(p);
-      })
-      .catch(() => announce(""));
+  const origin = readEnvOrigin();
+  if (!origin) {
+    return;
   }
+  const p = document.createElement("p");
+  p.className = "env-back";
+  const a = document.createElement("a");
+  a.href = origin.href;
+  a.textContent = t("env.back", { title: origin.title });
+  // Возврат по истории возвращает и положение прокрутки; ссылка остаётся рабочей без неё (новая вкладка, нет предыдущей записи).
+  a.addEventListener("click", (event) => {
+    if (!event.ctrlKey && !event.metaKey && !event.shiftKey && history.length > 1 && document.referrer.endsWith(origin.href)) {
+      event.preventDefault();
+      history.back();
+    }
+  });
+  p.append(a);
+  table.closest("[data-table]")?.before(p);
 }
 
 ready(() => {
+  rememberEnvOrigin();
   initCodeCopy();
   initMarkdownCopy();
   initNameCopy();

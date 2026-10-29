@@ -1,0 +1,16 @@
+{{- /*
+  Один вариант снимка Storybook из assets/screens/<история>/<вариант>.{avif,webp,png}. Вход: dict "story" "variant".
+  Выход: dict w, h (размеры самого файла: Hugo читает их из ресурса), fallback (адрес для <img>: png, иначе webp, иначе avif),
+  sources (список dict type, src в порядке AVIF, WebP) или nil, если нет ни одного файла. Таблицы размеров нет: размер берётся из пикселей.
+*/ -}}
+{{- $base := printf "screens/%s/%s" .story .variant -}}
+{{- $res := dict -}}
+{{- range $ext := slice "avif" "webp" "png" }}{{ with resources.Get (printf "%s.%s" $base $ext) }}{{ $res = merge $res (dict $ext .) }}{{ end }}{{ end -}}
+{{- $out := false -}}
+{{- if $res -}}
+  {{- $main := index $res "png" | default (index $res "webp") | default (index $res "avif") -}}
+  {{- $sources := slice -}}
+  {{- range slice "avif" "webp" }}{{ with index $res . }}{{ $sources = $sources | append (dict "type" .MediaType.Type "src" .RelPermalink) }}{{ end }}{{ end -}}
+  {{- $out = dict "w" $main.Width "h" $main.Height "fallback" $main.RelPermalink "sources" $sources -}}
+{{- end -}}
+{{- return $out -}}

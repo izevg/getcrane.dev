@@ -1,9 +1,10 @@
+import { join } from "node:path";
 import type { Page, Report } from "../lib/content.ts";
+import { ROOT, readYaml } from "../lib/content.ts";
 
-const AUDIENCE = ["developer", "platform", "security", "auditor"];
-const GENRE = ["tutorial", "how-to", "reference", "explanation"];
-const STATE = ["target", "current"];
-const STATUS = ["available", "in-development"];
+/** Допустимые значения front matter — data/schema.yaml (их же читают шаблоны Hugo); здесь остаются только длины. */
+const SCHEMA = readYaml<Record<"audience" | "genre" | "state" | "status", string[]>>(join(ROOT, "data", "schema.yaml"));
+const { audience: AUDIENCE, genre: GENRE, state: STATE, status: STATUS } = SCHEMA;
 const MAX_TITLE = 60;
 const MAX_DESCRIPTION = 160;
 /** Длина считается в символах (кодовых точках), не в байтах. */

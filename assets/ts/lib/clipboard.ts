@@ -2,7 +2,6 @@ import { t } from "./strings";
 
 /** «Скопировано» держится 1,8 с и у текстовой кнопки, и у иконки: 1,2 с (COPIED_MS консоли) глаз не успевал заметить. */
 const FEEDBACK_MS = 1800;
-const ICON_FEEDBACK_MS = 1800;
 const timers = new WeakMap<HTMLElement, number>();
 
 /** Общая live-область страницы (одна на страницу, aria-live=polite). */
@@ -86,6 +85,6 @@ export function feedback(button: HTMLElement, ok: boolean, okText: string, onErr
       } else {
         button.setAttribute("aria-label", original);
       }
-    }, iconOnly ? ICON_FEEDBACK_MS : FEEDBACK_MS),
+    }, FEEDBACK_MS),
   );
 }

@@ -1,0 +1,25 @@
+{{- /*
+  Разметка слоя подсказки по данным (html/template экранирует всё сам). Вход — dict, поля необязательны, кроме id, kind и mode:
+  id, kind (term | xref | chip | cite | env: класс tip-<kind>), mode (hover | pin | toggle: toggle — popover="auto", остальные — manual),
+  role (tooltip | group | пусто), label (aria-label слоя),
+  path (строка пути), head (dict code, badge: имя и метка env), title, titleHref (внешняя ссылка-заголовок), desc или def (подпись с id <id>-d для aria-describedby),
+  hint (до списка свойств), rows (список dict k, v, code), note (после списка), chips (готовый HTML), actions (список dict copy | href, label),
+  group (true: место подсказки о группе имён в блоке кода), links (список dict href, label, btn).
+*/ -}}
+<div id="{{ .id }}" class="tip tip-{{ .kind }}" popover="{{ if eq .mode "toggle" }}auto{{ else }}manual{{ end }}"{{ with .role }} role="{{ . }}"{{ end }}{{ with .label }} aria-label="{{ . }}"{{ end }}>
+  {{- with .path }}<p class="tip-path">{{ . }}</p>{{ end }}
+  {{- with .head }}<div class="tip-head"><code>{{ .code }}</code><span class="badge badge-genre">{{ .badge }}</span></div>{{ end }}
+  {{- if .titleHref }}<a class="tip-title" href="{{ .titleHref }}" rel="noopener noreferrer">{{ .title }}</a>
+  {{- else }}{{ with .title }}<p class="tip-title">{{ . }}</p>{{ end }}{{ end }}
+  {{- with .desc }}<p class="tip-desc" id="{{ $.id }}-d">{{ . }}</p>{{ end }}
+  {{- with .def }}<p class="tip-def" id="{{ $.id }}-d">{{ . }}</p>{{ end }}
+  {{- with .hint }}<p class="tip-hint">{{ . }}</p>{{ end }}
+  {{- with .rows }}<dl>{{ range . }}<dt>{{ .k }}</dt><dd>{{ if .code }}<code>{{ .v }}</code>{{ else }}{{ .v }}{{ end }}</dd>{{ end }}</dl>{{ end }}
+  {{- with .note }}<p class="tip-hint">{{ . }}</p>{{ end }}
+  {{- with .chips }}<p class="chips">{{ . }}</p>{{ end }}
+  {{- with .actions }}<div class="tip-actions" data-env-actions>
+    {{- range . }}{{ if .copy }}<button type="button" class="btn btn-secondary btn-sm" data-copy-name="{{ .copy }}">{{ partial "ui/icon.html" "copy" }}<span>{{ .label }}</span></button>{{ else }}<a class="btn btn-secondary btn-sm" href="{{ .href }}">{{ .label }}</a>{{ end }}{{ end -}}
+  </div>{{ end }}
+  {{- if .group }}<p class="tip-hint" data-env-group hidden></p>{{ end }}
+  {{- range .links }}<a{{ if .btn }} class="tip-more btn btn-secondary btn-sm"{{ end }} href="{{ .href }}">{{ .label }}</a>{{ end }}
+</div>

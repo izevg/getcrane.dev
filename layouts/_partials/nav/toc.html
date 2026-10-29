@@ -1,14 +1,15 @@
 {{- /*
-  Оглавление: h2 и h3 страницы + «Источники», если они есть. Считаются все h2 (рекурсивно по дереву фрагментов) плюс «Источники»; скрыто при менее трёх.
+  Оглавление: h2 и h3 страницы + «Источники», если они есть. Считаются все h2 плюс «Источники»; скрыто при менее трёх.
+  Пункты строит рекурсивный шаблон nav/toc-list.html по дереву .Fragments.Headings.
   Вход: dict "page" "inline" (true — сворачиваемый блок для узких экранов).
 */ -}}
 {{- $p := .page -}}
-{{- $heads := partial "nav/toc-flat.html" $p.Fragments.Headings -}}
 {{- $hasSources := $p.Scratch.Get "sources" -}}
-{{- $count := len (where $heads "level" 2) -}}
+{{- $count := 0 -}}
+{{- range $p.Fragments.HeadingsMap }}{{ if eq .Level 2 }}{{ $count = add $count 1 }}{{ end }}{{ end -}}
 {{- if $hasSources }}{{ $count = add $count 1 }}{{ end -}}
 {{- if ge $count 3 -}}
-{{- $list := partial "nav/toc-list.html" (dict "heads" $heads "sources" $hasSources) -}}
+{{- $list := partial "nav/toc-ol.html" (dict "nodes" $p.Fragments.Headings "sources" $hasSources) -}}
 {{- if .inline -}}
 <details class="toc-inline" data-pagefind-ignore>
   <summary>{{ i18n "toc" }}</summary>

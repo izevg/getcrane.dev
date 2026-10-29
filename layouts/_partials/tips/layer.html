@@ -1,0 +1,11 @@
+{{- /*
+  Слой подсказки на странице: данные → разметка (tips/markup.html) → хранилище страницы (выводится в конце main, page/tips.html).
+  Один слой на id (повторный вызов с тем же id ничего не меняет, так что пересборка hugo server не копит дубли). Включает остров tips.
+  Вход: dict "page" и поля tips/markup.html. Выход: id слоя.
+*/ -}}
+{{- $p := .page -}}
+{{- if not (index ($p.Scratch.Get "tips" | default dict) .id) -}}
+  {{- $p.Scratch.SetInMap "tips" .id (partial "tips/markup.html" .) -}}
+{{- end -}}
+{{- $p.Scratch.Set "f-tips" true -}}
+{{- return .id -}}

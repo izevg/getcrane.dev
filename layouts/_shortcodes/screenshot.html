@@ -1,33 +1,21 @@
 {{- /*
   {{< screenshot story="S3Versions" variant="Desktop1440Sheet" alt="…" >}}
-  Файлы: static/screens/<story>/<variant>.{avif,webp}. Светлый вариант указывает статья; тёмный и английский берутся из data/screen-pairs.yaml.
-  Размеры — ui/screen-dims.html. Тема выбирается по data-theme, без JS — по prefers-color-scheme (CSS .window .shot-light/.shot-dark).
+  Файлы: assets/screens/<story>/<variant>.{avif,webp}. Светлый вариант указывает статья; тёмный и английский берутся из data/screen-pairs.yaml
+  (правила — partial screens/resolve.html). Тема выбирается по data-theme, без JS — по prefers-color-scheme (CSS .window .shot-light/.shot-dark).
   Подпись заканчивается пометкой «Демонстрационные данные» / «Demo data». Нет файлов — плейсхолдер с alt;
   при params.screenshotsRequired: true отсутствующий файл ломает сборку. eager="true" — для снимка, который является LCP.
 */ -}}
 {{- $story := .Get "story" -}}{{- $variant := .Get "variant" -}}{{- $alt := .Get "alt" -}}
 {{- if not (and $story $variant $alt) }}{{ errorf "screenshot: нужны story, variant и alt (%s)" .Position }}{{ end -}}
-{{- $pair := index (index site.Data "screen-pairs") (printf "%s/%s" $story $variant) | default dict -}}
-{{- $eager := eq (.Get "eager") "true" -}}
 {{- .Page.Scratch.Set "f-zoom" true -}}
-{{- $pic := "" -}}
-{{- if eq .Page.Language.Lang "en" -}}
-  {{- $en := $pair.en | default $variant -}}
-  {{- $pic = partial "ui/shot-picture.html" (dict "story" $story "variant" $en "alt" $alt "class" "" "eager" $eager "high" $eager) -}}
-{{- else if $pair.dark -}}
-  {{- $l := partial "ui/shot-picture.html" (dict "story" $story "variant" $variant "alt" $alt "class" "shot-light" "eager" $eager) -}}
-  {{- $d := partial "ui/shot-picture.html" (dict "story" $story "variant" $pair.dark "alt" $alt "class" "shot-dark" "eager" $eager) -}}
-  {{- if and (trim (string $l) " \n") (trim (string $d) " \n") }}{{ $pic = (print $l $d) | safeHTML }}{{ end -}}
-{{- else -}}
-  {{- $pic = partial "ui/shot-picture.html" (dict "story" $story "variant" $variant "alt" $alt "class" "" "eager" $eager "high" $eager) -}}
-{{- end -}}
+{{- $pic := partial "screens/render.html" (dict "ref" (printf "%s/%s" $story $variant) "lang" .Page.Language.Lang "alt" $alt "eager" (eq (.Get "eager") "true")) -}}
 {{- $has := ne (trim (string $pic) " \n") "" -}}
-{{- if and (not $has) site.Params.screenshotsRequired }}{{ errorf "screenshot: нет файлов static/screens/%s/%s.{avif,webp} (%s)" $story $variant .Position }}{{ end -}}
+{{- if and (not $has) site.Params.screenshotsRequired }}{{ errorf "screenshot: нет файлов assets/screens/%s/%s.{avif,webp} (%s)" $story $variant .Position }}{{ end -}}
 <figure class="shot">
   {{- if $has }}
   <div class="window">{{ $pic }}</div>
   {{- else }}
-  <div class="shot-ph" style="aspect-ratio: 1440 / 900">{{ partial "ui/icon.html" (dict "name" "target" "class" "i i-20") }}<span>{{ partial "ui/t.html" (dict "k" "screenshot.placeholder" "v" (dict "alt" $alt)) }}</span></div>
+  <div class="shot-ph">{{ partial "ui/icon.html" (dict "name" "target" "class" "i i-20") }}<span>{{ partial "ui/t.html" (dict "k" "screenshot.placeholder" "v" (dict "alt" $alt)) }}</span></div>
   {{- end }}
   <figcaption>{{ $alt }}{{ if $has }} <span class="demo">{{ i18n "screenshot.demo" }}</span>{{ end }}</figcaption>
 </figure>

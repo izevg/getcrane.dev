@@ -1,0 +1,13 @@
+{{- /*
+  Ссылка на переменную окружения со слоем подсказки (env/layer.html). Вход: dict "page" "r" (env/lookup.html) "key" (позиция упоминания, env/first.html)
+  "inline" (true — в тексте: <a class="env-inline"><code>…; false — в блоке кода: <a class="env">…). Адрес — строка справочника. Выход: <a>.
+*/ -}}
+{{- $r := .r -}}
+{{- $id := partial "env/layer.html" (dict "page" .page "r" $r) -}}
+{{- $mid := partial "env/first.html" (dict "page" .page "r" $r "key" .key) -}}
+{{- $href := printf "%s#%s%s" (partial "env/url.html") $r.anchor (cond $r.isFile "-file" "") -}}
+{{- if .inline -}}
+<a class="env-inline"{{ with $mid }} id="{{ . }}"{{ end }} href="{{ $href }}" data-tip="{{ $id }}" data-tip-mode="pin" data-env="{{ $r.name }}" aria-describedby="{{ $id }}-d"><code>{{ $r.name }}</code></a>
+{{- else -}}
+<a class="env"{{ with $mid }} id="{{ . }}"{{ end }} href="{{ $href }}" data-tip="{{ $id }}" data-tip-mode="pin" data-env="{{ $r.name }}" draggable="false">{{ $r.name }}</a>
+{{- end -}}

@@ -1,0 +1,12 @@
+{{- /*
+  Разбор адреса внутренней ссылки «путь» или «путь#якорь» (от корня языка, раздел без _index). Вход: dict "arg" "pos".
+  Выход: dict "page" (страница-цель) "anchor" (может быть пустым) "href" (RelPermalink с якорем) "permalink" (абсолютный адрес с якорем).
+  Несуществующий путь ломает сборку. Существование якоря проверяет scripts/check-links.ts по собранному HTML.
+*/ -}}
+{{- $parts := split .arg "#" -}}
+{{- $path := strings.TrimSuffix "/" (strings.TrimPrefix "/" (index $parts 0)) -}}
+{{- $anchor := cond (gt (len $parts) 1) (index $parts 1) "" -}}
+{{- $t := site.GetPage $path -}}
+{{- if not $t }}{{ errorf "xref: страница %q не найдена (%s)" $path .pos }}{{ end -}}
+{{- $suffix := cond (ne $anchor "") (printf "#%s" $anchor) "" -}}
+{{- return (dict "page" $t "anchor" $anchor "href" (printf "%s%s" $t.RelPermalink $suffix) "permalink" (printf "%s%s" $t.Permalink $suffix)) -}}

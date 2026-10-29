@@ -1,0 +1,23 @@
+{{- /*
+  Снимки одного экрана по ссылке «История/СветлыйВариант» (S2Package/DesktopLight). Вход: dict "ref" "lang".
+  Пары вариантов — единственный источник data/screen-pairs.yaml: dark (тёмный) и en (английский). Один набор правил:
+  EN — один снимок в обеих темах (вариант en; нет его файлов — светлый), у EN-историй тёмного варианта нет;
+  остальные языки — пара «светлый + тёмный», если у записи есть dark, иначе один снимок.
+  Выход: dict light, dark (dark = nil, когда снимок один) или nil, если файлов не хватает (светлый или объявленный тёмный отсутствует).
+*/ -}}
+{{- $parts := split .ref "/" -}}
+{{- if ne (len $parts) 2 }}{{ errorf "screens: ссылка %q должна иметь вид История/Вариант" .ref }}{{ end -}}
+{{- $story := index $parts 0 -}}{{- $variant := index $parts 1 -}}
+{{- $pair := index (index site.Data "screen-pairs") .ref | default dict -}}
+{{- $out := false -}}
+{{- if eq .lang "en" -}}
+  {{- $one := partial "screens/variant.html" (dict "story" $story "variant" ($pair.en | default $variant)) -}}
+  {{- if not $one }}{{ $one = partial "screens/variant.html" (dict "story" $story "variant" $variant) }}{{ end -}}
+  {{- if $one }}{{ $out = dict "light" $one "dark" false }}{{ end -}}
+{{- else -}}
+  {{- $light := partial "screens/variant.html" (dict "story" $story "variant" $variant) -}}
+  {{- $dark := false -}}
+  {{- with $pair.dark }}{{ $dark = partial "screens/variant.html" (dict "story" $story "variant" .) }}{{ end -}}
+  {{- if and $light (or (not $pair.dark) $dark) }}{{ $out = dict "light" $light "dark" $dark }}{{ end -}}
+{{- end -}}
+{{- return $out -}}

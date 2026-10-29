@@ -1,0 +1,7 @@
+# Допустимые значения полей front matter: единственное место перечислений.
+# Их читают шаблоны (ui/badges.html, ui/audience-chips.html, выноски) и scripts/checks/meta.ts; длины title и description проверяет только TypeScript.
+# audience — подмножество (непустое), остальные — одно значение. Связь: status in-development допустим только при state current.
+audience: [developer, platform, security, auditor]
+genre: [tutorial, how-to, reference, explanation]
+state: [target, current]
+status: [available, in-development]

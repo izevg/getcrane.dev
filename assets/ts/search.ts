@@ -1,10 +1,9 @@
 import { $, $$ } from "./lib/dom";
 import { announce } from "./lib/clipboard";
 import { plural, t } from "./lib/strings";
+import { place } from "./tips/position";
 
 const BUNDLE = "/pagefind/";
-const GAP = 8;
-const MARGIN = 16;
 const LOADING_MS = 300;
 
 let loading: Promise<void> | undefined;
@@ -112,11 +111,8 @@ function showError(trigger: HTMLElement): void {
     }
     document.body.append(pop);
   }
-  const rect = trigger.getBoundingClientRect();
-  const vw = document.documentElement.clientWidth;
-  pop.style.top = `${Math.round(rect.bottom + GAP)}px`;
-  pop.style.right = `${Math.max(MARGIN, Math.round(vw - rect.right))}px`;
   pop.togglePopover(true);
+  place(trigger, pop);
 }
 
 async function open(trigger: HTMLElement): Promise<void> {

@@ -5,6 +5,8 @@ import { parse } from "yaml";
 export const ROOT = join(import.meta.dirname, "..", "..");
 /** Каталог собранного сайта: public по умолчанию; SITE_DIR=<путь> собирает и проверяет рядом, не трогая public (например при работающем hugo server). */
 export const SITE = process.env.SITE_DIR ? resolve(process.env.SITE_DIR) : join(ROOT, "public");
+/** Номер версии вида v0.x вне белого списка: единственное определение для проверки текста и собранного сайта. */
+export const VERSION = /(?<![\p{L}\p{N}_/.:-])v0\.\d+(?:\.\d+)?(?![\p{L}\p{N}_])/gu;
 export const LANGS = ["en", "ru"] as const;
 export type Lang = (typeof LANGS)[number];
 

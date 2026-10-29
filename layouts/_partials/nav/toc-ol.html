@@ -1,0 +1,2 @@
+{{- /* Список оглавления целиком. Вход: dict "nodes" (.Fragments.Headings) "sources" (true — добавить пункт «Источники»). */ -}}
+<ol class="toc">{{ partial "nav/toc-list.html" (dict "nodes" .nodes) }}{{ if .sources }}<li><a href="#sources">{{ i18n "sources" }}</a></li>{{ end }}</ol>

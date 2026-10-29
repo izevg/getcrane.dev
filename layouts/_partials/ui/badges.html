@@ -6,9 +6,9 @@
 {{- $genre := $p.Params.genre -}}
 {{- $state := $p.Params.state -}}
 {{- $status := $p.Params.status | default "available" -}}
-{{- if and $genre (not (in (slice "tutorial" "how-to" "reference" "explanation") $genre)) }}{{ errorf "front matter: неизвестный genre %q в %s" $genre $p.Path }}{{ end -}}
-{{- if and $state (not (in (slice "target" "current") $state)) }}{{ errorf "front matter: неизвестный state %q в %s" $state $p.Path }}{{ end -}}
-{{- if not (in (slice "available" "in-development") $status) }}{{ errorf "front matter: неизвестный status %q в %s" $status $p.Path }}{{ end -}}
+{{- if and $genre (not (in site.Data.schema.genre $genre)) }}{{ errorf "front matter: неизвестный genre %q в %s" $genre $p.Path }}{{ end -}}
+{{- if and $state (not (in site.Data.schema.state $state)) }}{{ errorf "front matter: неизвестный state %q в %s" $state $p.Path }}{{ end -}}
+{{- if not (in site.Data.schema.status $status) }}{{ errorf "front matter: неизвестный status %q в %s" $status $p.Path }}{{ end -}}
 {{- if and (eq $status "in-development") (ne $state "current") }}{{ errorf "front matter: in-development допустим только для state: current (%s)" $p.Path }}{{ end -}}
 {{- with $genre }}<span class="badge badge-genre">{{ i18n (printf "genre.%s" .) }}</span>{{ end -}}
 {{- with $state }}<span class="badge badge-{{ . }}">{{ partial "ui/icon.html" (cond (eq . "target") "target" "current") }}{{ i18n (printf "state.%s" .) }}</span>{{ end -}}

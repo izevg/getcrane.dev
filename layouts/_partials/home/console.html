@@ -7,7 +7,7 @@
 {{- range .d.console -}}
   {{- $item := . -}}
   {{- $t := index $item $lang | default dict -}}
-  {{- $pic := partial "home/shot.html" (dict "cfg" $item "lang" $lang "eager" false) -}}
+  {{- $pic := "" -}}{{- with $t.alt }}{{ $pic = partial "screens/render.html" (dict "ref" $item.shot "lang" $lang "alt" . "eager" false) }}{{ end -}}
   {{- if and $t.caption (trim (string $pic) " \n") -}}
     {{- with partial "home/page.html" $item.href }}{{ $items = $items | append (dict "pic" $pic "caption" $t.caption "href" .RelPermalink) }}{{ end -}}
   {{- end -}}

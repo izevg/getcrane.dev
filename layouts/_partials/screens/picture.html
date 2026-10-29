@@ -1,0 +1,8 @@
+{{- /*
+  <picture> одного варианта (screens/variant.html). Вход: dict "v" "alt" "class" "eager" (loading=eager) "high" (fetchpriority=high).
+  Размеры width/height — пиксели самого файла, браузер резервирует место до загрузки.
+*/ -}}
+<picture{{ with .class }} class="{{ . }}"{{ end }}>
+  {{- range .v.sources }}<source type="{{ .type }}" srcset="{{ .src }}">{{ end }}
+  <img src="{{ .v.fallback }}" width="{{ .v.w }}" height="{{ .v.h }}" alt="{{ .alt }}" decoding="async" {{ if .eager }}loading="eager"{{ if .high }} fetchpriority="high"{{ end }}{{ else }}loading="lazy"{{ end }}>
+</picture>

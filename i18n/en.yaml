@@ -174,8 +174,6 @@ version.trigger.name: "Documentation version: {label}, {status}"
 version.status.current: current
 version.status.previous: previous
 version.status.next: next
-version.current.label: Current
-version.next.label: Next
 version.all: All versions
 version.nav: Documentation versions
 chip.since: "Since {v}"

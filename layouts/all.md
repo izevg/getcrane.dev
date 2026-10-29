@@ -1,4 +1,4 @@
-{{- /* Markdown-версия страницы рядом с HTML: /<lang>/<путь>.md. */ -}}
+{{- /* Markdown-версия страницы и раздела рядом с HTML: /<lang>/<путь>.md. Один шаблон на оба вида. */ -}}
 ---
 title: {{ .Title | jsonify }}
 description: {{ .Params.description | default "" | jsonify }}
@@ -12,4 +12,4 @@ lang: {{ .Language.LanguageCode }}
 
 # {{ .Title }}
 
-{{ partial "md/body.html" (dict "page" .) }}
+{{ partial "md/body.html" . }}

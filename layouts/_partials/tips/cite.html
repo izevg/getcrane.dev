@@ -1,22 +1,21 @@
 {{- /*
   Чип источника ({{< cite "pep-503" >}}): чип «[N] издатель» и слой с названием, датами и ссылкой. Раздел «Источники» добавляется шаблоном страницы.
-  Без JS это ссылка на #source-N. Нумерация — по порядку первого упоминания (список «cites» пополняется идемпотентно). Неизвестный id ломает сборку. Вход: dict "page" "id" "pos" "key" (util/sckey.html шорткода).
+  Без JS это ссылка на #source-N. Нумерация — по порядку первого упоминания (список «cites» пополняется идемпотентно). Неизвестный id ломает сборку.
+  Вход: dict "page" "id" "pos" "key" (util/sckey.html шорткода).
 */ -}}
-{{- $id := .id -}}
 {{- $p := .page -}}
-{{- $s := index site.Data.sources $id -}}
-{{- if not $s }}{{ errorf "cite: неизвестный источник %q (%s); добавьте его в data/sources.yaml через руководителя документации" $id .pos }}{{ end -}}
+{{- $s := index site.Data.sources .id -}}
+{{- if not $s }}{{ errorf "cite: неизвестный источник %q (%s); добавьте его в data/sources.yaml через руководителя документации" .id .pos }}{{ end -}}
 {{- $list := $p.Scratch.Get "cites" | default slice -}}
 {{- $n := 0 -}}
-{{- range $i, $x := $list }}{{ if eq $x $id }}{{ $n = add $i 1 }}{{ end }}{{ end -}}
-{{- if eq $n 0 }}{{ $list = $list | append $id }}{{ $n = len $list }}{{ $p.Scratch.Set "cites" $list }}{{ end -}}
+{{- range $i, $x := $list }}{{ if eq $x $.id }}{{ $n = add $i 1 }}{{ end }}{{ end -}}
+{{- if eq $n 0 }}{{ $list = $list | append .id }}{{ $n = len $list }}{{ $p.Scratch.Set "cites" $list }}{{ end -}}
 {{- $p.Scratch.Set "sources" true -}}
-{{- $p.Scratch.Set "f-tips" true -}}
 {{- $short := $s.short | default (truncate 24 $s.publisher) -}}
 {{- /* id упоминания строится из позиции шорткода в источнике: счётчик в Scratch рос бы при каждой пересборке hugo server. Порядковые номера для «↑» считает page/sources.html по готовому HTML. */ -}}
 {{- $cid := printf "cite-%d-%s" $n .key -}}
-<a class="cite" id="{{ $cid }}" href="#source-{{ $n }}" data-tip="{{ $cid }}-pop" data-cite aria-label="{{ partial "ui/t.html" (dict "k" "cite.n" "v" (dict "n" $n)) }}: {{ $s.publisher }}"><span class="cite-n">[{{ $n }}]</span><span class="cite-pub">{{ $short }}</span></a><span id="{{ $cid }}-pop" class="tip tip-cite" popover="auto" role="group" aria-label="{{ $s.publisher }}"><span class="tip-path">{{ $s.publisher }} · {{ $n }}</span><a href="{{ $s.url }}" rel="noopener noreferrer" class="tip-title">{{ $s.title }}</a><span class="tip-hint">
-{{- with $s.date }}{{ (time.AsTime .).Format "2006-01-02" }} · {{ end -}}
-{{- partial "ui/t.html" (dict "k" "cite.accessed" "v" (dict "date" ((time.AsTime $s.accessed).Format "2006-01-02"))) -}}
-</span><a href="#sources">{{ i18n "cite.list" }}</a></span>
+{{- $hint := partial "ui/t.html" (dict "k" "cite.accessed" "v" (dict "date" ((time.AsTime $s.accessed).Format "2006-01-02"))) -}}
+{{- with $s.date }}{{ $hint = printf "%s · %s" ((time.AsTime .).Format "2006-01-02") $hint }}{{ end -}}
+{{- $pop := partial "tips/layer.html" (dict "page" $p "id" (printf "%s-pop" $cid) "kind" "cite" "mode" "toggle" "role" "group" "label" $s.publisher "path" (printf "%s · %d" $s.publisher $n) "title" $s.title "titleHref" $s.url "hint" $hint "links" (slice (dict "href" "#sources" "label" (i18n "cite.list")))) -}}
+<a class="cite" id="{{ $cid }}" href="#source-{{ $n }}" data-tip="{{ $pop }}" data-tip-mode="toggle" aria-label="{{ partial "ui/t.html" (dict "k" "cite.n" "v" (dict "n" $n)) }}: {{ $s.publisher }}"><span class="cite-n">[{{ $n }}]</span><span class="cite-pub">{{ $short }}</span></a>
 {{- /* Без хвостового перевода строки: шорткод стоит в потоке текста. */ -}}

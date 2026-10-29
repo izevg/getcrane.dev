@@ -1,14 +1,11 @@
 {{- /*
   /versions.json: список версий документации для селектора и страницы 404 (design/versions-spec.md, A3). Публикуется корнем.
-  Подписи берутся из каталогов i18n обоих языков: labelKey → значение, иначе label.
+  Подписи: label из data/versions.yaml — { ru, en } как есть, строка («0.3») одинакова для обоих языков.
 */ -}}
-{{- $cat := dict "en" (os.ReadFile "i18n/en.yaml" | transform.Unmarshal (dict "format" "yaml")) "ru" (os.ReadFile "i18n/ru.yaml" | transform.Unmarshal (dict "format" "yaml")) -}}
 {{- $V := partial "util/versions.html" -}}
 {{- $out := slice -}}
 {{- range $V.all -}}
-  {{- $v := . -}}
-  {{- $label := dict -}}
-  {{- range $lang, $c := $cat }}{{ $t := string $v.label }}{{ with $v.labelKey }}{{ $t = index $c . }}{{ end }}{{ $label = merge $label (dict $lang $t) }}{{ end -}}
+  {{- $label := .label -}}{{- if not (reflect.IsMap .label) }}{{ $label = dict "en" (string .label) "ru" (string .label) }}{{ end -}}
   {{- $e := dict "id" (string .id) "status" .status "path" .path "label" $label -}}
   {{- with .date }}{{ $e = merge $e (dict "date" (string .)) }}{{ end -}}
   {{- $out = $out | append $e -}}

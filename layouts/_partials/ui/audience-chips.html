@@ -4,11 +4,11 @@
 */ -}}
 {{- $keys := .keys -}}
 {{- if reflect.IsSlice $keys }}{{ else }}{{ $keys = split (trim (string $keys) " ") " " }}{{ end -}}
-{{- $known := slice "developer" "platform" "security" "auditor" -}}
+{{- $known := site.Data.schema.audience -}}
 <p class="chips {{ .class }}"><span class="sr">{{ i18n "audience.prefix" }} </span>
 {{- range $i, $k := $keys -}}
   {{- if $k -}}
-    {{- if not (in $known $k) }}{{ errorf "audience: неизвестный ключ %q в %s (допустимы: developer, platform, security, auditor)" $k $.ctx }}{{ end -}}
+    {{- if not (in $known $k) }}{{ errorf "audience: неизвестный ключ %q в %s (допустимы: %s)" $k $.ctx (delimit $known ", ") }}{{ end -}}
     <span class="chip{{ if eq $i 0 }} is-primary{{ end }}" data-audience="{{ $k }}">{{ partial "ui/icon.html" $k }}{{ i18n (printf "audience.%s" $k) }}</span>
   {{- end -}}
 {{- end -}}

@@ -1,67 +1,8 @@
 {{- /*
-  Чистый Markdown страницы для .md-версии и llms-full: шорткоды сайта заменяются обычным Markdown, остальное — как написал автор.
-  threat → резюме, абзац «Угроза» и список «Ответ CRANE», cards → список ссылок с описаниями из front matter целей,
-  term → слово, xref → ссылка, cite → ссылка на источник, env → `имя`, tabs → жирная подпись клиента,
-  screenshot → подпись, in-development → фиксированная фраза и текст. Вход: dict "page".
+  Чистый Markdown страницы для .md-версии (из неё scripts/postbuild.ts собирает llms-full.txt): шорткоды сайта разворачивает сам Hugo (RenderShortcodes) шаблонами _shortcodes/*.md,
+  остальное остаётся как написал автор. Страница дорожной карты дополняется списком функций из data/roadmap.yaml (HTML-версия берёт его из тех же данных).
+  Вход: страница.
 */ -}}
-{{- $p := .page -}}
-{{- $lang := $p.Language.Lang -}}
-{{- $s := $p.RawContent -}}
-{{- range findRESubmatch `\{\{<\s*cards\s+([^>]*?)\s*>\}\}` $s -}}
-  {{- $m := . -}}
-  {{- $items := slice -}}
-  {{- range findRESubmatch `"([^"]+)"` (index $m 1) -}}
-    {{- with site.GetPage (strings.TrimSuffix "/" (strings.TrimPrefix "/" (index . 1))) -}}
-      {{- $items = $items | append (printf "- [%s](%s)%s" .Title .Permalink (cond (ne (.Params.description | default "") "") (printf " — %s" .Params.description) "")) -}}
-    {{- end -}}
-  {{- end -}}
-  {{- $s = replace $s (index $m 0) (delimit $items "\n") -}}
-{{- end -}}
-{{- range findRESubmatch `(?s)\{\{<\s*threat\s+([^>]*?)\s*>\}\}(.*?)\{\{<\s*/threat\s*>\}\}` $s -}}
-  {{- $m := . -}}
-  {{- $args := index $m 1 -}}
-  {{- $inner := index $m 2 -}}
-  {{- $summary := "" -}}
-  {{- with findRESubmatch `summary="((?:[^"\\]|\\.)*)"` $args }}{{ $summary = index (index . 0) 1 }}{{ end -}}
-  {{- $what := "" -}}
-  {{- with findRESubmatch `(?s)\{\{<\s*threat-what\s*>\}\}(.*?)\{\{<\s*/threat-what\s*>\}\}` $inner }}{{ $what = trim (index (index . 0) 1) " \n" }}{{ end -}}
-  {{- $answer := "" -}}
-  {{- with findRESubmatch `(?s)\{\{<\s*threat-answer\s*>\}\}(.*?)\{\{<\s*/threat-answer\s*>\}\}` $inner }}{{ $answer = trim (index (index . 0) 1) " \n" }}{{ end -}}
-  {{- $more := "" -}}
-  {{- with findRESubmatch `more="([^"]+)"` $args }}{{ with site.GetPage (strings.TrimSuffix "/" (index (index . 0) 1)) }}{{ $more = printf "\n\n%s" (partial "ui/t.html" (dict "k" "threat.more" "v" (dict "title" (printf "[%s](%s)" .Title .Permalink)))) }}{{ end }}{{ end -}}
-  {{- $s = replace $s (index $m 0) (printf "**%s**\n\n**%s.** %s\n\n**%s.**\n\n%s%s" $summary (i18n "threat.what") $what (i18n "threat.answer") $answer $more) -}}
-{{- end -}}
-{{- range findRESubmatch `(?s)\{\{<\s*in-development\s*>\}\}(.*?)\{\{<\s*/in-development\s*>\}\}` $s -}}
-  {{- $s = replace $s (index . 0) (printf "%s %s" (i18n "in-development") (trim (index . 1) " \n")) -}}
-{{- end -}}
-{{- range findRESubmatch `\{\{<\s*term\s+"([^"]+)"(?:\s+"([^"]*)")?\s*>\}\}` $s -}}
-  {{- $rep := index . 2 -}}
-  {{- if not $rep }}{{ with index site.Data.glossary (index . 1) }}{{ $rep = (index . $lang).term }}{{ end }}{{ end -}}
-  {{- $s = replace $s (index . 0) $rep -}}
-{{- end -}}
-{{- range findRESubmatch `\{\{<\s*xref\s+"([^"#]+)(?:#([^"]+))?"(?:\s+"([^"]*)")?\s*>\}\}` $s -}}
-  {{- $m := . -}}
-  {{- with site.GetPage (strings.TrimSuffix "/" (index $m 1)) -}}
-    {{- $href := .Permalink -}}
-    {{- if index $m 2 }}{{ $href = printf "%s#%s" .Permalink (index $m 2) }}{{ end -}}
-    {{- $s = replace $s (index $m 0) (printf "[%s](%s)" ((index $m 3) | default .Title) $href) -}}
-  {{- end -}}
-{{- end -}}
-{{- range findRESubmatch `\{\{<\s*cite\s+"([^"]+)"\s*>\}\}` $s -}}
-  {{- $m := . -}}
-  {{- with index site.Data.sources (index $m 1) -}}
-    {{- $s = replace $s (index $m 0) (printf "[%s](%s)" (.short | default .publisher) .url) -}}
-  {{- end -}}
-{{- end -}}
-{{- range findRESubmatch `\{\{<\s*env\s+"([^"]+)"\s*>\}\}` $s -}}
-  {{- $s = replace $s (index . 0) (printf "`%s`" (index . 1)) -}}
-{{- end -}}
-{{- range findRESubmatch `\{\{<\s*tab\s+"([^"]+)"\s*>\}\}` $s -}}
-  {{- $s = replace $s (index . 0) (printf "**%s**\n\n" (index . 1)) -}}
-{{- end -}}
-{{- range findRESubmatch `\{\{<\s*screenshot[^>]*?alt="([^"]*)"[^>]*>\}\}` $s -}}
-  {{- $s = replace $s (index . 0) (partial "ui/t.html" (dict "k" "screenshot.placeholder" "v" (dict "alt" (index . 1)))) -}}
-{{- end -}}
-{{- $s = replaceRE `\{\{<\s*/?(?:tabs|tab|env-table)[^>]*>\}\}` "" $s -}}
-{{- $s = replaceRE `(?m)\s\{#([A-Za-z0-9_-]+)\s+[^}]*\}$` " {#${1}}" $s -}}
+{{- $s := .RenderShortcodes -}}
+{{- if eq .Params.layout "roadmap" }}{{ $s = printf "%s\n\n%s" (string $s) (partial "roadmap/md.html" .) }}{{ end -}}
 {{- return $s -}}

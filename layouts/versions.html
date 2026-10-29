@@ -26,7 +26,7 @@
           {{- range $V.all }}
             {{- $here := eq (string .id) (string $V.read.id) }}
             <tr>
-              <th scope="row"><a href="{{ .path }}{{ $lang }}/"{{ if $here }} aria-current="page"{{ end }}>{{ partial "versions/label.html" . }}</a>{{ if $here }} <span class="sr">{{ i18n "versions.here" }}</span>{{ end }}</th>
+              <th scope="row"><a href="{{ .path }}{{ $lang }}/"{{ if $here }} aria-current="page"{{ end }}>{{ .text }}</a>{{ if $here }} <span class="sr">{{ i18n "versions.here" }}</span>{{ end }}</th>
               <td><span class="badge badge-version">{{ i18n (printf "version.status.%s" .status) }}</span></td>
               <td>{{ with .date }}<time datetime="{{ . }}">{{ time.Format ":date_long" . }}</time>{{ else }}{{ i18n "versions.empty.date" }}{{ end }}</td>
               <td>{{ with .upgrade }}{{ with $.GetPage (printf "/%s" .) }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ else }}{{ i18n "versions.empty.date" }}{{ end }}{{ else }}{{ i18n "versions.empty.date" }}{{ end }}</td>
@@ -37,7 +37,7 @@
       </div>
       {{- if $V.multi }}
       {{- $a := index $V.all 0 }}{{ $b := index $V.all $V.oldest }}
-      {{- $la := partial "versions/label.html" $a }}{{ $lb := partial "versions/label.html" $b }}
+      {{- $la := $a.text }}{{ $lb := $b.text }}
       <h2 id="labels">{{ i18n "versions.labels" }}</h2>
       <dl class="ver-labels" data-ver>
         <dt><span class="badge badge-version">{{ partial "ui/icon.html" "tag" }}{{ partial "ui/t.html" (dict "k" "chip.since" "v" (dict "v" $la)) }}</span></dt>

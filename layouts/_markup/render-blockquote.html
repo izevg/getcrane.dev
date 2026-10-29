@@ -5,7 +5,7 @@
 {{- if eq .Type "alert" -}}
   {{- $t := lower .AlertType -}}
   {{- $generic := slice "note" "tip" "important" "warning" "caution" -}}
-  {{- $aud := slice "developer" "platform" "security" "auditor" -}}
+  {{- $aud := site.Data.schema.audience -}}
   {{- $label := "" -}}
   {{- if or (in $generic $t) (eq $t "limits") (in $aud $t) }}{{ $label = i18n (printf "callout.%s" $t) }}
   {{- else }}{{ errorf "callout: неизвестный тип [!%s] в %s" .AlertType .Page.Path }}{{ end -}}

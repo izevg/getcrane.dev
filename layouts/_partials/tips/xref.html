@@ -1,30 +1,15 @@
 {{- /*
   Внутренняя ссылка со слоем-описанием. Вход: dict "page" "arg" ("путь" или "путь#якорь") "text" (необязательно) "class" (по умолчанию xref) "pos" "icon" (необязательно).
-  Путь от корня языка, раздел без _index. Несуществующий путь ломает сборку. Существование якоря проверяет scripts/check-content.ts
-  (запрос .Fragments у чужой страницы из шорткода рискует циклической зависимостью рендера). Выход: ссылка; страница-цель — через return не отдаётся.
+  Путь от корня языка, раздел без _index; разбор — xref/resolve.html. Несуществующий путь ломает сборку; якорь проверяет scripts/check-links.ts по собранному HTML
+  (запрос .Fragments у чужой страницы из шорткода рискует циклической зависимостью рендера).
 */ -}}
-{{- $arg := .arg -}}
 {{- $p := .page -}}
-{{- $path := $arg -}}{{- $anchor := "" -}}
-{{- with findRESubmatch `^([^#]*)#(.+)$` $arg }}{{ $path = index (index . 0) 1 }}{{ $anchor = index (index . 0) 2 }}{{ end -}}
-{{- $path = strings.TrimSuffix "/" (strings.TrimPrefix "/" $path) -}}
-{{- $t := site.GetPage $path -}}
-{{- if not $t }}{{ errorf "xref: страница %q не найдена (%s)" $path .pos }}{{ end -}}
-{{- if $t.Eq $p }}{{ errorf "xref: ссылка на собственную страницу %q; используйте обычную ссылку на якорь (%s)" $path .pos }}{{ end -}}
-{{- $text := .text | default $t.Title -}}
-{{- $href := cond (ne $anchor "") (printf "%s#%s" $t.RelPermalink $anchor) $t.RelPermalink -}}
-{{- $tid := printf "tip-x-%s" (replace $path "/" "-") -}}
-{{- $tips := $p.Scratch.Get "tips" | default dict -}}
-{{- if not (index $tips $tid) -}}
-  {{- $crumbs := slice -}}
-  {{- range $t.Ancestors.Reverse }}{{ if not .IsHome }}{{ $crumbs = $crumbs | append .Title }}{{ end }}{{ end -}}
-  {{- $html := printf `<div id="%s" class="tip tip-xref" popover="manual" role="tooltip">%s<p class="tip-title">%s</p><p class="tip-desc" id="%s-d">%s</p><p class="chips">%s</p><a class="tip-more btn btn-secondary btn-sm" href="%s">%s</a></div>`
-        $tid
-        (cond (gt (len $crumbs) 0) (printf `<p class="tip-path">%s</p>` (delimit $crumbs " / " | htmlEscape)) "")
-        ($t.Title | htmlEscape) $tid (($t.Params.description | default "") | htmlEscape)
-        (partial "ui/badges.html" $t) $t.RelPermalink (i18n "xref.more") -}}
-  {{- $p.Scratch.SetInMap "tips" $tid ($html | safeHTML) -}}
-{{- end -}}
-{{- $p.Scratch.Set "f-tips" true -}}
-<a class="{{ .class | default "xref" }}" href="{{ $href }}" data-tip="{{ $tid }}" aria-describedby="{{ $tid }}-d">{{ with (.icon | default (cond (eq (.class | default "xref") "xref") "file-text" "")) }}{{ partial "ui/icon.html" . }}&#8288;{{ end }}{{ $text }}</a>
+{{- $r := partial "xref/resolve.html" (dict "arg" .arg "pos" .pos) -}}
+{{- $t := $r.page -}}
+{{- if $t.Eq $p }}{{ errorf "xref: ссылка на собственную страницу %q; используйте обычную ссылку на якорь (%s)" $t.Path .pos }}{{ end -}}
+{{- $crumbs := slice -}}
+{{- range $t.Ancestors.Reverse }}{{ if not .IsHome }}{{ $crumbs = $crumbs | append .Title }}{{ end }}{{ end -}}
+{{- $tid := partial "tips/layer.html" (dict "page" $p "id" (printf "tip-x-%s" (replace (strings.TrimPrefix "/" $t.Path) "/" "-")) "kind" "xref" "mode" "hover" "role" "tooltip" "path" (delimit $crumbs " / ") "title" $t.Title "desc" ($t.Params.description | default "") "chips" (partial "ui/badges.html" $t) "links" (slice (dict "href" $t.RelPermalink "label" (i18n "xref.more") "btn" true))) -}}
+{{- $icon := .icon | default (cond (eq (.class | default "xref") "xref") "file-text" "") -}}
+<a class="{{ .class | default "xref" }}" href="{{ $r.href }}" data-tip="{{ $tid }}" data-tip-mode="hover" aria-describedby="{{ $tid }}-d">{{ with $icon }}{{ partial "ui/icon.html" . }}&#8288;{{ end }}{{ .text | default $t.Title }}</a>
 {{- /* Без пробела после тега: стоит в потоке текста. */ -}}
